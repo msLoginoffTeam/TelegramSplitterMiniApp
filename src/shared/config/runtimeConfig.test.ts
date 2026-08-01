@@ -6,6 +6,10 @@ describe('getRuntimeConfig', () => {
     expect(getRuntimeConfig({})).toEqual({ apiBaseUrl: '/api' });
   });
 
+  it('accepts a same-origin API path', () => {
+    expect(getRuntimeConfig({ VITE_API_BASE_URL: '/api' })).toEqual({ apiBaseUrl: '/api' });
+  });
+
   it('rejects an invalid API URL', () => {
     expect(() => getRuntimeConfig({ VITE_API_BASE_URL: 'not a URL' })).toThrow(
       'Invalid runtime configuration',

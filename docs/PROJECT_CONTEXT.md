@@ -38,6 +38,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 - Telegram `initData` всегда валидируется backend; данные клиента не считаются авторизацией.
 - Тема Telegram, safe areas, Back/Main Button и haptics оборачиваются в отдельный platform adapter, чтобы не размазывать Telegram API по UI.
 - Telegram-specific SDK запрещено импортировать из `entities`, `features`, `widgets` и `pages`.
+- Compose этого репозитория поднимает только статический frontend через Nginx. `/api` проксируется в настраиваемый `API_UPSTREAM`; backend и PostgreSQL живут в backend-репозитории.
 - Полный foundation-план: `docs/FOUNDATION_PLAN.md`.
 
 ## Контракт с backend
@@ -61,3 +62,4 @@ Frontend вынесен в отдельный репозиторий осозн�
 - `docs/FOUNDATION_PLAN.md` — подробное задание на ближайший этап.
 - `docs/KNOWN_ISSUES.md` — frontend/integration backlog.
 - Backend context локально: `/Users/max/RiderProjects/BudgetSplitterWebApi/docs/PROJECT_CONTEXT.md`.
+- Локальный запуск и переменные — в корневом `README.md`; backend-сценарий — в `/Users/max/RiderProjects/BudgetSplitterWebApi/docs/LOCAL_DEVELOPMENT.md`.

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.vite/
+coverage/
+.git/
+.github/
+.idea/
+.vscode/
+.yarn/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+playwright-report/
+test-results/

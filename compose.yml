@@ -1,0 +1,12 @@
+name: telegram-splitter-web
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      API_UPSTREAM: ${API_UPSTREAM:-http://host.docker.internal:5050}
+    ports:
+      - '127.0.0.1:${WEB_PORT:-5173}:80'

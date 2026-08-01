@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
+const apiBaseUrlSchema = z.union([z.url(), z.string().startsWith('/')]);
+
 const runtimeConfigSchema = z.object({
-  VITE_API_BASE_URL: z.url().optional(),
+  VITE_API_BASE_URL: apiBaseUrlSchema.optional(),
 });
 
 export type RuntimeConfig = {

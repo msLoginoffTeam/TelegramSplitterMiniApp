@@ -435,6 +435,71 @@ export function setHistoryDataByQueryId(queryClient: QueryClient, queryKey: Quer
   queryClient.setQueryData(queryKey, updater);
 }
     
+export function healthUrl(): string {
+  let url_ = getBaseUrl() + "/health";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+let healthDefaultOptions: Omit<UseQueryOptions<void, unknown, void>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<void, unknown, void>, 'queryFn'>> = {
+};
+export function getHealthDefaultOptions() {
+  return healthDefaultOptions;
+};
+export function setHealthDefaultOptions(options: typeof healthDefaultOptions) {
+  healthDefaultOptions = options;
+}
+
+export function healthQueryKey(): QueryKey;
+export function healthQueryKey(...params: any[]): QueryKey {
+  return trimArrayEnd([
+      'Client',
+      'health',
+    ]);
+}
+export function __health(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.health(
+axiosConfig    );
+}
+
+/**
+ * @return OK
+ */
+export function useHealthQuery<TSelectData = void, TError = unknown>(options?: Omit<UseQueryOptions<void, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useHealthQuery<TSelectData = void, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+  let options: UseQueryOptions<void, TError, TSelectData> | undefined = undefined;
+  let axiosConfig: AxiosRequestConfig |undefined = undefined;
+  
+
+  options = params[0] as any;
+  axiosConfig = params[1] as any;
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useQuery<void, TError, TSelectData>({
+    queryFn: axiosConfig ? (context) => __health(context, axiosConfig) : __health,
+    queryKey: healthQueryKey(),
+    ...healthDefaultOptions as unknown as Omit<UseQueryOptions<void, TError, TSelectData>, 'queryKey'>,
+    ...options,
+  });
+}
+/**
+ * @return OK
+ */
+export function setHealthData(queryClient: QueryClient, updater: (data: void | undefined) => void, ) {
+  queryClient.setQueryData(healthQueryKey(),
+    updater
+  );
+}
+
+/**
+ * @return OK
+ */
+export function setHealthDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: void | undefined) => void) {
+  queryClient.setQueryData(queryKey, updater);
+}
+    
 export function groupAllUrl(groupId: string, userId?: string | undefined): string {
   let url_ = getBaseUrl() + "/api/expenses/group/{groupId}?";
 if (groupId === undefined || groupId === null)

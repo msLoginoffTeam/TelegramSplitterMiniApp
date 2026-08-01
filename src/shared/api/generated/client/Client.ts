@@ -224,6 +224,56 @@ function processHistory(response: AxiosResponse): Promise<Types.OperationHistory
 }
 
 /**
+ * @return OK
+ */
+export function health(config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/health";
+      url_ = url_.replace(/[?&]$/, "");
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigHealth,
+        ...config,
+        method: "GET",
+        url: url_,
+        headers: {
+            ..._requestConfigHealth?.headers,
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processHealth(_response);
+    });
+}
+
+function processHealth(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        return Promise.resolve<void>(null as any);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<void>(null as any);
+}
+
+/**
  * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
@@ -2163,6 +2213,17 @@ export function setHistoryRequestConfig(value: Partial<AxiosRequestConfig>) {
 }
 export function patchHistoryRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
   _requestConfigHistory = patch(_requestConfigHistory ?? {});
+}
+
+let _requestConfigHealth: Partial<AxiosRequestConfig> | null;
+export function getHealthRequestConfig() {
+  return _requestConfigHealth;
+}
+export function setHealthRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigHealth = value;
+}
+export function patchHealthRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigHealth = patch(_requestConfigHealth ?? {});
 }
 
 let _requestConfigGroupAll: Partial<AxiosRequestConfig> | null;
