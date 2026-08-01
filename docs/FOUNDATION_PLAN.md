@@ -1,6 +1,6 @@
 # Frontend foundation — план реализации
 
-Обновлено: 2026-08-02. Статус: approved, открытых foundation-решений нет.
+Обновлено: 2026-08-02. Статус: implemented, открытых foundation-решений нет.
 
 ## Цель этапа
 
@@ -209,7 +209,7 @@ Dev минимум:
 - После проверки настроить deterministic `api:generate`, обновляющий `openapi/backend.json` и `src/shared/api/generated/` при локальной разработке.
 - Добавить `api:check`, который повторяет generation и завершается ошибкой при незакоммиченном diff.
 
-Текущий статус: generation script подготовлен, но выполнение ждёт доступный актуальный Swagger endpoint локального backend. Не использовать вместо него устаревший Swagger bot adapter.
+Текущий статус: актуальный Swagger endpoint проверен (21 route), snapshot и output сгенерированы. По подтверждённому решению `react-query-swagger` проверяется отдельным `tsconfig.generated.json` с выключенными только `noUnusedLocals`/`noUnusedParameters`; handwritten code остаётся strict. Generated code не редактировать.
 
 ### 8. Tests
 

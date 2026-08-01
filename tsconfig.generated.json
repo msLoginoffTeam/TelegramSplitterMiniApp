@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.generated.tsbuildinfo",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["src/shared/api/generated"],
+  "exclude": []
+}

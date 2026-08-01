@@ -5,3 +5,4 @@ coverage/
 .yarn/
 *.tsbuildinfo
 openapi/*.tmp.json
+src/shared/api/generated/

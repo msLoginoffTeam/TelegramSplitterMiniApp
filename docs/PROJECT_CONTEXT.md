@@ -50,11 +50,10 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 ## Ближайшие шаги
 
-1. Выполнить утверждённый `docs/FOUNDATION_PLAN.md` в отдельной feature-ветке.
-2. Создать React/Vite scaffold и Telegram/browser platform adapters.
-3. Подключить `react-query-swagger`, Axios и TanStack Query.
-4. Сделать navigable UX skeleton на mock data.
-5. После backend auth подключить реальные группы, траты, платежи и transfers.
+1. Foundation реализован в ветке `codex/frontend-foundation`: React/Vite scaffold, platform adapters, Axios boundary, generated API artifacts и quality CI готовы.
+2. Согласовать navigation map и сделать navigable UX skeleton на mock data.
+3. При появлении первого entity API подключить его к central Axios factory; UI не импортирует generated client напрямую.
+4. После backend auth подключить реальные группы, траты, платежи и transfers.
 
 ## Навигация по знаниям
 
