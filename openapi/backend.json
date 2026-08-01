@@ -89,7 +89,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/transfers": {
@@ -140,7 +145,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/history": {
@@ -231,7 +241,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/health": {
@@ -303,7 +318,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -363,7 +383,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/expenses/{expenseId}": {
@@ -414,7 +439,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -446,7 +476,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/expenses/{expenseId}/title": {
@@ -551,7 +586,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/expenses/{expenseId}/totalAmount": {
@@ -659,7 +699,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/expenses/{expenseId}/participants": {
@@ -719,7 +764,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -771,7 +821,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -823,7 +878,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/expenses/{expenseId}/participants/{userId}": {
@@ -867,7 +927,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/my": {
@@ -957,7 +1022,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups": {
@@ -1046,7 +1116,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -1134,7 +1209,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}": {
@@ -1216,7 +1296,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -1319,7 +1404,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1402,7 +1492,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/users": {
@@ -1447,7 +1542,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/users/{userId}": {
@@ -1482,7 +1582,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/payments": {
@@ -1573,7 +1678,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/payments/expense": {
@@ -1635,7 +1745,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/payments/direct": {
@@ -1697,7 +1812,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/groups/{groupId}/payments/{paymentId}": {
@@ -1752,7 +1872,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1785,7 +1910,12 @@
           "200": {
             "description": "OK"
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/users": {
@@ -1824,7 +1954,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -1915,7 +2050,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/users/{userId}": {
@@ -1997,7 +2137,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -2100,7 +2245,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     },
     "/api/users/find": {
@@ -2149,7 +2299,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
       }
     }
   },
@@ -2611,6 +2766,14 @@
           }
         },
         "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "TelegramInitData": {
+        "type": "apiKey",
+        "description": "Telegram Mini App initData.",
+        "name": "X-Telegram-Init-Data",
+        "in": "header"
       }
     }
   }
