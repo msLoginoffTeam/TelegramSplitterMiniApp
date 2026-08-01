@@ -24,12 +24,20 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 ## Архитектурные решения
 
-- React + TypeScript; Vite как рекомендуемая основа.
-- Server state через TanStack Query.
-- Типы и API methods/hooks генерируются из backend OpenAPI; ручные копии DTO не поддерживаются.
-- Приложение должно работать как Telegram Mini App и как обычное локальное web-приложение с dev-auth adapter.
+- React 19 + TypeScript 6 + Vite 8.
+- Yarn 4 через Corepack с `node_modules` linker; версия фиксируется в `packageManager`, `yarn.lock` коммитится.
+- Server state через TanStack Query; Redux/Zustand и другой global store не добавляются без доказанной необходимости.
+- HTTP через единый Axios instance.
+- Типы и TanStack Query hooks генерируются `react-query-swagger` из backend OpenAPI; ручные копии DTO не поддерживаются.
+- React Router в SPA/library mode.
+- FSD-lite: `app → pages → widgets → features → entities → shared`, с публичным API slices и контролем импортов.
+- Стили: CSS custom properties для динамической темы/токенов и `*.module.scss` для локальных стилей. Без Tailwind, CSS-in-JS и UI kit.
+- Формы: React Hook Form + Zod.
+- Приложение должно работать как Telegram Mini App и как обычное web-приложение через разные platform adapters.
 - Telegram `initData` всегда валидируется backend; данные клиента не считаются авторизацией.
 - Тема Telegram, safe areas, Back/Main Button и haptics оборачиваются в отдельный platform adapter, чтобы не размазывать Telegram API по UI.
+- Telegram-specific SDK запрещено импортировать из `entities`, `features`, `widgets` и `pages`.
+- Полный foundation-план: `docs/FOUNDATION_PLAN.md`.
 
 ## Контракт с backend
 
@@ -40,14 +48,15 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 ## Ближайшие шаги
 
-1. Согласовать frontend foundation: package manager, UI primitives, routing, forms/validation и test stack.
-2. Создать React/Vite scaffold и Telegram/local environment adapter.
-3. Подключить OpenAPI generation и TanStack Query.
+1. Выполнить утверждённый `docs/FOUNDATION_PLAN.md` в отдельной feature-ветке.
+2. Создать React/Vite scaffold и Telegram/browser platform adapters.
+3. Подключить `react-query-swagger`, Axios и TanStack Query.
 4. Сделать navigable UX skeleton на mock data.
 5. После backend auth подключить реальные группы, траты, платежи и transfers.
 
 ## Навигация по знаниям
 
 - Этот файл — frontend architecture и принятые решения.
+- `docs/FOUNDATION_PLAN.md` — подробное задание на ближайший этап.
 - `docs/KNOWN_ISSUES.md` — frontend/integration backlog.
 - Backend context локально: `/Users/max/RiderProjects/BudgetSplitterWebApi/docs/PROJECT_CONTEXT.md`.
