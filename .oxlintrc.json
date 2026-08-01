@@ -1,0 +1,100 @@
+{
+  "plugins": ["react"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["dist/**", "coverage/**", "node_modules/**", "src/shared/api/generated/**"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-require-imports": "error",
+    "react/react-in-jsx-scope": "off",
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@tma.js/sdk-react",
+            "message": "Import the Telegram SDK only through shared/platform/telegram."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/shared/platform/telegram/**/*.{ts,tsx}", "src/app/providers/**/*.{ts,tsx}"],
+      "rules": {
+        "eslint/no-restricted-imports": "off"
+      }
+    },
+    {
+      "files": ["src/shared/**/*.{ts,tsx}"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/entities/*", "@/features/*", "@/widgets/*", "@/pages/*"],
+                "message": "shared must not import upper FSD layers."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/entities/**/*.{ts,tsx}"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/features/*", "@/widgets/*", "@/pages/*", "@/app/*"],
+                "message": "entities may only import shared or their own slice."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/**/*.{ts,tsx}"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/widgets/*", "@/pages/*", "@/app/*"],
+                "message": "features may not import widgets, pages, or app."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/widgets/**/*.{ts,tsx}"],
+      "rules": {
+        "eslint/no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/pages/*", "@/app/*"],
+                "message": "widgets may not import pages or app."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

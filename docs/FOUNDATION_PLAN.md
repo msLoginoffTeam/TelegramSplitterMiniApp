@@ -12,7 +12,7 @@
 
 - React 19.2.x, React DOM 19.2.x.
 - Vite 8 + `@vitejs/plugin-react`; React Compiler пока не включать.
-- TypeScript 6.0.x. Не брать TypeScript 7: текущий `typescript-eslint` поддерживает `<6.1`.
+- TypeScript 7.0.x (текущий stable).
 - Node 22; текущий 22.17.0 удовлетворяет Vite 8 (`>=22.12`).
 - Yarn 4 через Corepack, `nodeLinker: node-modules`, exact `packageManager`, lockfile в Git.
 - TanStack Query v5 для server state.
@@ -138,7 +138,7 @@ Runtime минимум:
 Dev минимум:
 
 - Vite/plugin React, TypeScript 6;
-- ESLint flat config + `typescript-eslint` + React hooks/refresh plugins;
+- Oxlint с нативными TypeScript/React правилами; выбран вместо `typescript-eslint`, который пока не поддерживает TypeScript 7.
 - Prettier;
 - Vitest, jsdom, React Testing Library, user-event.
 
@@ -208,6 +208,8 @@ Dev минимум:
 - При дефекте генерации не менять generator автоматически: зафиксировать blocker и обсудить.
 - После проверки настроить deterministic `api:generate`, обновляющий `openapi/backend.json` и `src/shared/api/generated/` при локальной разработке.
 - Добавить `api:check`, который повторяет generation и завершается ошибкой при незакоммиченном diff.
+
+Текущий статус: generation script подготовлен, но выполнение ждёт доступный актуальный Swagger endpoint локального backend. Не использовать вместо него устаревший Swagger bot adapter.
 
 ### 8. Tests
 

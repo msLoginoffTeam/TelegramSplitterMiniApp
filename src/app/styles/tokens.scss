@@ -1,0 +1,14 @@
+:root {
+  --color-background: #ffffff;
+  --color-text: #101828;
+  --color-hint: #667085;
+  --color-accent: #0d7cff;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --app-viewport-height: 100dvh;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --font-size-caption: 0.875rem;
+  --font-size-title: clamp(2rem, 8vw, 3.25rem);
+}

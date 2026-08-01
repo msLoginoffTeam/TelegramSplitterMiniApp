@@ -24,7 +24,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 ## Архитектурные решения
 
-- React 19 + TypeScript 6 + Vite 8.
+- React 19 + TypeScript 7 + Vite 8.
 - Yarn 4 через Corepack с `node_modules` linker; версия фиксируется в `packageManager`, `yarn.lock` коммитится.
 - Server state через TanStack Query; Redux/Zustand и другой global store не добавляются без доказанной необходимости.
 - HTTP через единый Axios instance.
