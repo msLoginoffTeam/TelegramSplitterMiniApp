@@ -12,6 +12,6 @@
 | FE-006 | P2 | open | Docker | Frontend Dockerfile и связь с backend local Compose пока отсутствуют. |
 | FE-007 | P1 | planned | Toolchain | Не использовать TypeScript 7 до поддержки в `typescript-eslint`; на foundation pin TypeScript 6.0.x. |
 | FE-008 | P1 | planned | React | React 19 совместим с выбранным стеком. `@telegram-apps/telegram-ui` исключён: его текущие peer dependencies ограничены React 18. |
-| FE-009 | P1 | open | API artifacts | Требуется подтвердить политику: коммитить OpenAPI snapshot и generated client (рекомендуется) либо генерировать их только при build. |
+| FE-009 | P1 | fixed | API artifacts | Принято решение коммитить `openapi/backend.json` и `src/shared/api/generated/`; локальная разработка перегенерирует оба артефакта, CI позднее проверяет drift. |
 
 Подтверждённые backend-баги ведутся в `/Users/max/RiderProjects/BudgetSplitterWebApi/docs/KNOWN_ISSUES.md` и здесь не дублируются.

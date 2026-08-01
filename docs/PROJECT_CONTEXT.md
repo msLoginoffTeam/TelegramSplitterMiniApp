@@ -29,6 +29,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 - Server state через TanStack Query; Redux/Zustand и другой global store не добавляются без доказанной необходимости.
 - HTTP через единый Axios instance.
 - Типы и TanStack Query hooks генерируются `react-query-swagger` из backend OpenAPI; ручные копии DTO не поддерживаются.
+- Актуальный OpenAPI snapshot и deterministic generated client коммитятся в frontend-репозиторий. При локальных изменениях backend они перегенерируются разработчиком; CI позднее проверяет drift.
 - React Router в SPA/library mode.
 - FSD-lite: `app → pages → widgets → features → entities → shared`, с публичным API slices и контролем импортов.
 - Стили: CSS custom properties для динамической темы/токенов и `*.module.scss` для локальных стилей. Без Tailwind, CSS-in-JS и UI kit.
@@ -45,6 +46,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 - Frontend хранит формы и временный UI state, но не дублирует расчёт долгов.
 - Генератор API должен запускаться одной командой из OpenAPI snapshot или локального Swagger endpoint.
 - CI должен обнаруживать незакоммиченный drift сгенерированного клиента.
+- Канонические пути артефактов: `openapi/backend.json` и `src/shared/api/generated/`.
 
 ## Ближайшие шаги
 

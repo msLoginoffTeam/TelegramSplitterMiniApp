@@ -1,6 +1,6 @@
 # Frontend foundation — план реализации
 
-Обновлено: 2026-08-02. Статус: approved с одним открытым решением в разделе «Вопрос перед реализацией API generation».
+Обновлено: 2026-08-02. Статус: approved, открытых foundation-решений нет.
 
 ## Цель этапа
 
@@ -18,6 +18,7 @@
 - TanStack Query v5 для server state.
 - Axios как единственный HTTP transport.
 - `react-query-swagger` для OpenAPI → TypeScript/Axios/TanStack Query.
+- OpenAPI snapshot (`openapi/backend.json`) и generated client (`src/shared/api/generated/`) коммитятся в Git и перегенерируются локально при изменениях backend-контракта.
 - React Router в SPA/library mode.
 - React Hook Form + Zod для форм и validation schemas.
 - FSD-lite для структуры и направления зависимостей.
@@ -167,7 +168,7 @@ Dev минимум:
 - `yarn.lock`, `.yarnrc.yml`, `package.json`;
 - source SCSS/TypeScript;
 - `AGENTS.md` и `docs/`;
-- утверждённый OpenAPI snapshot и generated client, если принимается рекомендуемая политика.
+- `openapi/backend.json` и `src/shared/api/generated/` — это коммитящиеся воспроизводимые артефакты, а не ignore targets.
 
 После scaffold обязательно проверить `git status --ignored` и убедиться, что secrets/build/cache не попадут в commit.
 
@@ -205,7 +206,8 @@ Dev минимум:
 - Использовать TanStack mode, Axios template и module/tree-shakable output.
 - Проверить конкретно: nullable, decimal, DateTime, optional params, operation names, query keys, mutations и auth factory.
 - При дефекте генерации не менять generator автоматически: зафиксировать blocker и обсудить.
-- После проверки настроить deterministic `api:generate`.
+- После проверки настроить deterministic `api:generate`, обновляющий `openapi/backend.json` и `src/shared/api/generated/` при локальной разработке.
+- Добавить `api:check`, который повторяет generation и завершается ошибкой при незакоммиченном diff.
 
 ### 8. Tests
 
@@ -226,7 +228,7 @@ GitHub Actions на push/PR:
 5. typecheck;
 6. tests;
 7. production build;
-8. `api:check`, когда утверждена artifact policy.
+8. `api:check`, повторно генерирующий и проверяющий отсутствие drift.
 
 Deploy, Docker publish и Telegram configuration в foundation CI не добавлять.
 
@@ -251,12 +253,17 @@ Deploy, Docker publish и Telegram configuration в foundation CI не доба�
 - сменить React, TypeScript, Yarn, router, code generator или styling approach;
 - добавить global state manager, UI kit, Tailwind/CSS-in-JS;
 - изменить backend API ради удобства frontend;
-- выбрать политику, отличную от подтверждённой для generated artifacts;
+- перестать коммитить OpenAPI snapshot/generated client или изменить их канонические пути;
 - добавить production auth/deploy/Docker orchestration;
 - принять существенный workaround для Telegram SDK или React 19.
 
-## Вопрос перед реализацией API generation
+## Политика API artifacts
 
-Рекомендация: коммитить в frontend-репозиторий и актуальный OpenAPI snapshot, и deterministic generated client. Это позволяет собирать frontend независимо от запущенного backend и проверять drift в CI. Альтернатива — генерировать на build, но тогда сборка зависит от доступности backend/spec source и хуже воспроизводится.
+Решение утверждено:
 
-Нужно подтверждение пользователя для рекомендуемой политики до шага 7.
+- коммитить актуальный snapshot как `openapi/backend.json`;
+- коммитить deterministic output в `src/shared/api/generated/`;
+- перегенерировать оба артефакта локально при изменениях backend API;
+- не требовать доступный backend для обычного frontend build;
+- CI выполняет повторную генерацию и `git diff --exit-code`, чтобы обнаруживать drift;
+- generated code вручную не редактируется.
