@@ -14,6 +14,18 @@ Foundation реализован: platform adapters, generated API contract, qual
 - Telegram Mini Apps SDK integration
 - Docker image для локального интеграционного запуска
 
+## Первый локальный запуск
+
+Проект фиксирует Yarn 4 через Corepack, поэтому глобальный Yarn 1 использовать нельзя. Один раз на машине выполните:
+
+```bash
+corepack enable
+yarn install --immutable
+yarn dev
+```
+
+Для JetBrains IDE после `corepack enable` перезапустите IDE. Yarn executable должен указывать на Corepack shim (на текущем Mac — `/opt/homebrew/bin/yarn`), а не на отдельную установку Yarn 1.
+
 ## Локальный Docker stack
 
 Из корня frontend-репозитория запустите:
