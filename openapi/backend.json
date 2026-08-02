@@ -261,7 +261,7 @@
         }
       }
     },
-    "/api/expenses/group/{groupId}": {
+    "/api/groups/{groupId}/expenses": {
       "get": {
         "tags": [
           "Expenses"
@@ -391,7 +391,7 @@
         ]
       }
     },
-    "/api/expenses/{expenseId}": {
+    "/api/groups/{groupId}/expenses/{expenseId}": {
       "get": {
         "tags": [
           "Expenses"
@@ -400,8 +400,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -454,8 +455,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -484,7 +486,7 @@
         ]
       }
     },
-    "/api/expenses/{expenseId}/title": {
+    "/api/groups/{groupId}/expenses/{expenseId}/title": {
       "put": {
         "tags": [
           "Expenses"
@@ -492,6 +494,16 @@
         "summary": "Updates an existing expense’s title",
         "parameters": [
           {
+            "name": "groupId",
+            "in": "path",
+            "description": "ID of the group containing the expense.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
             "name": "expenseId",
             "in": "path",
             "description": "ID of the expense to update.",
@@ -503,7 +515,7 @@
           }
         ],
         "requestBody": {
-          "description": "",
+          "description": "New title.",
           "content": {
             "application/json": {
               "schema": {
@@ -523,68 +535,8 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
+          "200": {
+            "description": "OK"
           }
         },
         "security": [
@@ -594,7 +546,7 @@
         ]
       }
     },
-    "/api/expenses/{expenseId}/totalAmount": {
+    "/api/groups/{groupId}/expenses/{expenseId}/totalAmount": {
       "put": {
         "tags": [
           "Expenses"
@@ -602,6 +554,16 @@
         "summary": "Updates an existing expense’s total amount.",
         "parameters": [
           {
+            "name": "groupId",
+            "in": "path",
+            "description": "ID of the group containing the expense.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
             "name": "expenseId",
             "in": "path",
             "description": "ID of the expense to update.",
@@ -613,7 +575,7 @@
           }
         ],
         "requestBody": {
-          "description": "",
+          "description": "New total amount.",
           "content": {
             "application/json": {
               "schema": {
@@ -636,68 +598,8 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
+          "200": {
+            "description": "OK"
           }
         },
         "security": [
@@ -707,7 +609,7 @@
         ]
       }
     },
-    "/api/expenses/{expenseId}/participants": {
+    "/api/groups/{groupId}/expenses/{expenseId}/participants": {
       "get": {
         "tags": [
           "Expenses"
@@ -716,8 +618,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -779,8 +682,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -836,8 +740,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -886,7 +791,7 @@
         ]
       }
     },
-    "/api/expenses/{expenseId}/participants/{userId}": {
+    "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}": {
       "delete": {
         "tags": [
           "Expenses"
@@ -895,8 +800,9 @@
         "parameters": [
           {
             "name": "groupId",
-            "in": "query",
+            "in": "path",
             "description": "ID of the group.",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -940,18 +846,7 @@
         "tags": [
           "Groups"
         ],
-        "summary": "Retrieves all groups the specified user belongs to.",
-        "parameters": [
-          {
-            "name": "userTelegramId",
-            "in": "query",
-            "description": "Telegram ID of the user.",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
+        "summary": "Retrieves groups the authenticated user belongs to.",
         "responses": {
           "200": {
             "description": "OK",
@@ -978,46 +873,6 @@
                   "items": {
                     "$ref": "#/components/schemas/GroupOverviewResponseDto"
                   }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1590,6 +1445,109 @@
         ]
       }
     },
+    "/api/groups/{groupId}/users/{userId}/permissions": {
+      "put": {
+        "tags": [
+          "Groups"
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGroupMemberPermissionsRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGroupMemberPermissionsRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGroupMemberPermissionsRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{groupId}/ownership": {
+      "post": {
+        "tags": [
+          "Groups"
+        ],
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferGroupOwnershipRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferGroupOwnershipRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferGroupOwnershipRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
+      }
+    },
     "/api/groups/{groupId}/payments": {
       "get": {
         "tags": [
@@ -1918,164 +1876,12 @@
         ]
       }
     },
-    "/api/users": {
+    "/api/users/me": {
       "get": {
         "tags": [
           "Users"
         ],
-        "summary": "Retrieves an overview of all users in the system.",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserOverviewResponseDto"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserOverviewResponseDto"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/UserOverviewResponseDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TelegramInitData": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Creates a new user record.",
-        "requestBody": {
-          "description": "User creation data.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreateRequestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreateRequestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreateRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string",
-                  "format": "uuid"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TelegramInitData": []
-          }
-        ]
-      }
-    },
-    "/api/users/{userId}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Retrieves detailed information for a specific user.",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
+        "summary": "Retrieves the authenticated user's profile.",
         "responses": {
           "200": {
             "description": "OK",
@@ -2093,46 +1899,6 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2148,19 +1914,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Updates user details.",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "description": "ID of the user.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
+        "summary": "Updates the authenticated user's profile.",
         "requestBody": {
           "description": "Updated user data.",
           "content": {
@@ -2182,122 +1936,8 @@
           }
         },
         "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "TelegramInitData": []
-          }
-        ]
-      }
-    },
-    "/api/users/find": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Retrieves detailed information for a specific user by nickname or userTelegramId.",
-        "parameters": [
-          {
-            "name": "nickname",
-            "in": "query",
-            "description": "of the user.",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "userTelegramId",
-            "in": "query",
-            "description": "",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserResponseDto"
-                }
-              }
-            }
+            "description": "OK"
           }
         },
         "security": [
@@ -2362,7 +2002,7 @@
             "type": "number",
             "format": "double"
           },
-          "createdById": {
+          "payerId": {
             "type": "string",
             "format": "uuid"
           },
@@ -2385,10 +2025,6 @@
           "title": {
             "type": "string",
             "nullable": true
-          },
-          "createdByTelegramId": {
-            "type": "integer",
-            "format": "int64"
           },
           "telegramChatId": {
             "type": "integer",
@@ -2431,13 +2067,17 @@
             "type": "number",
             "format": "double"
           },
-          "createdById": {
+          "payerId": {
             "type": "string",
             "format": "uuid"
           },
-          "createdByName": {
+          "payerName": {
             "type": "string",
             "nullable": true
+          },
+          "createdByUserId": {
+            "type": "string",
+            "format": "uuid"
           },
           "createdAt": {
             "type": "string",
@@ -2491,6 +2131,37 @@
         },
         "additionalProperties": false
       },
+      "GroupMemberResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "telegramId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOwner": {
+            "type": "boolean"
+          },
+          "role": {
+            "$ref": "#/components/schemas/GroupRole"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupPermission"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GroupOverviewResponseDto": {
         "type": "object",
         "properties": {
@@ -2504,6 +2175,28 @@
           }
         },
         "additionalProperties": false
+      },
+      "GroupPermission": {
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "GroupResponseDto": {
         "type": "object",
@@ -2521,15 +2214,26 @@
             "format": "int64",
             "nullable": true
           },
-          "users": {
+          "members": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UserResponseDto"
+              "$ref": "#/components/schemas/GroupMemberResponseDto"
             },
             "nullable": true
           }
         },
         "additionalProperties": false
+      },
+      "GroupRole": {
+        "enum": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "OperationHistoryResponseDto": {
         "type": "object",
@@ -2585,6 +2289,10 @@
             "type": "string",
             "nullable": true
           },
+          "createdByUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
           "amount": {
             "type": "number",
             "format": "double"
@@ -2623,6 +2331,16 @@
         },
         "additionalProperties": {}
       },
+      "TransferGroupOwnershipRequestDto": {
+        "type": "object",
+        "properties": {
+          "newOwnerUserId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
       "TransferSuggestionDto": {
         "type": "object",
         "properties": {
@@ -2656,6 +2374,22 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/TransferSuggestionDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateGroupMemberPermissionsRequestDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "$ref": "#/components/schemas/GroupRole"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GroupPermission"
             },
             "nullable": true
           }
@@ -2710,38 +2444,6 @@
         },
         "additionalProperties": false
       },
-      "UserCreateRequestDto": {
-        "type": "object",
-        "properties": {
-          "telegramId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "UserOverviewResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "telegramId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
       "UserResponseDto": {
         "type": "object",
         "properties": {
@@ -2755,13 +2457,6 @@
           },
           "displayName": {
             "type": "string",
-            "nullable": true
-          },
-          "groups": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GroupResponseDto"
-            },
             "nullable": true
           }
         },

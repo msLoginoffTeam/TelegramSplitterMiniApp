@@ -1,6 +1,6 @@
 # Telegram Splitter Mini App — контекст
 
-Обновлено: 2026-08-02.
+Обновлено: 2026-08-03.
 
 ## Репозиторий
 
@@ -51,10 +51,10 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 ## Ближайшие шаги
 
-1. Foundation реализован в ветке `codex/frontend-foundation`: React/Vite scaffold, platform adapters, Axios boundary, generated API artifacts и quality CI готовы.
-2. Согласовать navigation map и сделать navigable UX skeleton на mock data.
-3. При появлении первого entity API подключить его к central Axios factory; UI не импортирует generated client напрямую.
-4. После backend auth подключить реальные группы, траты, платежи и transfers.
+1. Foundation реализован в `main`: React/Vite scaffold, platform adapters, Axios boundary, generated API artifacts и quality CI готовы.
+2. Backend handoff завершён: актуальный OpenAPI-контракт включает Telegram authentication, Users API, groups, permissions, траты, платежи и transfers.
+3. Согласовать navigation map и сделать navigable UX skeleton на mock data.
+4. Подключить реальные группы через central Axios factory; UI не импортирует generated client напрямую. Перед первым запросом добавить передачу Telegram `initData` в boundary клиента.
 
 ## Навигация по знаниям
 

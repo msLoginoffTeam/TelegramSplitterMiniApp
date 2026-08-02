@@ -145,7 +145,7 @@ export interface ICreateDirectPaymentRequestDto {
 export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
     title?: string | null;
     totalAmount?: number;
-    createdById?: string;
+    payerId?: string;
     isDraft?: boolean;
     shares?: ExpenseShareCreateDto[] | null;
 
@@ -162,7 +162,7 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
         if (_data) {
             this.title = _data["title"];
             this.totalAmount = _data["totalAmount"];
-            this.createdById = _data["createdById"];
+            this.payerId = _data["payerId"];
             this.isDraft = _data["isDraft"];
             if (Array.isArray(_data["shares"])) {
                 this.shares = [] as any;
@@ -183,7 +183,7 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["totalAmount"] = this.totalAmount;
-        data["createdById"] = this.createdById;
+        data["payerId"] = this.payerId;
         data["isDraft"] = this.isDraft;
         if (Array.isArray(this.shares)) {
             data["shares"] = [];
@@ -197,14 +197,13 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
 export interface ICreateExpenseRequestDto {
     title?: string | null;
     totalAmount?: number;
-    createdById?: string;
+    payerId?: string;
     isDraft?: boolean;
     shares?: ExpenseShareCreateDto[] | null;
 }
 
 export class CreateGroupRequestDto implements ICreateGroupRequestDto {
     title?: string | null;
-    createdByTelegramId?: number;
     telegramChatId?: number | null;
 
     constructor(data?: ICreateGroupRequestDto) {
@@ -219,7 +218,6 @@ export class CreateGroupRequestDto implements ICreateGroupRequestDto {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
-            this.createdByTelegramId = _data["createdByTelegramId"];
             this.telegramChatId = _data["telegramChatId"];
         }
     }
@@ -234,7 +232,6 @@ export class CreateGroupRequestDto implements ICreateGroupRequestDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
-        data["createdByTelegramId"] = this.createdByTelegramId;
         data["telegramChatId"] = this.telegramChatId;
         return data;
     }
@@ -242,7 +239,6 @@ export class CreateGroupRequestDto implements ICreateGroupRequestDto {
 
 export interface ICreateGroupRequestDto {
     title?: string | null;
-    createdByTelegramId?: number;
     telegramChatId?: number | null;
 }
 
@@ -294,8 +290,9 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
     id?: string;
     title?: string | null;
     totalAmount?: number;
-    createdById?: string;
-    createdByName?: string | null;
+    payerId?: string;
+    payerName?: string | null;
+    createdByUserId?: string;
     createdAt?: Date;
     isDraft?: boolean;
     shares?: ExpenseShareResponseDto[] | null;
@@ -314,8 +311,9 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.totalAmount = _data["totalAmount"];
-            this.createdById = _data["createdById"];
-            this.createdByName = _data["createdByName"];
+            this.payerId = _data["payerId"];
+            this.payerName = _data["payerName"];
+            this.createdByUserId = _data["createdByUserId"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>null;
             this.isDraft = _data["isDraft"];
             if (Array.isArray(_data["shares"])) {
@@ -338,8 +336,9 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["totalAmount"] = this.totalAmount;
-        data["createdById"] = this.createdById;
-        data["createdByName"] = this.createdByName;
+        data["payerId"] = this.payerId;
+        data["payerName"] = this.payerName;
+        data["createdByUserId"] = this.createdByUserId;
         data["createdAt"] = this.createdAt && this.createdAt.toISOString();
         data["isDraft"] = this.isDraft;
         if (Array.isArray(this.shares)) {
@@ -355,8 +354,9 @@ export interface IExpenseResponseDto {
     id?: string;
     title?: string | null;
     totalAmount?: number;
-    createdById?: string;
-    createdByName?: string | null;
+    payerId?: string;
+    payerName?: string | null;
+    createdByUserId?: string;
     createdAt?: Date;
     isDraft?: boolean;
     shares?: ExpenseShareResponseDto[] | null;
@@ -450,6 +450,70 @@ export interface IExpenseShareResponseDto {
     isPaid?: boolean;
 }
 
+export class GroupMemberResponseDto implements IGroupMemberResponseDto {
+    userId?: string;
+    telegramId?: number;
+    displayName?: string | null;
+    isOwner?: boolean;
+    role?: GroupRole;
+    permissions?: GroupPermission[] | null;
+
+    constructor(data?: IGroupMemberResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.telegramId = _data["telegramId"];
+            this.displayName = _data["displayName"];
+            this.isOwner = _data["isOwner"];
+            this.role = _data["role"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GroupMemberResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GroupMemberResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["telegramId"] = this.telegramId;
+        data["displayName"] = this.displayName;
+        data["isOwner"] = this.isOwner;
+        data["role"] = this.role;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGroupMemberResponseDto {
+    userId?: string;
+    telegramId?: number;
+    displayName?: string | null;
+    isOwner?: boolean;
+    role?: GroupRole;
+    permissions?: GroupPermission[] | null;
+}
+
 export class GroupOverviewResponseDto implements IGroupOverviewResponseDto {
     id?: string;
     title?: string | null;
@@ -490,11 +554,30 @@ export interface IGroupOverviewResponseDto {
     title?: string | null;
 }
 
+export enum GroupPermission {
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+    _6 = 6,
+    _7 = 7,
+    _8 = 8,
+    _9 = 9,
+    _10 = 10,
+    _11 = 11,
+    _12 = 12,
+    _13 = 13,
+    _14 = 14,
+    _15 = 15,
+    _16 = 16,
+}
+
 export class GroupResponseDto implements IGroupResponseDto {
     id?: string;
     title?: string | null;
     telegramChatId?: number | null;
-    users?: UserResponseDto[] | null;
+    members?: GroupMemberResponseDto[] | null;
 
     constructor(data?: IGroupResponseDto) {
         if (data) {
@@ -510,10 +593,10 @@ export class GroupResponseDto implements IGroupResponseDto {
             this.id = _data["id"];
             this.title = _data["title"];
             this.telegramChatId = _data["telegramChatId"];
-            if (Array.isArray(_data["users"])) {
-                this.users = [] as any;
-                for (let item of _data["users"])
-                    this.users!.push(UserResponseDto.fromJS(item));
+            if (Array.isArray(_data["members"])) {
+                this.members = [] as any;
+                for (let item of _data["members"])
+                    this.members!.push(GroupMemberResponseDto.fromJS(item));
             }
         }
     }
@@ -530,10 +613,10 @@ export class GroupResponseDto implements IGroupResponseDto {
         data["id"] = this.id;
         data["title"] = this.title;
         data["telegramChatId"] = this.telegramChatId;
-        if (Array.isArray(this.users)) {
-            data["users"] = [];
-            for (let item of this.users)
-                data["users"].push(item.toJSON());
+        if (Array.isArray(this.members)) {
+            data["members"] = [];
+            for (let item of this.members)
+                data["members"].push(item.toJSON());
         }
         return data;
     }
@@ -543,7 +626,15 @@ export interface IGroupResponseDto {
     id?: string;
     title?: string | null;
     telegramChatId?: number | null;
-    users?: UserResponseDto[] | null;
+    members?: GroupMemberResponseDto[] | null;
+}
+
+export enum GroupRole {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
 }
 
 export class OperationHistoryResponseDto implements IOperationHistoryResponseDto {
@@ -605,6 +696,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
     fromUserName?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    createdByUserId?: string;
     amount?: number;
     timestamp?: Date;
 
@@ -625,6 +717,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
             this.fromUserName = _data["fromUserName"];
             this.toUserId = _data["toUserId"];
             this.toUserName = _data["toUserName"];
+            this.createdByUserId = _data["createdByUserId"];
             this.amount = _data["amount"];
             this.timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>null;
         }
@@ -645,6 +738,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
         data["fromUserName"] = this.fromUserName;
         data["toUserId"] = this.toUserId;
         data["toUserName"] = this.toUserName;
+        data["createdByUserId"] = this.createdByUserId;
         data["amount"] = this.amount;
         data["timestamp"] = this.timestamp && this.timestamp.toISOString();
         return data;
@@ -658,6 +752,7 @@ export interface IPaymentResponseDto {
     fromUserName?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    createdByUserId?: string;
     amount?: number;
     timestamp?: Date;
 }
@@ -724,6 +819,42 @@ export interface IProblemDetails {
     instance?: string | null;
 
     [key: string]: any;
+}
+
+export class TransferGroupOwnershipRequestDto implements ITransferGroupOwnershipRequestDto {
+    newOwnerUserId?: string;
+
+    constructor(data?: ITransferGroupOwnershipRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.newOwnerUserId = _data["newOwnerUserId"];
+        }
+    }
+
+    static fromJS(data: any): TransferGroupOwnershipRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TransferGroupOwnershipRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newOwnerUserId"] = this.newOwnerUserId;
+        return data;
+    }
+}
+
+export interface ITransferGroupOwnershipRequestDto {
+    newOwnerUserId?: string;
 }
 
 export class TransferSuggestionDto implements ITransferSuggestionDto {
@@ -820,6 +951,54 @@ export class TransferSuggestionsResponseDto implements ITransferSuggestionsRespo
 
 export interface ITransferSuggestionsResponseDto {
     transfers?: TransferSuggestionDto[] | null;
+}
+
+export class UpdateGroupMemberPermissionsRequestDto implements IUpdateGroupMemberPermissionsRequestDto {
+    role?: GroupRole;
+    permissions?: GroupPermission[] | null;
+
+    constructor(data?: IUpdateGroupMemberPermissionsRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.role = _data["role"];
+            if (Array.isArray(_data["permissions"])) {
+                this.permissions = [] as any;
+                for (let item of _data["permissions"])
+                    this.permissions!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateGroupMemberPermissionsRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateGroupMemberPermissionsRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["role"] = this.role;
+        if (Array.isArray(this.permissions)) {
+            data["permissions"] = [];
+            for (let item of this.permissions)
+                data["permissions"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IUpdateGroupMemberPermissionsRequestDto {
+    role?: GroupRole;
+    permissions?: GroupPermission[] | null;
 }
 
 export class UpdateGroupRequestDto implements IUpdateGroupRequestDto {
@@ -974,95 +1153,10 @@ export interface IUserBalanceResponseDto {
     displayName?: string | null;
 }
 
-export class UserCreateRequestDto implements IUserCreateRequestDto {
-    telegramId?: number;
-    displayName?: string | null;
-
-    constructor(data?: IUserCreateRequestDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.telegramId = _data["telegramId"];
-            this.displayName = _data["displayName"];
-        }
-    }
-
-    static fromJS(data: any): UserCreateRequestDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserCreateRequestDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["telegramId"] = this.telegramId;
-        data["displayName"] = this.displayName;
-        return data;
-    }
-}
-
-export interface IUserCreateRequestDto {
-    telegramId?: number;
-    displayName?: string | null;
-}
-
-export class UserOverviewResponseDto implements IUserOverviewResponseDto {
-    id?: string;
-    telegramId?: number;
-    displayName?: string | null;
-
-    constructor(data?: IUserOverviewResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.telegramId = _data["telegramId"];
-            this.displayName = _data["displayName"];
-        }
-    }
-
-    static fromJS(data: any): UserOverviewResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserOverviewResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["telegramId"] = this.telegramId;
-        data["displayName"] = this.displayName;
-        return data;
-    }
-}
-
-export interface IUserOverviewResponseDto {
-    id?: string;
-    telegramId?: number;
-    displayName?: string | null;
-}
-
 export class UserResponseDto implements IUserResponseDto {
     id?: string;
     telegramId?: number;
     displayName?: string | null;
-    groups?: GroupResponseDto[] | null;
 
     constructor(data?: IUserResponseDto) {
         if (data) {
@@ -1078,11 +1172,6 @@ export class UserResponseDto implements IUserResponseDto {
             this.id = _data["id"];
             this.telegramId = _data["telegramId"];
             this.displayName = _data["displayName"];
-            if (Array.isArray(_data["groups"])) {
-                this.groups = [] as any;
-                for (let item of _data["groups"])
-                    this.groups!.push(GroupResponseDto.fromJS(item));
-            }
         }
     }
 
@@ -1098,11 +1187,6 @@ export class UserResponseDto implements IUserResponseDto {
         data["id"] = this.id;
         data["telegramId"] = this.telegramId;
         data["displayName"] = this.displayName;
-        if (Array.isArray(this.groups)) {
-            data["groups"] = [];
-            for (let item of this.groups)
-                data["groups"].push(item.toJSON());
-        }
         return data;
     }
 }
@@ -1111,7 +1195,6 @@ export interface IUserResponseDto {
     id?: string;
     telegramId?: number;
     displayName?: string | null;
-    groups?: GroupResponseDto[] | null;
 }
 //-----/CustomTypes.File-----
 
@@ -1169,10 +1252,10 @@ import { getResultTypeFactory } from './client/helpers';
 export function deserializeDate(str: unknown) {
   if (!str || typeof str !== 'string') return str;
   if (!/^\d\d\d\d\-\d\d\-\d\d/.test(str)) return str;
-  
+
   const date = new Date(str);
   const isDate = date instanceof Date && !isNaN(date as any);
-  
+
   return isDate ? date : str;
 }
 
@@ -1240,20 +1323,18 @@ export function getResultTypeClassKey(queryKey: QueryKey): string {
 }
 
 export function initPersister() {
-  
+
   addResultTypeFactory('Client___balance', (data: any) => { const result = new BalanceResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___transfers', (data: any) => { const result = new TransferSuggestionsResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___history', (data: any) => { const result = new OperationHistoryResponseDto(); result.init(data); return result; });
-  addResultTypeFactory('Client___groupAll', (data: any) => { const result = new ExpenseResponseDto(); result.init(data); return result; });
+  addResultTypeFactory('Client___expensesAll', (data: any) => { const result = new ExpenseResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___expensesGET', (data: any) => { const result = new ExpenseResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___participantsAll', (data: any) => { const result = new ExpenseShareResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___my', (data: any) => { const result = new GroupOverviewResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___groupsAll', (data: any) => { const result = new GroupOverviewResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___groupsGET', (data: any) => { const result = new GroupResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___paymentsAll', (data: any) => { const result = new PaymentResponseDto(); result.init(data); return result; });
-  addResultTypeFactory('Client___usersAll', (data: any) => { const result = new UserOverviewResponseDto(); result.init(data); return result; });
-  addResultTypeFactory('Client___usersGET', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
-  addResultTypeFactory('Client___find', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
+  addResultTypeFactory('Client___meGET', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
 
 
 }

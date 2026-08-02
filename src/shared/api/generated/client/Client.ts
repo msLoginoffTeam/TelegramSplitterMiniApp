@@ -279,8 +279,8 @@ function processHealth(response: AxiosResponse): Promise<void> {
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
  */
-export function groupAll(groupId: string, userId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto[]> {
-    let url_ = getBaseUrl() + "/api/expenses/group/{groupId}?";
+export function expensesAll(groupId: string, userId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto[]> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses?";
     if (groupId === undefined || groupId === null)
       throw new Error("The parameter 'groupId' must be defined.");
     url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
@@ -291,12 +291,12 @@ export function groupAll(groupId: string, userId?: string | undefined, config?: 
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
-        ..._requestConfigGroupAll,
+        ..._requestConfigExpensesAll,
         ...config,
         method: "GET",
         url: url_,
         headers: {
-            ..._requestConfigGroupAll?.headers,
+            ..._requestConfigExpensesAll?.headers,
             "Accept": "text/plain",
             ...config?.headers,
         }
@@ -309,11 +309,11 @@ export function groupAll(groupId: string, userId?: string | undefined, config?: 
             throw _error;
         }
     }).then((_response: AxiosResponse) => {
-        return processGroupAll(_response);
+        return processExpensesAll(_response);
     });
 }
 
-function processGroupAll(response: AxiosResponse): Promise<Types.ExpenseResponseDto[]> {
+function processExpensesAll(response: AxiosResponse): Promise<Types.ExpenseResponseDto[]> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && typeof response.headers === "object") {
@@ -350,8 +350,8 @@ function processGroupAll(response: AxiosResponse): Promise<Types.ExpenseResponse
  * @param body (optional) Data for creating the expense.
  * @return OK
  */
-export function group(groupId: string, body?: Types.CreateExpenseRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
-    let url_ = getBaseUrl() + "/api/expenses/group/{groupId}";
+export function expensesPOST(groupId: string, body?: Types.CreateExpenseRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses";
     if (groupId === undefined || groupId === null)
       throw new Error("The parameter 'groupId' must be defined.");
     url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
@@ -360,13 +360,13 @@ export function group(groupId: string, body?: Types.CreateExpenseRequestDto | un
     const content_ = JSON.stringify(body);
 
     let options_: AxiosRequestConfig = {
-        ..._requestConfigGroup,
+        ..._requestConfigExpensesPOST,
         ...config,
         data: content_,
         method: "POST",
         url: url_,
         headers: {
-            ..._requestConfigGroup?.headers,
+            ..._requestConfigExpensesPOST?.headers,
             "Content-Type": "application/json",
             "Accept": "text/plain",
             ...config?.headers,
@@ -380,11 +380,11 @@ export function group(groupId: string, body?: Types.CreateExpenseRequestDto | un
             throw _error;
         }
     }).then((_response: AxiosResponse) => {
-        return processGroup(_response);
+        return processExpensesPOST(_response);
     });
 }
 
-function processGroup(response: AxiosResponse): Promise<Types.ExpenseResponseDto> {
+function processExpensesPOST(response: AxiosResponse): Promise<Types.ExpenseResponseDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && typeof response.headers === "object") {
@@ -410,19 +410,18 @@ function processGroup(response: AxiosResponse): Promise<Types.ExpenseResponseDto
 
 /**
  * Retrieves details for a specific expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function expensesGET(expenseId: string, groupId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}?";
+export function expensesGET(groupId: string, expenseId: string, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
@@ -474,19 +473,18 @@ function processExpensesGET(response: AxiosResponse): Promise<Types.ExpenseRespo
 
 /**
  * Deletes an expense from the group.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense to delete.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function expensesDELETE(expenseId: string, groupId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}?";
+export function expensesDELETE(groupId: string, expenseId: string, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
@@ -534,12 +532,16 @@ function processExpensesDELETE(response: AxiosResponse): Promise<void> {
 
 /**
  * Updates an existing expense’s title
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New title.
+ * @return OK
  */
-export function title(expenseId: string, body?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/title";
+export function title(groupId: string, expenseId: string, body?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/title";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
@@ -581,42 +583,29 @@ function processTitle(response: AxiosResponse): Promise<void> {
             }
         }
     }
-    if (status === 204) {
+    if (status === 200) {
         const _responseText = response.data;
         return Promise.resolve<void>(null as any);
 
-    } else if (status === 400) {
+    } else if (status !== 200 && status !== 204) {
         const _responseText = response.data;
-        let result400: any = null;
-        let resultData400  = _responseText;
-        result400 = Types.ProblemDetails.fromJS(resultData400);
-        return throwException("Bad Request", status, _responseText, _headers, result400);
-
-    } else if (status === 404) {
-        const _responseText = response.data;
-        let result404: any = null;
-        let resultData404  = _responseText;
-        result404 = Types.ProblemDetails.fromJS(resultData404);
-        return throwException("Not Found", status, _responseText, _headers, result404);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
     }
+    return Promise.resolve<void>(null as any);
 }
 
 /**
  * Updates an existing expense’s total amount.
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New total amount.
+ * @return OK
  */
-export function totalAmount(expenseId: string, body?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/totalAmount";
+export function totalAmount(groupId: string, expenseId: string, body?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/totalAmount";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
@@ -658,49 +647,31 @@ function processTotalAmount(response: AxiosResponse): Promise<void> {
             }
         }
     }
-    if (status === 204) {
+    if (status === 200) {
         const _responseText = response.data;
         return Promise.resolve<void>(null as any);
 
-    } else if (status === 400) {
+    } else if (status !== 200 && status !== 204) {
         const _responseText = response.data;
-        let result400: any = null;
-        let resultData400  = _responseText;
-        result400 = Types.ProblemDetails.fromJS(resultData400);
-        return throwException("Bad Request", status, _responseText, _headers, result400);
-
-    } else if (status === 404) {
-        const _responseText = response.data;
-        let result404: any = null;
-        let resultData404  = _responseText;
-        result404 = Types.ProblemDetails.fromJS(resultData404);
-        return throwException("Not Found", status, _responseText, _headers, result404);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
     }
+    return Promise.resolve<void>(null as any);
 }
 
 /**
  * Retrieves all participants and their shares for an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function participantsAll(expenseId: string, groupId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseShareResponseDto[]> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+export function participantsAll(groupId: string, expenseId: string, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseShareResponseDto[]> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
@@ -759,20 +730,19 @@ function processParticipantsAll(response: AxiosResponse): Promise<Types.ExpenseS
 
 /**
  * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Share details of the new participant.
  * @return OK
  */
-export function participantsPOST(expenseId: string, groupId?: string | undefined, body?: Types.ExpenseShareCreateDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+export function participantsPOST(groupId: string, expenseId: string, body?: Types.ExpenseShareCreateDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     const content_ = JSON.stringify(body);
@@ -824,20 +794,19 @@ function processParticipantsPOST(response: AxiosResponse): Promise<void> {
 
 /**
  * Updates the share amount for an existing participant in an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Updated share details for the participant.
  * @return OK
  */
-export function participantsPUT(expenseId: string, groupId?: string | undefined, body?: Types.ExpenseShareCreateDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+export function participantsPUT(groupId: string, expenseId: string, body?: Types.ExpenseShareCreateDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     const content_ = JSON.stringify(body);
@@ -889,23 +858,22 @@ function processParticipantsPUT(response: AxiosResponse): Promise<void> {
 
 /**
  * Removes a participant from an expense and reallocates their share to the payer.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function participantsDELETE(expenseId: string, userId: string, groupId?: string | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants/{userId}?";
+export function participantsDELETE(groupId: string, expenseId: string, userId: string, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
     if (expenseId === undefined || expenseId === null)
       throw new Error("The parameter 'expenseId' must be defined.");
     url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
     if (userId === undefined || userId === null)
       throw new Error("The parameter 'userId' must be defined.");
     url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-    if (groupId === null)
-        throw new Error("The parameter 'groupId' cannot be null.");
-    else if (groupId !== undefined)
-        url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
@@ -952,16 +920,11 @@ function processParticipantsDELETE(response: AxiosResponse): Promise<void> {
 }
 
 /**
- * Retrieves all groups the specified user belongs to.
- * @param userTelegramId (optional) Telegram ID of the user.
+ * Retrieves groups the authenticated user belongs to.
  * @return OK
  */
-export function my(userTelegramId?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.GroupOverviewResponseDto[]> {
-    let url_ = getBaseUrl() + "/api/groups/my?";
-    if (userTelegramId === null)
-        throw new Error("The parameter 'userTelegramId' cannot be null.");
-    else if (userTelegramId !== undefined)
-        url_ += "userTelegramId=" + encodeURIComponent("" + userTelegramId) + "&";
+export function my(config?: AxiosRequestConfig | undefined): Promise<Types.GroupOverviewResponseDto[]> {
+    let url_ = getBaseUrl() + "/api/groups/my";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
@@ -1011,26 +974,16 @@ function processMy(response: AxiosResponse): Promise<Types.GroupOverviewResponse
         }
         return Promise.resolve<Types.GroupOverviewResponseDto[]>(result200);
 
-    } else if (status === 404) {
+    } else if (status !== 200 && status !== 204) {
         const _responseText = response.data;
-        let result404: any = null;
-        let resultData404  = _responseText;
-        result404 = Types.ProblemDetails.fromJS(resultData404);
-        return throwException("Not Found", status, _responseText, _headers, result404);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
     }
+    return Promise.resolve<Types.GroupOverviewResponseDto[]>(null as any);
 }
 
 /**
  * Retrieves all groups the specified chat belongs to.
- * @param telegramChatId (optional) 
+ * @param telegramChatId (optional)
  * @return OK
  */
 export function groupsAll(telegramChatId?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.GroupOverviewResponseDto[]> {
@@ -1513,6 +1466,125 @@ function processUsersDELETE(response: AxiosResponse): Promise<void> {
 }
 
 /**
+ * @param body (optional)
+ * @return OK
+ */
+export function permissions(groupId: string, userId: string, body?: Types.UpdateGroupMemberPermissionsRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/users/{userId}/permissions";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigPermissions,
+        ...config,
+        data: content_,
+        method: "PUT",
+        url: url_,
+        headers: {
+            ..._requestConfigPermissions?.headers,
+            "Content-Type": "application/json",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processPermissions(_response);
+    });
+}
+
+function processPermissions(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        return Promise.resolve<void>(null as any);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<void>(null as any);
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function ownership(groupId: string, body?: Types.TransferGroupOwnershipRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/ownership";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigOwnership,
+        ...config,
+        data: content_,
+        method: "POST",
+        url: url_,
+        headers: {
+            ..._requestConfigOwnership?.headers,
+            "Content-Type": "application/json",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processOwnership(_response);
+    });
+}
+
+function processOwnership(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        return Promise.resolve<void>(null as any);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<void>(null as any);
+}
+
+/**
  * Retrieves all payments (expense-based and direct) in the group.
  * @param groupId ID of the group.
  * @return OK
@@ -1840,20 +1912,20 @@ function processPaymentsDELETE(response: AxiosResponse): Promise<void> {
 }
 
 /**
- * Retrieves an overview of all users in the system.
+ * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function usersAll(config?: AxiosRequestConfig | undefined): Promise<Types.UserOverviewResponseDto[]> {
-    let url_ = getBaseUrl() + "/api/users";
+export function meGET(config?: AxiosRequestConfig | undefined): Promise<Types.UserResponseDto> {
+    let url_ = getBaseUrl() + "/api/users/me";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
-        ..._requestConfigUsersAll,
+        ..._requestConfigMeGET,
         ...config,
         method: "GET",
         url: url_,
         headers: {
-            ..._requestConfigUsersAll?.headers,
+            ..._requestConfigMeGET?.headers,
             "Accept": "text/plain",
             ...config?.headers,
         }
@@ -1866,300 +1938,11 @@ export function usersAll(config?: AxiosRequestConfig | undefined): Promise<Types
             throw _error;
         }
     }).then((_response: AxiosResponse) => {
-        return processUsersAll(_response);
+        return processMeGET(_response);
     });
 }
 
-function processUsersAll(response: AxiosResponse): Promise<Types.UserOverviewResponseDto[]> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-        for (let k in response.headers) {
-            if (response.headers.hasOwnProperty(k)) {
-                _headers[k] = response.headers[k];
-            }
-        }
-    }
-    if (status === 200) {
-        const _responseText = response.data;
-        let result200: any = null;
-        let resultData200  = _responseText;
-        if (Array.isArray(resultData200)) {
-            result200 = [] as any;
-            for (let item of resultData200)
-                result200!.push(Types.UserOverviewResponseDto.fromJS(item));
-        }
-        else {
-            result200 = <any>null;
-        }
-        return Promise.resolve<Types.UserOverviewResponseDto[]>(result200);
-
-    } else if (status !== 200 && status !== 204) {
-        const _responseText = response.data;
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-    }
-    return Promise.resolve<Types.UserOverviewResponseDto[]>(null as any);
-}
-
-/**
- * Creates a new user record.
- * @param body (optional) User creation data.
- * @return Created
- */
-export function usersPOST2(body?: Types.UserCreateRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<string> {
-    let url_ = getBaseUrl() + "/api/users";
-      url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: AxiosRequestConfig = {
-        ..._requestConfigUsersPOST2,
-        ...config,
-        data: content_,
-        method: "POST",
-        url: url_,
-        headers: {
-            ..._requestConfigUsersPOST2?.headers,
-            "Content-Type": "application/json",
-            "Accept": "text/plain",
-            ...config?.headers,
-        }
-    };
-
-    return getAxios().request(options_).catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-            return _error.response;
-        } else {
-            throw _error;
-        }
-    }).then((_response: AxiosResponse) => {
-        return processUsersPOST2(_response);
-    });
-}
-
-function processUsersPOST2(response: AxiosResponse): Promise<string> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-        for (let k in response.headers) {
-            if (response.headers.hasOwnProperty(k)) {
-                _headers[k] = response.headers[k];
-            }
-        }
-    }
-    if (status === 201) {
-        const _responseText = response.data;
-        let result201: any = null;
-        let resultData201  = _responseText;
-            result201 = resultData201 !== undefined ? resultData201 : <any>null;
-    
-        return Promise.resolve<string>(result201);
-
-    } else if (status === 400) {
-        const _responseText = response.data;
-        let result400: any = null;
-        let resultData400  = _responseText;
-        result400 = Types.ProblemDetails.fromJS(resultData400);
-        return throwException("Bad Request", status, _responseText, _headers, result400);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
-    }
-}
-
-/**
- * Retrieves detailed information for a specific user.
- * @param userId ID of the user.
- * @return OK
- */
-export function usersGET(userId: string, config?: AxiosRequestConfig | undefined): Promise<Types.UserResponseDto> {
-    let url_ = getBaseUrl() + "/api/users/{userId}";
-    if (userId === undefined || userId === null)
-      throw new Error("The parameter 'userId' must be defined.");
-    url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-      url_ = url_.replace(/[?&]$/, "");
-
-    let options_: AxiosRequestConfig = {
-        ..._requestConfigUsersGET,
-        ...config,
-        method: "GET",
-        url: url_,
-        headers: {
-            ..._requestConfigUsersGET?.headers,
-            "Accept": "text/plain",
-            ...config?.headers,
-        }
-    };
-
-    return getAxios().request(options_).catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-            return _error.response;
-        } else {
-            throw _error;
-        }
-    }).then((_response: AxiosResponse) => {
-        return processUsersGET(_response);
-    });
-}
-
-function processUsersGET(response: AxiosResponse): Promise<Types.UserResponseDto> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-        for (let k in response.headers) {
-            if (response.headers.hasOwnProperty(k)) {
-                _headers[k] = response.headers[k];
-            }
-        }
-    }
-    if (status === 200) {
-        const _responseText = response.data;
-        let result200: any = null;
-        let resultData200  = _responseText;
-        result200 = Types.UserResponseDto.fromJS(resultData200);
-        return Promise.resolve<Types.UserResponseDto>(result200);
-
-    } else if (status === 404) {
-        const _responseText = response.data;
-        let result404: any = null;
-        let resultData404  = _responseText;
-        result404 = Types.ProblemDetails.fromJS(resultData404);
-        return throwException("Not Found", status, _responseText, _headers, result404);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
-    }
-}
-
-/**
- * Updates user details.
- * @param userId ID of the user.
- * @param body (optional) Updated user data.
- * @return No Content
- */
-export function usersPUT(userId: string, body?: Types.UpdateUserRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/users/{userId}";
-    if (userId === undefined || userId === null)
-      throw new Error("The parameter 'userId' must be defined.");
-    url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-      url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: AxiosRequestConfig = {
-        ..._requestConfigUsersPUT,
-        ...config,
-        data: content_,
-        method: "PUT",
-        url: url_,
-        headers: {
-            ..._requestConfigUsersPUT?.headers,
-            "Content-Type": "application/json",
-            ...config?.headers,
-        }
-    };
-
-    return getAxios().request(options_).catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-            return _error.response;
-        } else {
-            throw _error;
-        }
-    }).then((_response: AxiosResponse) => {
-        return processUsersPUT(_response);
-    });
-}
-
-function processUsersPUT(response: AxiosResponse): Promise<void> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-        for (let k in response.headers) {
-            if (response.headers.hasOwnProperty(k)) {
-                _headers[k] = response.headers[k];
-            }
-        }
-    }
-    if (status === 204) {
-        const _responseText = response.data;
-        return Promise.resolve<void>(null as any);
-
-    } else if (status === 400) {
-        const _responseText = response.data;
-        let result400: any = null;
-        let resultData400  = _responseText;
-        result400 = Types.ProblemDetails.fromJS(resultData400);
-        return throwException("Bad Request", status, _responseText, _headers, result400);
-
-    } else if (status === 404) {
-        const _responseText = response.data;
-        let result404: any = null;
-        let resultData404  = _responseText;
-        result404 = Types.ProblemDetails.fromJS(resultData404);
-        return throwException("Not Found", status, _responseText, _headers, result404);
-
-    } else {
-        const _responseText = response.data;
-        let resultdefault: any = null;
-        let resultDatadefault  = _responseText;
-        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
-        return throwException("Error", status, _responseText, _headers, resultdefault);
-
-    }
-}
-
-/**
- * Retrieves detailed information for a specific user by nickname or userTelegramId.
- * @param nickname (optional) of the user.
- * @param userTelegramId (optional) 
- * @return OK
- */
-export function find(nickname?: string | undefined, userTelegramId?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.UserResponseDto> {
-    let url_ = getBaseUrl() + "/api/users/find?";
-    if (nickname === null)
-        throw new Error("The parameter 'nickname' cannot be null.");
-    else if (nickname !== undefined)
-        url_ += "nickname=" + encodeURIComponent("" + nickname) + "&";
-    if (userTelegramId === null)
-        throw new Error("The parameter 'userTelegramId' cannot be null.");
-    else if (userTelegramId !== undefined)
-        url_ += "userTelegramId=" + encodeURIComponent("" + userTelegramId) + "&";
-      url_ = url_.replace(/[?&]$/, "");
-
-    let options_: AxiosRequestConfig = {
-        ..._requestConfigFind,
-        ...config,
-        method: "GET",
-        url: url_,
-        headers: {
-            ..._requestConfigFind?.headers,
-            "Accept": "text/plain",
-            ...config?.headers,
-        }
-    };
-
-    return getAxios().request(options_).catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-            return _error.response;
-        } else {
-            throw _error;
-        }
-    }).then((_response: AxiosResponse) => {
-        return processFind(_response);
-    });
-}
-
-function processFind(response: AxiosResponse): Promise<Types.UserResponseDto> {
+function processMeGET(response: AxiosResponse): Promise<Types.UserResponseDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && typeof response.headers === "object") {
@@ -2181,6 +1964,62 @@ function processFind(response: AxiosResponse): Promise<Types.UserResponseDto> {
         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
     }
     return Promise.resolve<Types.UserResponseDto>(null as any);
+}
+
+/**
+ * Updates the authenticated user's profile.
+ * @param body (optional) Updated user data.
+ * @return OK
+ */
+export function mePUT(body?: Types.UpdateUserRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
+    let url_ = getBaseUrl() + "/api/users/me";
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigMePUT,
+        ...config,
+        data: content_,
+        method: "PUT",
+        url: url_,
+        headers: {
+            ..._requestConfigMePUT?.headers,
+            "Content-Type": "application/json",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processMePUT(_response);
+    });
+}
+
+function processMePUT(response: AxiosResponse): Promise<void> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        return Promise.resolve<void>(null as any);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<void>(null as any);
 }
 let _requestConfigBalance: Partial<AxiosRequestConfig> | null;
 export function getBalanceRequestConfig() {
@@ -2226,26 +2065,26 @@ export function patchHealthRequestConfig(patch: (value: Partial<AxiosRequestConf
   _requestConfigHealth = patch(_requestConfigHealth ?? {});
 }
 
-let _requestConfigGroupAll: Partial<AxiosRequestConfig> | null;
-export function getGroupAllRequestConfig() {
-  return _requestConfigGroupAll;
+let _requestConfigExpensesAll: Partial<AxiosRequestConfig> | null;
+export function getExpensesAllRequestConfig() {
+  return _requestConfigExpensesAll;
 }
-export function setGroupAllRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigGroupAll = value;
+export function setExpensesAllRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesAll = value;
 }
-export function patchGroupAllRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigGroupAll = patch(_requestConfigGroupAll ?? {});
+export function patchExpensesAllRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesAll = patch(_requestConfigExpensesAll ?? {});
 }
 
-let _requestConfigGroup: Partial<AxiosRequestConfig> | null;
-export function getGroupRequestConfig() {
-  return _requestConfigGroup;
+let _requestConfigExpensesPOST: Partial<AxiosRequestConfig> | null;
+export function getExpensesPOSTRequestConfig() {
+  return _requestConfigExpensesPOST;
 }
-export function setGroupRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigGroup = value;
+export function setExpensesPOSTRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesPOST = value;
 }
-export function patchGroupRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigGroup = patch(_requestConfigGroup ?? {});
+export function patchExpensesPOSTRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesPOST = patch(_requestConfigExpensesPOST ?? {});
 }
 
 let _requestConfigExpensesGET: Partial<AxiosRequestConfig> | null;
@@ -2424,6 +2263,28 @@ export function patchUsersDELETERequestConfig(patch: (value: Partial<AxiosReques
   _requestConfigUsersDELETE = patch(_requestConfigUsersDELETE ?? {});
 }
 
+let _requestConfigPermissions: Partial<AxiosRequestConfig> | null;
+export function getPermissionsRequestConfig() {
+  return _requestConfigPermissions;
+}
+export function setPermissionsRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigPermissions = value;
+}
+export function patchPermissionsRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigPermissions = patch(_requestConfigPermissions ?? {});
+}
+
+let _requestConfigOwnership: Partial<AxiosRequestConfig> | null;
+export function getOwnershipRequestConfig() {
+  return _requestConfigOwnership;
+}
+export function setOwnershipRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigOwnership = value;
+}
+export function patchOwnershipRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigOwnership = patch(_requestConfigOwnership ?? {});
+}
+
 let _requestConfigPaymentsAll: Partial<AxiosRequestConfig> | null;
 export function getPaymentsAllRequestConfig() {
   return _requestConfigPaymentsAll;
@@ -2479,57 +2340,24 @@ export function patchPaymentsDELETERequestConfig(patch: (value: Partial<AxiosReq
   _requestConfigPaymentsDELETE = patch(_requestConfigPaymentsDELETE ?? {});
 }
 
-let _requestConfigUsersAll: Partial<AxiosRequestConfig> | null;
-export function getUsersAllRequestConfig() {
-  return _requestConfigUsersAll;
+let _requestConfigMeGET: Partial<AxiosRequestConfig> | null;
+export function getMeGETRequestConfig() {
+  return _requestConfigMeGET;
 }
-export function setUsersAllRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigUsersAll = value;
+export function setMeGETRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigMeGET = value;
 }
-export function patchUsersAllRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigUsersAll = patch(_requestConfigUsersAll ?? {});
-}
-
-let _requestConfigUsersPOST2: Partial<AxiosRequestConfig> | null;
-export function getUsersPOST2RequestConfig() {
-  return _requestConfigUsersPOST2;
-}
-export function setUsersPOST2RequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigUsersPOST2 = value;
-}
-export function patchUsersPOST2RequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigUsersPOST2 = patch(_requestConfigUsersPOST2 ?? {});
+export function patchMeGETRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigMeGET = patch(_requestConfigMeGET ?? {});
 }
 
-let _requestConfigUsersGET: Partial<AxiosRequestConfig> | null;
-export function getUsersGETRequestConfig() {
-  return _requestConfigUsersGET;
+let _requestConfigMePUT: Partial<AxiosRequestConfig> | null;
+export function getMePUTRequestConfig() {
+  return _requestConfigMePUT;
 }
-export function setUsersGETRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigUsersGET = value;
+export function setMePUTRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigMePUT = value;
 }
-export function patchUsersGETRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigUsersGET = patch(_requestConfigUsersGET ?? {});
-}
-
-let _requestConfigUsersPUT: Partial<AxiosRequestConfig> | null;
-export function getUsersPUTRequestConfig() {
-  return _requestConfigUsersPUT;
-}
-export function setUsersPUTRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigUsersPUT = value;
-}
-export function patchUsersPUTRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigUsersPUT = patch(_requestConfigUsersPUT ?? {});
-}
-
-let _requestConfigFind: Partial<AxiosRequestConfig> | null;
-export function getFindRequestConfig() {
-  return _requestConfigFind;
-}
-export function setFindRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigFind = value;
-}
-export function patchFindRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigFind = patch(_requestConfigFind ?? {});
+export function patchMePUTRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigMePUT = patch(_requestConfigMePUT ?? {});
 }

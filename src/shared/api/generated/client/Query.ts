@@ -31,56 +31,54 @@ export type HistoryQueryParameters = {
   groupId: string ;
 }
 
-export type GroupAllQueryParameters = {
+export type ExpensesAllQueryParameters = {
   groupId: string ;
   userId?: string | undefined ;
 }
 
-export type GroupQueryParameters = {
+export type ExpensesPOSTQueryParameters = {
   groupId: string ;
 }
 
 export type ExpensesGETQueryParameters = {
+  groupId: string ;
   expenseId: string ;
-  groupId?: string | undefined ;
 }
 
 export type ExpensesDELETEQueryParameters = {
+  groupId: string ;
   expenseId: string ;
-  groupId?: string | undefined ;
 }
 
 export type TitleQueryParameters = {
+  groupId: string ;
   expenseId: string ;
 }
 
 export type TotalAmountQueryParameters = {
+  groupId: string ;
   expenseId: string ;
 }
 
 export type ParticipantsAllQueryParameters = {
+  groupId: string ;
   expenseId: string ;
-  groupId?: string | undefined ;
 }
 
 export type ParticipantsPOSTQueryParameters = {
+  groupId: string ;
   expenseId: string ;
-  groupId?: string | undefined ;
 }
 
 export type ParticipantsPUTQueryParameters = {
+  groupId: string ;
   expenseId: string ;
-  groupId?: string | undefined ;
 }
 
 export type ParticipantsDELETEQueryParameters = {
+  groupId: string ;
   expenseId: string ;
   userId: string ;
-  groupId?: string | undefined ;
-}
-
-export type MyQueryParameters = {
-  userTelegramId?: number | undefined ;
 }
 
 export type GroupsAllQueryParameters = {
@@ -108,6 +106,15 @@ export type UsersDELETEQueryParameters = {
   userId: string ;
 }
 
+export type PermissionsQueryParameters = {
+  groupId: string ;
+  userId: string ;
+}
+
+export type OwnershipQueryParameters = {
+  groupId: string ;
+}
+
 export type PaymentsAllQueryParameters = {
   groupId: string ;
 }
@@ -128,19 +135,6 @@ export type PaymentsPUTQueryParameters = {
 export type PaymentsDELETEQueryParameters = {
   groupId: string ;
   paymentId: string ;
-}
-
-export type UsersGETQueryParameters = {
-  userId: string ;
-}
-
-export type UsersPUTQueryParameters = {
-  userId: string ;
-}
-
-export type FindQueryParameters = {
-  nickname?: string | undefined ;
-  userTelegramId?: number | undefined ;
 }
 
 export function balanceUrl(groupId: string): string {
@@ -195,7 +189,7 @@ export function useBalanceQuery<TSelectData = Types.BalanceResponseDto, TError =
   let options: UseQueryOptions<Types.BalanceResponseDto, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ groupId,  } = params[0] as BalanceQueryParameters);
@@ -235,7 +229,7 @@ export function setBalanceData(queryClient: QueryClient, updater: (data: Types.B
 export function setBalanceDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.BalanceResponseDto | undefined) => Types.BalanceResponseDto) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function transfersUrl(groupId: string, useNpAlgorithm?: boolean | undefined): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/transfers?";
 if (groupId === undefined || groupId === null)
@@ -297,7 +291,7 @@ export function useTransfersQuery<TSelectData = Types.TransferSuggestionsRespons
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
   let useNpAlgorithm: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ groupId, useNpAlgorithm,  } = params[0] as TransfersQueryParameters);
@@ -341,7 +335,7 @@ otherwise use the greedy algorithm.
 export function setTransfersDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.TransferSuggestionsResponseDto | undefined) => Types.TransferSuggestionsResponseDto) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function historyUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/history";
 if (groupId === undefined || groupId === null)
@@ -394,7 +388,7 @@ export function useHistoryQuery<TSelectData = Types.OperationHistoryResponseDto[
   let options: UseQueryOptions<Types.OperationHistoryResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ groupId,  } = params[0] as HistoryQueryParameters);
@@ -434,7 +428,7 @@ export function setHistoryData(queryClient: QueryClient, updater: (data: Types.O
 export function setHistoryDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.OperationHistoryResponseDto[] | undefined) => Types.OperationHistoryResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function healthUrl(): string {
   let url_ = getBaseUrl() + "/health";
   url_ = url_.replace(/[?&]$/, "");
@@ -469,7 +463,7 @@ export function useHealthQuery<TSelectData = void, TError = unknown>(options?: O
 export function useHealthQuery<TSelectData = void, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<void, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  
+
 
   options = params[0] as any;
   axiosConfig = params[1] as any;
@@ -499,9 +493,9 @@ export function setHealthData(queryClient: QueryClient, updater: (data: void | u
 export function setHealthDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: void | undefined) => void) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-export function groupAllUrl(groupId: string, userId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/group/{groupId}?";
+
+export function expensesAllUrl(groupId: string, userId?: string | undefined): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses?";
 if (groupId === undefined || groupId === null)
   throw new Error("The parameter 'groupId' must be defined.");
 url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
@@ -513,57 +507,57 @@ else if (userId !== undefined)
   return url_;
 }
 
-let groupAllDefaultOptions: Omit<UseQueryOptions<Types.ExpenseResponseDto[], unknown, Types.ExpenseResponseDto[]>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.ExpenseResponseDto[], unknown, Types.ExpenseResponseDto[]>, 'queryFn'>> = {
+let expensesAllDefaultOptions: Omit<UseQueryOptions<Types.ExpenseResponseDto[], unknown, Types.ExpenseResponseDto[]>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.ExpenseResponseDto[], unknown, Types.ExpenseResponseDto[]>, 'queryFn'>> = {
 };
-export function getGroupAllDefaultOptions() {
-  return groupAllDefaultOptions;
+export function getExpensesAllDefaultOptions() {
+  return expensesAllDefaultOptions;
 };
-export function setGroupAllDefaultOptions(options: typeof groupAllDefaultOptions) {
-  groupAllDefaultOptions = options;
+export function setExpensesAllDefaultOptions(options: typeof expensesAllDefaultOptions) {
+  expensesAllDefaultOptions = options;
 }
 
-export function groupAllQueryKey(dto: GroupAllQueryParameters): QueryKey;
-export function groupAllQueryKey(groupId: string, userId?: string | undefined): QueryKey;
-export function groupAllQueryKey(...params: any[]): QueryKey {
+export function expensesAllQueryKey(dto: ExpensesAllQueryParameters): QueryKey;
+export function expensesAllQueryKey(groupId: string, userId?: string | undefined): QueryKey;
+export function expensesAllQueryKey(...params: any[]): QueryKey {
   if (params.length === 1 && isParameterObject(params[0])) {
-    const { groupId, userId,  } = params[0] as GroupAllQueryParameters;
+    const { groupId, userId,  } = params[0] as ExpensesAllQueryParameters;
 
     return trimArrayEnd([
         'Client',
-        'groupAll',
+        'expensesAll',
         groupId as any,
         userId as any,
       ]);
   } else {
     return trimArrayEnd([
         'Client',
-        'groupAll',
+        'expensesAll',
         ...params
       ]);
   }
 }
-export function __groupAll(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
-  return Client.groupAll(
+export function __expensesAll(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.expensesAll(
       context.queryKey[2] as string,       context.queryKey[3] as string | undefined,axiosConfig    );
 }
 
-export function useGroupAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(dto: GroupAllQueryParameters, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useExpensesAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(dto: ExpensesAllQueryParameters, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
  * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
  */
-export function useGroupAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(groupId: string, userId?: string | undefined, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-export function useGroupAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+export function useExpensesAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(groupId: string, userId?: string | undefined, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useExpensesAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
   let userId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
-      ({ groupId, userId,  } = params[0] as GroupAllQueryParameters);
+      ({ groupId, userId,  } = params[0] as ExpensesAllQueryParameters);
       options = params[1];
       axiosConfig = params[2];
     } else {
@@ -575,9 +569,9 @@ export function useGroupAllQuery<TSelectData = Types.ExpenseResponseDto[], TErro
   options = addMetaToOptions(options, metaContext);
 
   return useQuery<Types.ExpenseResponseDto[], TError, TSelectData>({
-    queryFn: axiosConfig ? (context) => __groupAll(context, axiosConfig) : __groupAll,
-    queryKey: groupAllQueryKey(groupId, userId),
-    ...groupAllDefaultOptions as unknown as Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>,
+    queryFn: axiosConfig ? (context) => __expensesAll(context, axiosConfig) : __expensesAll,
+    queryKey: expensesAllQueryKey(groupId, userId),
+    ...expensesAllDefaultOptions as unknown as Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
@@ -587,8 +581,8 @@ export function useGroupAllQuery<TSelectData = Types.ExpenseResponseDto[], TErro
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
  */
-export function setGroupAllData(queryClient: QueryClient, updater: (data: Types.ExpenseResponseDto[] | undefined) => Types.ExpenseResponseDto[], groupId: string, userId?: string | undefined) {
-  queryClient.setQueryData(groupAllQueryKey(groupId, userId),
+export function setExpensesAllData(queryClient: QueryClient, updater: (data: Types.ExpenseResponseDto[] | undefined) => Types.ExpenseResponseDto[], groupId: string, userId?: string | undefined) {
+  queryClient.setQueryData(expensesAllQueryKey(groupId, userId),
     updater
   );
 }
@@ -599,12 +593,12 @@ export function setGroupAllData(queryClient: QueryClient, updater: (data: Types.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
  */
-export function setGroupAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.ExpenseResponseDto[] | undefined) => Types.ExpenseResponseDto[]) {
+export function setExpensesAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.ExpenseResponseDto[] | undefined) => Types.ExpenseResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-export function groupUrl(groupId: string): string {
-  let url_ = getBaseUrl() + "/api/expenses/group/{groupId}";
+
+export function expensesPOSTUrl(groupId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses";
 if (groupId === undefined || groupId === null)
   throw new Error("The parameter 'groupId' must be defined.");
 url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
@@ -612,10 +606,10 @@ url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
   return url_;
 }
 
-export function groupMutationKey(groupId: string): MutationKey {
+export function expensesPOSTMutationKey(groupId: string): MutationKey {
   return trimArrayEnd([
       'Client',
-      'group',
+      'expensesPOST',
       groupId as any,
     ]);
 }
@@ -626,20 +620,20 @@ export function groupMutationKey(groupId: string): MutationKey {
  * @param body (optional) Data for creating the expense.
  * @return OK
  */
-export function useGroupMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Types.CreateExpenseRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.ExpenseResponseDto, unknown, Types.CreateExpenseRequestDto, TContext> {
-  const key = groupMutationKey(groupId);
-  
+export function useExpensesPOSTMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Types.CreateExpenseRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.ExpenseResponseDto, unknown, Types.CreateExpenseRequestDto, TContext> {
+  const key = expensesPOSTMutationKey(groupId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: Types.CreateExpenseRequestDto) => Client.group(groupId, body),
+    mutationFn: (body: Types.CreateExpenseRequestDto) => Client.expensesPOST(groupId, body),
     mutationKey: key,
   });
 }
-  
-type Group__MutationParameters = GroupQueryParameters & {
+
+type ExpensesPOST__MutationParameters = ExpensesPOSTQueryParameters & {
   body: Types.CreateExpenseRequestDto;
 }
 
@@ -649,28 +643,27 @@ type Group__MutationParameters = GroupQueryParameters & {
  * @param body (optional) Data for creating the expense.
  * @return OK
  */
-export function useGroupMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Group__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: GroupQueryParameters}): UseMutationResult<Types.ExpenseResponseDto, unknown, Group__MutationParameters, TContext> {
-  const key = groupMutationKey(options?.parameters?.groupId!);
-  
+export function useExpensesPOSTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, ExpensesPOST__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ExpensesPOSTQueryParameters}): UseMutationResult<Types.ExpenseResponseDto, unknown, ExpensesPOST__MutationParameters, TContext> {
+  const key = expensesPOSTMutationKey(options?.parameters?.groupId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: Group__MutationParameters) => Client.group(data.groupId ?? options?.parameters?.groupId!, data.body),
+  ...options,
+  mutationFn: (data: ExpensesPOST__MutationParameters) => Client.expensesPOST(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
 }
-  
-export function expensesGETUrl(expenseId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}?";
+
+export function expensesGETUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
@@ -685,16 +678,16 @@ export function setExpensesGETDefaultOptions(options: typeof expensesGETDefaultO
 }
 
 export function expensesGETQueryKey(dto: ExpensesGETQueryParameters): QueryKey;
-export function expensesGETQueryKey(expenseId: string, groupId?: string | undefined): QueryKey;
+export function expensesGETQueryKey(groupId: string, expenseId: string): QueryKey;
 export function expensesGETQueryKey(...params: any[]): QueryKey {
   if (params.length === 1 && isParameterObject(params[0])) {
-    const { expenseId, groupId,  } = params[0] as ExpensesGETQueryParameters;
+    const { groupId, expenseId,  } = params[0] as ExpensesGETQueryParameters;
 
     return trimArrayEnd([
         'Client',
         'expensesGET',
-        expenseId as any,
         groupId as any,
+        expenseId as any,
       ]);
   } else {
     return trimArrayEnd([
@@ -706,30 +699,30 @@ export function expensesGETQueryKey(...params: any[]): QueryKey {
 }
 export function __expensesGET(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
   return Client.expensesGET(
-      context.queryKey[2] as string,       context.queryKey[3] as string | undefined,axiosConfig    );
+      context.queryKey[2] as string,       context.queryKey[3] as string,axiosConfig    );
 }
 
 export function useExpensesGETQuery<TSelectData = Types.ExpenseResponseDto, TError = unknown>(dto: ExpensesGETQueryParameters, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
  * Retrieves details for a specific expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function useExpensesGETQuery<TSelectData = Types.ExpenseResponseDto, TError = unknown>(expenseId: string, groupId?: string | undefined, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useExpensesGETQuery<TSelectData = Types.ExpenseResponseDto, TError = unknown>(groupId: string, expenseId: string, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 export function useExpensesGETQuery<TSelectData = Types.ExpenseResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<Types.ExpenseResponseDto, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  let expenseId: any = undefined;
   let groupId: any = undefined;
-  
+  let expenseId: any = undefined;
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
-      ({ expenseId, groupId,  } = params[0] as ExpensesGETQueryParameters);
+      ({ groupId, expenseId,  } = params[0] as ExpensesGETQueryParameters);
       options = params[1];
       axiosConfig = params[2];
     } else {
-      [expenseId, groupId, options, axiosConfig] = params;
+      [groupId, expenseId, options, axiosConfig] = params;
     }
   }
 
@@ -738,97 +731,99 @@ export function useExpensesGETQuery<TSelectData = Types.ExpenseResponseDto, TErr
 
   return useQuery<Types.ExpenseResponseDto, TError, TSelectData>({
     queryFn: axiosConfig ? (context) => __expensesGET(context, axiosConfig) : __expensesGET,
-    queryKey: expensesGETQueryKey(expenseId, groupId),
+    queryKey: expensesGETQueryKey(groupId, expenseId),
     ...expensesGETDefaultOptions as unknown as Omit<UseQueryOptions<Types.ExpenseResponseDto, TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
 /**
  * Retrieves details for a specific expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function setExpensesGETData(queryClient: QueryClient, updater: (data: Types.ExpenseResponseDto | undefined) => Types.ExpenseResponseDto, expenseId: string, groupId?: string | undefined) {
-  queryClient.setQueryData(expensesGETQueryKey(expenseId, groupId),
+export function setExpensesGETData(queryClient: QueryClient, updater: (data: Types.ExpenseResponseDto | undefined) => Types.ExpenseResponseDto, groupId: string, expenseId: string) {
+  queryClient.setQueryData(expensesGETQueryKey(groupId, expenseId),
     updater
   );
 }
 
 /**
  * Retrieves details for a specific expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
 export function setExpensesGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.ExpenseResponseDto | undefined) => Types.ExpenseResponseDto) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-export function expensesDELETEUrl(expenseId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}?";
+
+export function expensesDELETEUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function expensesDELETEMutationKey(expenseId: string, groupId?: string | undefined): MutationKey {
+export function expensesDELETEMutationKey(groupId: string, expenseId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'expensesDELETE',
-      expenseId as any,
       groupId as any,
+      expenseId as any,
     ]);
 }
 
 /**
  * Deletes an expense from the group.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense to delete.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function useExpensesDELETEMutation<TContext>(expenseId: string, groupId?: string | undefined, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
-  const key = expensesDELETEMutationKey(expenseId, groupId);
-  
+export function useExpensesDELETEMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
+  const key = expensesDELETEMutationKey(groupId, expenseId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: () => Client.expensesDELETE(expenseId, groupId),
+    mutationFn: () => Client.expensesDELETE(groupId, expenseId),
     mutationKey: key,
   });
 }
-  
+
 type ExpensesDELETE__MutationParameters = ExpensesDELETEQueryParameters
 
 /**
  * Deletes an expense from the group.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense to delete.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
 export function useExpensesDELETEMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, ExpensesDELETE__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ExpensesDELETEQueryParameters}): UseMutationResult<void, unknown, ExpensesDELETE__MutationParameters, TContext> {
-  const key = expensesDELETEMutationKey(options?.parameters?.expenseId!, options?.parameters?.groupId!);
-  
+  const key = expensesDELETEMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: ExpensesDELETE__MutationParameters) => Client.expensesDELETE(data.expenseId ?? options?.parameters?.expenseId!, data.groupId ?? options?.parameters?.groupId!),
+  ...options,
+  mutationFn: (data: ExpensesDELETE__MutationParameters) => Client.expensesDELETE(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!),
   mutationKey: key,
 });
 }
-  
-export function titleUrl(expenseId: string): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/title";
+
+export function titleUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/title";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
@@ -836,58 +831,64 @@ url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
   return url_;
 }
 
-export function titleMutationKey(expenseId: string): MutationKey {
+export function titleMutationKey(groupId: string, expenseId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'title',
+      groupId as any,
       expenseId as any,
     ]);
 }
 
 /**
  * Updates an existing expense’s title
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New title.
+ * @return OK
  */
-export function useTitleMutation<TContext>(expenseId: string, options?: Omit<UseMutationOptions<void, unknown, string, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, string, TContext> {
-  const key = titleMutationKey(expenseId);
-  
+export function useTitleMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<void, unknown, string, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, string, TContext> {
+  const key = titleMutationKey(groupId, expenseId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: string) => Client.title(expenseId, body),
+    mutationFn: (body: string) => Client.title(groupId, expenseId, body),
     mutationKey: key,
   });
 }
-  
+
 type Title__MutationParameters = TitleQueryParameters & {
   body: string;
 }
 
 /**
  * Updates an existing expense’s title
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New title.
+ * @return OK
  */
 export function useTitleMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, Title__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: TitleQueryParameters}): UseMutationResult<void, unknown, Title__MutationParameters, TContext> {
-  const key = titleMutationKey(options?.parameters?.expenseId!);
-  
+  const key = titleMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: Title__MutationParameters) => Client.title(data.expenseId ?? options?.parameters?.expenseId!, data.body),
+  ...options,
+  mutationFn: (data: Title__MutationParameters) => Client.title(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.body),
   mutationKey: key,
 });
 }
-  
-export function totalAmountUrl(expenseId: string): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/totalAmount";
+
+export function totalAmountUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/totalAmount";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
@@ -895,65 +896,67 @@ url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
   return url_;
 }
 
-export function totalAmountMutationKey(expenseId: string): MutationKey {
+export function totalAmountMutationKey(groupId: string, expenseId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'totalAmount',
+      groupId as any,
       expenseId as any,
     ]);
 }
 
 /**
  * Updates an existing expense’s total amount.
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New total amount.
+ * @return OK
  */
-export function useTotalAmountMutation<TContext>(expenseId: string, options?: Omit<UseMutationOptions<void, unknown, number, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, number, TContext> {
-  const key = totalAmountMutationKey(expenseId);
-  
+export function useTotalAmountMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<void, unknown, number, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, number, TContext> {
+  const key = totalAmountMutationKey(groupId, expenseId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: number) => Client.totalAmount(expenseId, body),
+    mutationFn: (body: number) => Client.totalAmount(groupId, expenseId, body),
     mutationKey: key,
   });
 }
-  
+
 type TotalAmount__MutationParameters = TotalAmountQueryParameters & {
   body: number;
 }
 
 /**
  * Updates an existing expense’s total amount.
+ * @param groupId ID of the group containing the expense.
  * @param expenseId ID of the expense to update.
- * @param body (optional) 
- * @return No Content
+ * @param body (optional) New total amount.
+ * @return OK
  */
 export function useTotalAmountMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, TotalAmount__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: TotalAmountQueryParameters}): UseMutationResult<void, unknown, TotalAmount__MutationParameters, TContext> {
-  const key = totalAmountMutationKey(options?.parameters?.expenseId!);
-  
+  const key = totalAmountMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: TotalAmount__MutationParameters) => Client.totalAmount(data.expenseId ?? options?.parameters?.expenseId!, data.body),
+  ...options,
+  mutationFn: (data: TotalAmount__MutationParameters) => Client.totalAmount(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.body),
   mutationKey: key,
 });
 }
-  
-export function participantsAllUrl(expenseId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+
+export function participantsAllUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
@@ -968,16 +971,16 @@ export function setParticipantsAllDefaultOptions(options: typeof participantsAll
 }
 
 export function participantsAllQueryKey(dto: ParticipantsAllQueryParameters): QueryKey;
-export function participantsAllQueryKey(expenseId: string, groupId?: string | undefined): QueryKey;
+export function participantsAllQueryKey(groupId: string, expenseId: string): QueryKey;
 export function participantsAllQueryKey(...params: any[]): QueryKey {
   if (params.length === 1 && isParameterObject(params[0])) {
-    const { expenseId, groupId,  } = params[0] as ParticipantsAllQueryParameters;
+    const { groupId, expenseId,  } = params[0] as ParticipantsAllQueryParameters;
 
     return trimArrayEnd([
         'Client',
         'participantsAll',
-        expenseId as any,
         groupId as any,
+        expenseId as any,
       ]);
   } else {
     return trimArrayEnd([
@@ -989,30 +992,30 @@ export function participantsAllQueryKey(...params: any[]): QueryKey {
 }
 export function __participantsAll(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
   return Client.participantsAll(
-      context.queryKey[2] as string,       context.queryKey[3] as string | undefined,axiosConfig    );
+      context.queryKey[2] as string,       context.queryKey[3] as string,axiosConfig    );
 }
 
 export function useParticipantsAllQuery<TSelectData = Types.ExpenseShareResponseDto[], TError = unknown>(dto: ParticipantsAllQueryParameters, options?: Omit<UseQueryOptions<Types.ExpenseShareResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
  * Retrieves all participants and their shares for an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function useParticipantsAllQuery<TSelectData = Types.ExpenseShareResponseDto[], TError = unknown>(expenseId: string, groupId?: string | undefined, options?: Omit<UseQueryOptions<Types.ExpenseShareResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useParticipantsAllQuery<TSelectData = Types.ExpenseShareResponseDto[], TError = unknown>(groupId: string, expenseId: string, options?: Omit<UseQueryOptions<Types.ExpenseShareResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 export function useParticipantsAllQuery<TSelectData = Types.ExpenseShareResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<Types.ExpenseShareResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  let expenseId: any = undefined;
   let groupId: any = undefined;
-  
+  let expenseId: any = undefined;
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
-      ({ expenseId, groupId,  } = params[0] as ParticipantsAllQueryParameters);
+      ({ groupId, expenseId,  } = params[0] as ParticipantsAllQueryParameters);
       options = params[1];
       axiosConfig = params[2];
     } else {
-      [expenseId, groupId, options, axiosConfig] = params;
+      [groupId, expenseId, options, axiosConfig] = params;
     }
   }
 
@@ -1021,239 +1024,232 @@ export function useParticipantsAllQuery<TSelectData = Types.ExpenseShareResponse
 
   return useQuery<Types.ExpenseShareResponseDto[], TError, TSelectData>({
     queryFn: axiosConfig ? (context) => __participantsAll(context, axiosConfig) : __participantsAll,
-    queryKey: participantsAllQueryKey(expenseId, groupId),
+    queryKey: participantsAllQueryKey(groupId, expenseId),
     ...participantsAllDefaultOptions as unknown as Omit<UseQueryOptions<Types.ExpenseShareResponseDto[], TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
 /**
  * Retrieves all participants and their shares for an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function setParticipantsAllData(queryClient: QueryClient, updater: (data: Types.ExpenseShareResponseDto[] | undefined) => Types.ExpenseShareResponseDto[], expenseId: string, groupId?: string | undefined) {
-  queryClient.setQueryData(participantsAllQueryKey(expenseId, groupId),
+export function setParticipantsAllData(queryClient: QueryClient, updater: (data: Types.ExpenseShareResponseDto[] | undefined) => Types.ExpenseShareResponseDto[], groupId: string, expenseId: string) {
+  queryClient.setQueryData(participantsAllQueryKey(groupId, expenseId),
     updater
   );
 }
 
 /**
  * Retrieves all participants and their shares for an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
 export function setParticipantsAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.ExpenseShareResponseDto[] | undefined) => Types.ExpenseShareResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-export function participantsPOSTUrl(expenseId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+
+export function participantsPOSTUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function participantsPOSTMutationKey(expenseId: string, groupId?: string | undefined): MutationKey {
+export function participantsPOSTMutationKey(groupId: string, expenseId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'participantsPOST',
-      expenseId as any,
       groupId as any,
+      expenseId as any,
     ]);
 }
 
 /**
  * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Share details of the new participant.
  * @return OK
  */
-export function useParticipantsPOSTMutation<TContext>(expenseId: string, groupId?: string | undefined, options?: Omit<UseMutationOptions<void, unknown, Types.ExpenseShareCreateDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.ExpenseShareCreateDto, TContext> {
-  const key = participantsPOSTMutationKey(expenseId, groupId);
-  
+export function useParticipantsPOSTMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<void, unknown, Types.ExpenseShareCreateDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.ExpenseShareCreateDto, TContext> {
+  const key = participantsPOSTMutationKey(groupId, expenseId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: Types.ExpenseShareCreateDto) => Client.participantsPOST(expenseId, groupId, body),
+    mutationFn: (body: Types.ExpenseShareCreateDto) => Client.participantsPOST(groupId, expenseId, body),
     mutationKey: key,
   });
 }
-  
+
 type ParticipantsPOST__MutationParameters = ParticipantsPOSTQueryParameters & {
   body: Types.ExpenseShareCreateDto;
 }
 
 /**
  * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Share details of the new participant.
  * @return OK
  */
 export function useParticipantsPOSTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, ParticipantsPOST__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ParticipantsPOSTQueryParameters}): UseMutationResult<void, unknown, ParticipantsPOST__MutationParameters, TContext> {
-  const key = participantsPOSTMutationKey(options?.parameters?.expenseId!, options?.parameters?.groupId!);
-  
+  const key = participantsPOSTMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: ParticipantsPOST__MutationParameters) => Client.participantsPOST(data.expenseId ?? options?.parameters?.expenseId!, data.groupId ?? options?.parameters?.groupId!, data.body),
+  ...options,
+  mutationFn: (data: ParticipantsPOST__MutationParameters) => Client.participantsPOST(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.body),
   mutationKey: key,
 });
 }
-  
-export function participantsPUTUrl(expenseId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants?";
+
+export function participantsPUTUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function participantsPUTMutationKey(expenseId: string, groupId?: string | undefined): MutationKey {
+export function participantsPUTMutationKey(groupId: string, expenseId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'participantsPUT',
-      expenseId as any,
       groupId as any,
+      expenseId as any,
     ]);
 }
 
 /**
  * Updates the share amount for an existing participant in an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Updated share details for the participant.
  * @return OK
  */
-export function useParticipantsPUTMutation<TContext>(expenseId: string, groupId?: string | undefined, options?: Omit<UseMutationOptions<void, unknown, Types.ExpenseShareCreateDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.ExpenseShareCreateDto, TContext> {
-  const key = participantsPUTMutationKey(expenseId, groupId);
-  
+export function useParticipantsPUTMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<void, unknown, Types.ExpenseShareCreateDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.ExpenseShareCreateDto, TContext> {
+  const key = participantsPUTMutationKey(groupId, expenseId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: Types.ExpenseShareCreateDto) => Client.participantsPUT(expenseId, groupId, body),
+    mutationFn: (body: Types.ExpenseShareCreateDto) => Client.participantsPUT(groupId, expenseId, body),
     mutationKey: key,
   });
 }
-  
+
 type ParticipantsPUT__MutationParameters = ParticipantsPUTQueryParameters & {
   body: Types.ExpenseShareCreateDto;
 }
 
 /**
  * Updates the share amount for an existing participant in an expense.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
- * @param groupId (optional) ID of the group.
  * @param body (optional) Updated share details for the participant.
  * @return OK
  */
 export function useParticipantsPUTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, ParticipantsPUT__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ParticipantsPUTQueryParameters}): UseMutationResult<void, unknown, ParticipantsPUT__MutationParameters, TContext> {
-  const key = participantsPUTMutationKey(options?.parameters?.expenseId!, options?.parameters?.groupId!);
-  
+  const key = participantsPUTMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: ParticipantsPUT__MutationParameters) => Client.participantsPUT(data.expenseId ?? options?.parameters?.expenseId!, data.groupId ?? options?.parameters?.groupId!, data.body),
+  ...options,
+  mutationFn: (data: ParticipantsPUT__MutationParameters) => Client.participantsPUT(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.body),
   mutationKey: key,
 });
 }
-  
-export function participantsDELETEUrl(expenseId: string, userId: string, groupId?: string | undefined): string {
-  let url_ = getBaseUrl() + "/api/expenses/{expenseId}/participants/{userId}?";
+
+export function participantsDELETEUrl(groupId: string, expenseId: string, userId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
 if (expenseId === undefined || expenseId === null)
   throw new Error("The parameter 'expenseId' must be defined.");
 url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
 if (userId === undefined || userId === null)
   throw new Error("The parameter 'userId' must be defined.");
 url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-if (groupId === null)
-    throw new Error("The parameter 'groupId' cannot be null.");
-else if (groupId !== undefined)
-    url_ += "groupId=" + encodeURIComponent("" + groupId) + "&";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function participantsDELETEMutationKey(expenseId: string, userId: string, groupId?: string | undefined): MutationKey {
+export function participantsDELETEMutationKey(groupId: string, expenseId: string, userId: string): MutationKey {
   return trimArrayEnd([
       'Client',
       'participantsDELETE',
+      groupId as any,
       expenseId as any,
       userId as any,
-      groupId as any,
     ]);
 }
 
 /**
  * Removes a participant from an expense and reallocates their share to the payer.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
-export function useParticipantsDELETEMutation<TContext>(expenseId: string, userId: string, groupId?: string | undefined, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
-  const key = participantsDELETEMutationKey(expenseId, userId, groupId);
-  
+export function useParticipantsDELETEMutation<TContext>(groupId: string, expenseId: string, userId: string, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
+  const key = participantsDELETEMutationKey(groupId, expenseId, userId);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: () => Client.participantsDELETE(expenseId, userId, groupId),
+    mutationFn: () => Client.participantsDELETE(groupId, expenseId, userId),
     mutationKey: key,
   });
 }
-  
+
 type ParticipantsDELETE__MutationParameters = ParticipantsDELETEQueryParameters
 
 /**
  * Removes a participant from an expense and reallocates their share to the payer.
+ * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
- * @param groupId (optional) ID of the group.
  * @return OK
  */
 export function useParticipantsDELETEMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, ParticipantsDELETE__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ParticipantsDELETEQueryParameters}): UseMutationResult<void, unknown, ParticipantsDELETE__MutationParameters, TContext> {
-  const key = participantsDELETEMutationKey(options?.parameters?.expenseId!, options?.parameters?.userId!, options?.parameters?.groupId!);
-  
+  const key = participantsDELETEMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!, options?.parameters?.userId!);
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
-  mutationFn: (data: ParticipantsDELETE__MutationParameters) => Client.participantsDELETE(data.expenseId ?? options?.parameters?.expenseId!, data.userId ?? options?.parameters?.userId!, data.groupId ?? options?.parameters?.groupId!),
+  ...options,
+  mutationFn: (data: ParticipantsDELETE__MutationParameters) => Client.participantsDELETE(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.userId ?? options?.parameters?.userId!),
   mutationKey: key,
 });
 }
-  
-export function myUrl(userTelegramId?: number | undefined): string {
-  let url_ = getBaseUrl() + "/api/groups/my?";
-if (userTelegramId === null)
-    throw new Error("The parameter 'userTelegramId' cannot be null.");
-else if (userTelegramId !== undefined)
-    url_ += "userTelegramId=" + encodeURIComponent("" + userTelegramId) + "&";
+
+export function myUrl(): string {
+  let url_ = getBaseUrl() + "/api/groups/my";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
@@ -1267,81 +1263,59 @@ export function setMyDefaultOptions(options: typeof myDefaultOptions) {
   myDefaultOptions = options;
 }
 
-export function myQueryKey(userTelegramId?: number | undefined): QueryKey;
+export function myQueryKey(): QueryKey;
 export function myQueryKey(...params: any[]): QueryKey {
-  if (params.length === 1 && isParameterObject(params[0])) {
-    const { userTelegramId,  } = params[0] as MyQueryParameters;
-
-    return trimArrayEnd([
-        'Client',
-        'my',
-        userTelegramId as any,
-      ]);
-  } else {
-    return trimArrayEnd([
-        'Client',
-        'my',
-        ...params
-      ]);
-  }
+  return trimArrayEnd([
+      'Client',
+      'my',
+    ]);
 }
 export function __my(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
   return Client.my(
-      context.queryKey[2] as number | undefined,axiosConfig    );
+axiosConfig    );
 }
 
-export function useMyQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(dto: MyQueryParameters, options?: Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
- * Retrieves all groups the specified user belongs to.
- * @param userTelegramId (optional) Telegram ID of the user.
+ * Retrieves groups the authenticated user belongs to.
  * @return OK
  */
-export function useMyQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(userTelegramId?: number | undefined, options?: Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useMyQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(options?: Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 export function useMyQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  let userTelegramId: any = undefined;
-  
-  if (params.length > 0) {
-    if (isParameterObject(params[0])) {
-      ({ userTelegramId,  } = params[0] as MyQueryParameters);
-      options = params[1];
-      axiosConfig = params[2];
-    } else {
-      [userTelegramId, options, axiosConfig] = params;
-    }
-  }
+
+
+  options = params[0] as any;
+  axiosConfig = params[1] as any;
 
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
 
   return useQuery<Types.GroupOverviewResponseDto[], TError, TSelectData>({
     queryFn: axiosConfig ? (context) => __my(context, axiosConfig) : __my,
-    queryKey: myQueryKey(userTelegramId),
+    queryKey: myQueryKey(),
     ...myDefaultOptions as unknown as Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
 /**
- * Retrieves all groups the specified user belongs to.
- * @param userTelegramId (optional) Telegram ID of the user.
+ * Retrieves groups the authenticated user belongs to.
  * @return OK
  */
-export function setMyData(queryClient: QueryClient, updater: (data: Types.GroupOverviewResponseDto[] | undefined) => Types.GroupOverviewResponseDto[], userTelegramId?: number | undefined) {
-  queryClient.setQueryData(myQueryKey(userTelegramId),
+export function setMyData(queryClient: QueryClient, updater: (data: Types.GroupOverviewResponseDto[] | undefined) => Types.GroupOverviewResponseDto[], ) {
+  queryClient.setQueryData(myQueryKey(),
     updater
   );
 }
 
 /**
- * Retrieves all groups the specified user belongs to.
- * @param userTelegramId (optional) Telegram ID of the user.
+ * Retrieves groups the authenticated user belongs to.
  * @return OK
  */
 export function setMyDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.GroupOverviewResponseDto[] | undefined) => Types.GroupOverviewResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function groupsAllUrl(telegramChatId?: number | undefined): string {
   let url_ = getBaseUrl() + "/api/groups?";
 if (telegramChatId === null)
@@ -1387,7 +1361,7 @@ export function __groupsAll(context: QueryFunctionContext, axiosConfig?: AxiosRe
 export function useGroupsAllQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(dto: GroupsAllQueryParameters, options?: Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
  * Retrieves all groups the specified chat belongs to.
- * @param telegramChatId (optional) 
+ * @param telegramChatId (optional)
  * @return OK
  */
 export function useGroupsAllQuery<TSelectData = Types.GroupOverviewResponseDto[], TError = unknown>(telegramChatId?: number | undefined, options?: Omit<UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
@@ -1395,7 +1369,7 @@ export function useGroupsAllQuery<TSelectData = Types.GroupOverviewResponseDto[]
   let options: UseQueryOptions<Types.GroupOverviewResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let telegramChatId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ telegramChatId,  } = params[0] as GroupsAllQueryParameters);
@@ -1418,7 +1392,7 @@ export function useGroupsAllQuery<TSelectData = Types.GroupOverviewResponseDto[]
 }
 /**
  * Retrieves all groups the specified chat belongs to.
- * @param telegramChatId (optional) 
+ * @param telegramChatId (optional)
  * @return OK
  */
 export function setGroupsAllData(queryClient: QueryClient, updater: (data: Types.GroupOverviewResponseDto[] | undefined) => Types.GroupOverviewResponseDto[], telegramChatId?: number | undefined) {
@@ -1429,13 +1403,13 @@ export function setGroupsAllData(queryClient: QueryClient, updater: (data: Types
 
 /**
  * Retrieves all groups the specified chat belongs to.
- * @param telegramChatId (optional) 
+ * @param telegramChatId (optional)
  * @return OK
  */
 export function setGroupsAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.GroupOverviewResponseDto[] | undefined) => Types.GroupOverviewResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function groupsPOSTUrl(): string {
   let url_ = getBaseUrl() + "/api/groups";
   url_ = url_.replace(/[?&]$/, "");
@@ -1456,17 +1430,17 @@ export function groupsPOSTMutationKey(): MutationKey {
  */
 export function useGroupsPOSTMutation<TContext>(options?: Omit<UseMutationOptions<Types.GroupResponseDto, unknown, Types.CreateGroupRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.GroupResponseDto, unknown, Types.CreateGroupRequestDto, TContext> {
   const key = groupsPOSTMutationKey();
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.CreateGroupRequestDto) => Client.groupsPOST(body),
     mutationKey: key,
   });
 }
-  
+
 export function groupsGETUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}";
 if (groupId === undefined || groupId === null)
@@ -1519,7 +1493,7 @@ export function useGroupsGETQuery<TSelectData = Types.GroupResponseDto, TError =
   let options: UseQueryOptions<Types.GroupResponseDto, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ groupId,  } = params[0] as GroupsGETQueryParameters);
@@ -1559,7 +1533,7 @@ export function setGroupsGETData(queryClient: QueryClient, updater: (data: Types
 export function setGroupsGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.GroupResponseDto | undefined) => Types.GroupResponseDto) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function groupsPUTUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}";
 if (groupId === undefined || groupId === null)
@@ -1585,17 +1559,17 @@ export function groupsPUTMutationKey(groupId: string): MutationKey {
  */
 export function useGroupsPUTMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<void, unknown, Types.UpdateGroupRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdateGroupRequestDto, TContext> {
   const key = groupsPUTMutationKey(groupId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.UpdateGroupRequestDto) => Client.groupsPUT(groupId, body),
     mutationKey: key,
   });
 }
-  
+
 type GroupsPUT__MutationParameters = GroupsPUTQueryParameters & {
   body: Types.UpdateGroupRequestDto;
 }
@@ -1608,17 +1582,17 @@ type GroupsPUT__MutationParameters = GroupsPUTQueryParameters & {
  */
 export function useGroupsPUTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, GroupsPUT__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: GroupsPUTQueryParameters}): UseMutationResult<void, unknown, GroupsPUT__MutationParameters, TContext> {
   const key = groupsPUTMutationKey(options?.parameters?.groupId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: GroupsPUT__MutationParameters) => Client.groupsPUT(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
 }
-  
+
 export function groupsDELETEUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}";
 if (groupId === undefined || groupId === null)
@@ -1643,17 +1617,17 @@ export function groupsDELETEMutationKey(groupId: string): MutationKey {
  */
 export function useGroupsDELETEMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
   const key = groupsDELETEMutationKey(groupId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: () => Client.groupsDELETE(groupId),
     mutationKey: key,
   });
 }
-  
+
 type GroupsDELETE__MutationParameters = GroupsDELETEQueryParameters
 
 /**
@@ -1663,17 +1637,17 @@ type GroupsDELETE__MutationParameters = GroupsDELETEQueryParameters
  */
 export function useGroupsDELETEMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, GroupsDELETE__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: GroupsDELETEQueryParameters}): UseMutationResult<void, unknown, GroupsDELETE__MutationParameters, TContext> {
   const key = groupsDELETEMutationKey(options?.parameters?.groupId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: GroupsDELETE__MutationParameters) => Client.groupsDELETE(data.groupId ?? options?.parameters?.groupId!),
   mutationKey: key,
 });
 }
-  
+
 export function usersPOSTUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/users";
 if (groupId === undefined || groupId === null)
@@ -1699,17 +1673,17 @@ export function usersPOSTMutationKey(groupId: string): MutationKey {
  */
 export function useUsersPOSTMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<void, unknown, Types.AddGroupUserRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.AddGroupUserRequestDto, TContext> {
   const key = usersPOSTMutationKey(groupId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.AddGroupUserRequestDto) => Client.usersPOST(groupId, body),
     mutationKey: key,
   });
 }
-  
+
 type UsersPOST__MutationParameters = UsersPOSTQueryParameters & {
   body: Types.AddGroupUserRequestDto;
 }
@@ -1722,17 +1696,17 @@ type UsersPOST__MutationParameters = UsersPOSTQueryParameters & {
  */
 export function useUsersPOSTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, UsersPOST__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: UsersPOSTQueryParameters}): UseMutationResult<void, unknown, UsersPOST__MutationParameters, TContext> {
   const key = usersPOSTMutationKey(options?.parameters?.groupId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: UsersPOST__MutationParameters) => Client.usersPOST(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
 }
-  
+
 export function usersDELETEUrl(groupId: string, userId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/users/{userId}";
 if (groupId === undefined || groupId === null)
@@ -1762,17 +1736,17 @@ export function usersDELETEMutationKey(groupId: string, userId: string): Mutatio
  */
 export function useUsersDELETEMutation<TContext>(groupId: string, userId: string, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
   const key = usersDELETEMutationKey(groupId, userId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: () => Client.usersDELETE(groupId, userId),
     mutationKey: key,
   });
 }
-  
+
 type UsersDELETE__MutationParameters = UsersDELETEQueryParameters
 
 /**
@@ -1783,17 +1757,131 @@ type UsersDELETE__MutationParameters = UsersDELETEQueryParameters
  */
 export function useUsersDELETEMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, UsersDELETE__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: UsersDELETEQueryParameters}): UseMutationResult<void, unknown, UsersDELETE__MutationParameters, TContext> {
   const key = usersDELETEMutationKey(options?.parameters?.groupId!, options?.parameters?.userId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: UsersDELETE__MutationParameters) => Client.usersDELETE(data.groupId ?? options?.parameters?.groupId!, data.userId ?? options?.parameters?.userId!),
   mutationKey: key,
 });
 }
-  
+
+export function permissionsUrl(groupId: string, userId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/users/{userId}/permissions";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+if (userId === undefined || userId === null)
+  throw new Error("The parameter 'userId' must be defined.");
+url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function permissionsMutationKey(groupId: string, userId: string): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'permissions',
+      groupId as any,
+      userId as any,
+    ]);
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function usePermissionsMutation<TContext>(groupId: string, userId: string, options?: Omit<UseMutationOptions<void, unknown, Types.UpdateGroupMemberPermissionsRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdateGroupMemberPermissionsRequestDto, TContext> {
+  const key = permissionsMutationKey(groupId, userId);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: (body: Types.UpdateGroupMemberPermissionsRequestDto) => Client.permissions(groupId, userId, body),
+    mutationKey: key,
+  });
+}
+
+type Permissions__MutationParameters = PermissionsQueryParameters & {
+  body: Types.UpdateGroupMemberPermissionsRequestDto;
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function usePermissionsMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, Permissions__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: PermissionsQueryParameters}): UseMutationResult<void, unknown, Permissions__MutationParameters, TContext> {
+  const key = permissionsMutationKey(options?.parameters?.groupId!, options?.parameters?.userId!);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+return useMutation({
+  ...options,
+  mutationFn: (data: Permissions__MutationParameters) => Client.permissions(data.groupId ?? options?.parameters?.groupId!, data.userId ?? options?.parameters?.userId!, data.body),
+  mutationKey: key,
+});
+}
+
+export function ownershipUrl(groupId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/ownership";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function ownershipMutationKey(groupId: string): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'ownership',
+      groupId as any,
+    ]);
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function useOwnershipMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<void, unknown, Types.TransferGroupOwnershipRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.TransferGroupOwnershipRequestDto, TContext> {
+  const key = ownershipMutationKey(groupId);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: (body: Types.TransferGroupOwnershipRequestDto) => Client.ownership(groupId, body),
+    mutationKey: key,
+  });
+}
+
+type Ownership__MutationParameters = OwnershipQueryParameters & {
+  body: Types.TransferGroupOwnershipRequestDto;
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function useOwnershipMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, Ownership__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: OwnershipQueryParameters}): UseMutationResult<void, unknown, Ownership__MutationParameters, TContext> {
+  const key = ownershipMutationKey(options?.parameters?.groupId!);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+return useMutation({
+  ...options,
+  mutationFn: (data: Ownership__MutationParameters) => Client.ownership(data.groupId ?? options?.parameters?.groupId!, data.body),
+  mutationKey: key,
+});
+}
+
 export function paymentsAllUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/payments";
 if (groupId === undefined || groupId === null)
@@ -1846,7 +1934,7 @@ export function usePaymentsAllQuery<TSelectData = Types.PaymentResponseDto[], TE
   let options: UseQueryOptions<Types.PaymentResponseDto[], TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
   let groupId: any = undefined;
-  
+
   if (params.length > 0) {
     if (isParameterObject(params[0])) {
       ({ groupId,  } = params[0] as PaymentsAllQueryParameters);
@@ -1886,7 +1974,7 @@ export function setPaymentsAllData(queryClient: QueryClient, updater: (data: Typ
 export function setPaymentsAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.PaymentResponseDto[] | undefined) => Types.PaymentResponseDto[]) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
+
 export function expenseUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/payments/expense";
 if (groupId === undefined || groupId === null)
@@ -1912,17 +2000,17 @@ export function expenseMutationKey(groupId: string): MutationKey {
  */
 export function useExpenseMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<Types.PaymentResponseDto, unknown, Types.CreatePaymentForExpenseRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.PaymentResponseDto, unknown, Types.CreatePaymentForExpenseRequestDto, TContext> {
   const key = expenseMutationKey(groupId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.CreatePaymentForExpenseRequestDto) => Client.expense(groupId, body),
     mutationKey: key,
   });
 }
-  
+
 type Expense__MutationParameters = ExpenseQueryParameters & {
   body: Types.CreatePaymentForExpenseRequestDto;
 }
@@ -1935,17 +2023,17 @@ type Expense__MutationParameters = ExpenseQueryParameters & {
  */
 export function useExpenseMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.PaymentResponseDto, unknown, Expense__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ExpenseQueryParameters}): UseMutationResult<Types.PaymentResponseDto, unknown, Expense__MutationParameters, TContext> {
   const key = expenseMutationKey(options?.parameters?.groupId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: Expense__MutationParameters) => Client.expense(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
 }
-  
+
 export function directUrl(groupId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/payments/direct";
 if (groupId === undefined || groupId === null)
@@ -1971,17 +2059,17 @@ export function directMutationKey(groupId: string): MutationKey {
  */
 export function useDirectMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<Types.PaymentResponseDto, unknown, Types.CreateDirectPaymentRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.PaymentResponseDto, unknown, Types.CreateDirectPaymentRequestDto, TContext> {
   const key = directMutationKey(groupId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.CreateDirectPaymentRequestDto) => Client.direct(groupId, body),
     mutationKey: key,
   });
 }
-  
+
 type Direct__MutationParameters = DirectQueryParameters & {
   body: Types.CreateDirectPaymentRequestDto;
 }
@@ -1994,17 +2082,17 @@ type Direct__MutationParameters = DirectQueryParameters & {
  */
 export function useDirectMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.PaymentResponseDto, unknown, Direct__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: DirectQueryParameters}): UseMutationResult<Types.PaymentResponseDto, unknown, Direct__MutationParameters, TContext> {
   const key = directMutationKey(options?.parameters?.groupId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: Direct__MutationParameters) => Client.direct(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
 }
-  
+
 export function paymentsPUTUrl(groupId: string, paymentId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/payments/{paymentId}";
 if (groupId === undefined || groupId === null)
@@ -2035,17 +2123,17 @@ export function paymentsPUTMutationKey(groupId: string, paymentId: string): Muta
  */
 export function usePaymentsPUTMutation<TContext>(groupId: string, paymentId: string, options?: Omit<UseMutationOptions<void, unknown, Types.UpdatePaymentRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdatePaymentRequestDto, TContext> {
   const key = paymentsPUTMutationKey(groupId, paymentId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: (body: Types.UpdatePaymentRequestDto) => Client.paymentsPUT(groupId, paymentId, body),
     mutationKey: key,
   });
 }
-  
+
 type PaymentsPUT__MutationParameters = PaymentsPUTQueryParameters & {
   body: Types.UpdatePaymentRequestDto;
 }
@@ -2059,17 +2147,17 @@ type PaymentsPUT__MutationParameters = PaymentsPUTQueryParameters & {
  */
 export function usePaymentsPUTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, PaymentsPUT__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: PaymentsPUTQueryParameters}): UseMutationResult<void, unknown, PaymentsPUT__MutationParameters, TContext> {
   const key = paymentsPUTMutationKey(options?.parameters?.groupId!, options?.parameters?.paymentId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: PaymentsPUT__MutationParameters) => Client.paymentsPUT(data.groupId ?? options?.parameters?.groupId!, data.paymentId ?? options?.parameters?.paymentId!, data.body),
   mutationKey: key,
 });
 }
-  
+
 export function paymentsDELETEUrl(groupId: string, paymentId: string): string {
   let url_ = getBaseUrl() + "/api/groups/{groupId}/payments/{paymentId}";
 if (groupId === undefined || groupId === null)
@@ -2099,17 +2187,17 @@ export function paymentsDELETEMutationKey(groupId: string, paymentId: string): M
  */
 export function usePaymentsDELETEMutation<TContext>(groupId: string, paymentId: string, options?: Omit<UseMutationOptions<void, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, void, TContext> {
   const key = paymentsDELETEMutationKey(groupId, paymentId);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
     mutationFn: () => Client.paymentsDELETE(groupId, paymentId),
     mutationKey: key,
   });
 }
-  
+
 type PaymentsDELETE__MutationParameters = PaymentsDELETEQueryParameters
 
 /**
@@ -2120,53 +2208,53 @@ type PaymentsDELETE__MutationParameters = PaymentsDELETEQueryParameters
  */
 export function usePaymentsDELETEMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, PaymentsDELETE__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: PaymentsDELETEQueryParameters}): UseMutationResult<void, unknown, PaymentsDELETE__MutationParameters, TContext> {
   const key = paymentsDELETEMutationKey(options?.parameters?.groupId!, options?.parameters?.paymentId!);
-  
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
 return useMutation({
-  ...options, 
+  ...options,
   mutationFn: (data: PaymentsDELETE__MutationParameters) => Client.paymentsDELETE(data.groupId ?? options?.parameters?.groupId!, data.paymentId ?? options?.parameters?.paymentId!),
   mutationKey: key,
 });
 }
-  
-export function usersAllUrl(): string {
-  let url_ = getBaseUrl() + "/api/users";
+
+export function meGETUrl(): string {
+  let url_ = getBaseUrl() + "/api/users/me";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-let usersAllDefaultOptions: Omit<UseQueryOptions<Types.UserOverviewResponseDto[], unknown, Types.UserOverviewResponseDto[]>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserOverviewResponseDto[], unknown, Types.UserOverviewResponseDto[]>, 'queryFn'>> = {
+let meGETDefaultOptions: Omit<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryFn'>> = {
 };
-export function getUsersAllDefaultOptions() {
-  return usersAllDefaultOptions;
+export function getMeGETDefaultOptions() {
+  return meGETDefaultOptions;
 };
-export function setUsersAllDefaultOptions(options: typeof usersAllDefaultOptions) {
-  usersAllDefaultOptions = options;
+export function setMeGETDefaultOptions(options: typeof meGETDefaultOptions) {
+  meGETDefaultOptions = options;
 }
 
-export function usersAllQueryKey(): QueryKey;
-export function usersAllQueryKey(...params: any[]): QueryKey {
+export function meGETQueryKey(): QueryKey;
+export function meGETQueryKey(...params: any[]): QueryKey {
   return trimArrayEnd([
       'Client',
-      'usersAll',
+      'meGET',
     ]);
 }
-export function __usersAll(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
-  return Client.usersAll(
+export function __meGET(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.meGET(
 axiosConfig    );
 }
 
 /**
- * Retrieves an overview of all users in the system.
+ * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function useUsersAllQuery<TSelectData = Types.UserOverviewResponseDto[], TError = unknown>(options?: Omit<UseQueryOptions<Types.UserOverviewResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-export function useUsersAllQuery<TSelectData = Types.UserOverviewResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.UserOverviewResponseDto[], TError, TSelectData> | undefined = undefined;
+export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+  let options: UseQueryOptions<Types.UserResponseDto, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  
+
 
   options = params[0] as any;
   axiosConfig = params[1] as any;
@@ -2174,314 +2262,58 @@ export function useUsersAllQuery<TSelectData = Types.UserOverviewResponseDto[], 
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
 
-  return useQuery<Types.UserOverviewResponseDto[], TError, TSelectData>({
-    queryFn: axiosConfig ? (context) => __usersAll(context, axiosConfig) : __usersAll,
-    queryKey: usersAllQueryKey(),
-    ...usersAllDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserOverviewResponseDto[], TError, TSelectData>, 'queryKey'>,
+  return useQuery<Types.UserResponseDto, TError, TSelectData>({
+    queryFn: axiosConfig ? (context) => __meGET(context, axiosConfig) : __meGET,
+    queryKey: meGETQueryKey(),
+    ...meGETDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
 /**
- * Retrieves an overview of all users in the system.
+ * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function setUsersAllData(queryClient: QueryClient, updater: (data: Types.UserOverviewResponseDto[] | undefined) => Types.UserOverviewResponseDto[], ) {
-  queryClient.setQueryData(usersAllQueryKey(),
+export function setMeGETData(queryClient: QueryClient, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto, ) {
+  queryClient.setQueryData(meGETQueryKey(),
     updater
   );
 }
 
 /**
- * Retrieves an overview of all users in the system.
+ * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function setUsersAllDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserOverviewResponseDto[] | undefined) => Types.UserOverviewResponseDto[]) {
+export function setMeGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto) {
   queryClient.setQueryData(queryKey, updater);
 }
-    
-export function usersPOST2Url(): string {
-  let url_ = getBaseUrl() + "/api/users";
+
+export function mePUTUrl(): string {
+  let url_ = getBaseUrl() + "/api/users/me";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-export function usersPOST2MutationKey(): MutationKey {
+export function mePUTMutationKey(): MutationKey {
   return trimArrayEnd([
       'Client',
-      'usersPOST2',
+      'mePUT',
     ]);
 }
 
 /**
- * Creates a new user record.
- * @param body (optional) User creation data.
- * @return Created
+ * Updates the authenticated user's profile.
+ * @param body (optional) Updated user data.
+ * @return OK
  */
-export function useUsersPOST2Mutation<TContext>(options?: Omit<UseMutationOptions<string, unknown, Types.UserCreateRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<string, unknown, Types.UserCreateRequestDto, TContext> {
-  const key = usersPOST2MutationKey();
-  
+export function useMePUTMutation<TContext>(options?: Omit<UseMutationOptions<void, unknown, Types.UpdateUserRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdateUserRequestDto, TContext> {
+  const key = mePUTMutationKey();
+
   const metaContext = useContext(QueryMetaContext);
   options = addMetaToOptions(options, metaContext);
-  
+
   return useMutation({
     ...options,
-    mutationFn: (body: Types.UserCreateRequestDto) => Client.usersPOST2(body),
+    mutationFn: (body: Types.UpdateUserRequestDto) => Client.mePUT(body),
     mutationKey: key,
   });
-}
-  
-export function usersGETUrl(userId: string): string {
-  let url_ = getBaseUrl() + "/api/users/{userId}";
-if (userId === undefined || userId === null)
-  throw new Error("The parameter 'userId' must be defined.");
-url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-  url_ = url_.replace(/[?&]$/, "");
-  return url_;
-}
-
-let usersGETDefaultOptions: Omit<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryFn'>> = {
-};
-export function getUsersGETDefaultOptions() {
-  return usersGETDefaultOptions;
-};
-export function setUsersGETDefaultOptions(options: typeof usersGETDefaultOptions) {
-  usersGETDefaultOptions = options;
-}
-
-export function usersGETQueryKey(userId: string): QueryKey;
-export function usersGETQueryKey(...params: any[]): QueryKey {
-  if (params.length === 1 && isParameterObject(params[0])) {
-    const { userId,  } = params[0] as UsersGETQueryParameters;
-
-    return trimArrayEnd([
-        'Client',
-        'usersGET',
-        userId as any,
-      ]);
-  } else {
-    return trimArrayEnd([
-        'Client',
-        'usersGET',
-        ...params
-      ]);
-  }
-}
-export function __usersGET(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
-  return Client.usersGET(
-      context.queryKey[2] as string,axiosConfig    );
-}
-
-export function useUsersGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(dto: UsersGETQueryParameters, options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-/**
- * Retrieves detailed information for a specific user.
- * @param userId ID of the user.
- * @return OK
- */
-export function useUsersGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(userId: string, options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-export function useUsersGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.UserResponseDto, TError, TSelectData> | undefined = undefined;
-  let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  let userId: any = undefined;
-  
-  if (params.length > 0) {
-    if (isParameterObject(params[0])) {
-      ({ userId,  } = params[0] as UsersGETQueryParameters);
-      options = params[1];
-      axiosConfig = params[2];
-    } else {
-      [userId, options, axiosConfig] = params;
-    }
-  }
-
-  const metaContext = useContext(QueryMetaContext);
-  options = addMetaToOptions(options, metaContext);
-
-  return useQuery<Types.UserResponseDto, TError, TSelectData>({
-    queryFn: axiosConfig ? (context) => __usersGET(context, axiosConfig) : __usersGET,
-    queryKey: usersGETQueryKey(userId),
-    ...usersGETDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>,
-    ...options,
-  });
-}
-/**
- * Retrieves detailed information for a specific user.
- * @param userId ID of the user.
- * @return OK
- */
-export function setUsersGETData(queryClient: QueryClient, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto, userId: string) {
-  queryClient.setQueryData(usersGETQueryKey(userId),
-    updater
-  );
-}
-
-/**
- * Retrieves detailed information for a specific user.
- * @param userId ID of the user.
- * @return OK
- */
-export function setUsersGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto) {
-  queryClient.setQueryData(queryKey, updater);
-}
-    
-export function usersPUTUrl(userId: string): string {
-  let url_ = getBaseUrl() + "/api/users/{userId}";
-if (userId === undefined || userId === null)
-  throw new Error("The parameter 'userId' must be defined.");
-url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-  url_ = url_.replace(/[?&]$/, "");
-  return url_;
-}
-
-export function usersPUTMutationKey(userId: string): MutationKey {
-  return trimArrayEnd([
-      'Client',
-      'usersPUT',
-      userId as any,
-    ]);
-}
-
-/**
- * Updates user details.
- * @param userId ID of the user.
- * @param body (optional) Updated user data.
- * @return No Content
- */
-export function useUsersPUTMutation<TContext>(userId: string, options?: Omit<UseMutationOptions<void, unknown, Types.UpdateUserRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdateUserRequestDto, TContext> {
-  const key = usersPUTMutationKey(userId);
-  
-  const metaContext = useContext(QueryMetaContext);
-  options = addMetaToOptions(options, metaContext);
-  
-  return useMutation({
-    ...options,
-    mutationFn: (body: Types.UpdateUserRequestDto) => Client.usersPUT(userId, body),
-    mutationKey: key,
-  });
-}
-  
-type UsersPUT__MutationParameters = UsersPUTQueryParameters & {
-  body: Types.UpdateUserRequestDto;
-}
-
-/**
- * Updates user details.
- * @param userId ID of the user.
- * @param body (optional) Updated user data.
- * @return No Content
- */
-export function useUsersPUTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<void, unknown, UsersPUT__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: UsersPUTQueryParameters}): UseMutationResult<void, unknown, UsersPUT__MutationParameters, TContext> {
-  const key = usersPUTMutationKey(options?.parameters?.userId!);
-  
-  const metaContext = useContext(QueryMetaContext);
-  options = addMetaToOptions(options, metaContext);
-  
-return useMutation({
-  ...options, 
-  mutationFn: (data: UsersPUT__MutationParameters) => Client.usersPUT(data.userId ?? options?.parameters?.userId!, data.body),
-  mutationKey: key,
-});
-}
-  
-export function findUrl(nickname?: string | undefined, userTelegramId?: number | undefined): string {
-  let url_ = getBaseUrl() + "/api/users/find?";
-if (nickname === null)
-    throw new Error("The parameter 'nickname' cannot be null.");
-else if (nickname !== undefined)
-    url_ += "nickname=" + encodeURIComponent("" + nickname) + "&";
-if (userTelegramId === null)
-    throw new Error("The parameter 'userTelegramId' cannot be null.");
-else if (userTelegramId !== undefined)
-    url_ += "userTelegramId=" + encodeURIComponent("" + userTelegramId) + "&";
-  url_ = url_.replace(/[?&]$/, "");
-  return url_;
-}
-
-let findDefaultOptions: Omit<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryFn'>> = {
-};
-export function getFindDefaultOptions() {
-  return findDefaultOptions;
-};
-export function setFindDefaultOptions(options: typeof findDefaultOptions) {
-  findDefaultOptions = options;
-}
-
-export function findQueryKey(dto: FindQueryParameters): QueryKey;
-export function findQueryKey(nickname?: string | undefined, userTelegramId?: number | undefined): QueryKey;
-export function findQueryKey(...params: any[]): QueryKey {
-  if (params.length === 1 && isParameterObject(params[0])) {
-    const { nickname, userTelegramId,  } = params[0] as FindQueryParameters;
-
-    return trimArrayEnd([
-        'Client',
-        'find',
-        nickname as any,
-        userTelegramId as any,
-      ]);
-  } else {
-    return trimArrayEnd([
-        'Client',
-        'find',
-        ...params
-      ]);
-  }
-}
-export function __find(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
-  return Client.find(
-      context.queryKey[2] as string | undefined,       context.queryKey[3] as number | undefined,axiosConfig    );
-}
-
-export function useFindQuery<TSelectData = Types.UserResponseDto, TError = unknown>(dto: FindQueryParameters, options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-/**
- * Retrieves detailed information for a specific user by nickname or userTelegramId.
- * @param nickname (optional) of the user.
- * @param userTelegramId (optional) 
- * @return OK
- */
-export function useFindQuery<TSelectData = Types.UserResponseDto, TError = unknown>(nickname?: string | undefined, userTelegramId?: number | undefined, options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-export function useFindQuery<TSelectData = Types.UserResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
-  let options: UseQueryOptions<Types.UserResponseDto, TError, TSelectData> | undefined = undefined;
-  let axiosConfig: AxiosRequestConfig |undefined = undefined;
-  let nickname: any = undefined;
-  let userTelegramId: any = undefined;
-  
-  if (params.length > 0) {
-    if (isParameterObject(params[0])) {
-      ({ nickname, userTelegramId,  } = params[0] as FindQueryParameters);
-      options = params[1];
-      axiosConfig = params[2];
-    } else {
-      [nickname, userTelegramId, options, axiosConfig] = params;
-    }
-  }
-
-  const metaContext = useContext(QueryMetaContext);
-  options = addMetaToOptions(options, metaContext);
-
-  return useQuery<Types.UserResponseDto, TError, TSelectData>({
-    queryFn: axiosConfig ? (context) => __find(context, axiosConfig) : __find,
-    queryKey: findQueryKey(nickname, userTelegramId),
-    ...findDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>,
-    ...options,
-  });
-}
-/**
- * Retrieves detailed information for a specific user by nickname or userTelegramId.
- * @param nickname (optional) of the user.
- * @param userTelegramId (optional) 
- * @return OK
- */
-export function setFindData(queryClient: QueryClient, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto, nickname?: string | undefined, userTelegramId?: number | undefined) {
-  queryClient.setQueryData(findQueryKey(nickname, userTelegramId),
-    updater
-  );
-}
-
-/**
- * Retrieves detailed information for a specific user by nickname or userTelegramId.
- * @param nickname (optional) of the user.
- * @param userTelegramId (optional) 
- * @return OK
- */
-export function setFindDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto) {
-  queryClient.setQueryData(queryKey, updater);
 }

@@ -1,10 +1,12 @@
 import { spawnSync } from 'node:child_process';
-import { mkdir, rename, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 const rootDirectory = fileURLToPath(new URL('../', import.meta.url));
 const snapshotPath = fileURLToPath(new URL('../openapi/backend.json', import.meta.url));
 const outputPath = fileURLToPath(new URL('../src/shared/api/generated/client.ts', import.meta.url));
+const generatedDirectory = fileURLToPath(new URL('../src/shared/api/generated/', import.meta.url));
 const temporarySnapshotPath = fileURLToPath(
   new URL('../openapi/backend.tmp.json', import.meta.url),
 );
@@ -45,3 +47,16 @@ const result = spawnSync(
 if (result.status !== 0) {
   process.exit(result.status ?? 1);
 }
+
+// react-query-swagger currently emits trailing whitespace in some comments.
+// Keep committed generated artifacts deterministic and compatible with `git diff --check`.
+const generatedFiles = await readdir(generatedDirectory, { recursive: true });
+await Promise.all(
+  generatedFiles
+    .filter((file) => file.endsWith('.ts'))
+    .map(async (file) => {
+      const filePath = join(generatedDirectory, file);
+      const contents = await readFile(filePath, 'utf8');
+      await writeFile(filePath, contents.replace(/[ \t]+$/gm, ''));
+    }),
+);
