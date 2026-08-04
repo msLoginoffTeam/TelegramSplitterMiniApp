@@ -3,7 +3,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 const sdk = vi.hoisted(() => ({
   isTMA: vi.fn<() => boolean>(() => false),
   init: vi.fn(),
-  initData: { raw: vi.fn<() => string | undefined>(() => 'signed-init-data') },
+  initData: {
+    raw: vi.fn<() => string | undefined>(() => 'signed-init-data'),
+    restore: vi.fn(),
+  },
   themeParams: {
     isMounted: vi.fn<() => boolean>(() => false),
     mount: vi.fn(),
@@ -61,6 +64,7 @@ describe('platform adapters', () => {
     await Promise.all([platform.initialize(), platform.initialize()]);
 
     expect(sdk.init).toHaveBeenCalledTimes(1);
+    expect(sdk.initData.restore).toHaveBeenCalledTimes(1);
     expect(sdk.miniApp.ready).toHaveBeenCalledTimes(1);
     expect(platform.getInitData()).toBe('signed-init-data');
   });

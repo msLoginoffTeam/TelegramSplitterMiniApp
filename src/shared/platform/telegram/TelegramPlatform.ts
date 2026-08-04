@@ -49,6 +49,7 @@ export class TelegramPlatform implements PlatformAdapter {
 
   private async initializeSdk(): Promise<void> {
     init({ acceptCustomStyles: true });
+    initData.restore();
 
     if (!themeParams.isMounted()) {
       themeParams.mount();
