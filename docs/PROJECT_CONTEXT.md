@@ -54,7 +54,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 1. Foundation реализован в `main`: React/Vite scaffold, platform adapters, Axios boundary, generated API artifacts и quality CI готовы.
 2. Backend handoff завершён: актуальный OpenAPI-контракт включает Telegram authentication, Users API, groups, permissions, траты, платежи и transfers.
 3. Навигационный каркас реализован без mock data: `/groups`, создание группы и разделы выбранной группы (траты, платежи, transfers, участники, настройки).
-4. Первый live vertical slice реализован: Telegram `initData` передаётся из Axios boundary, browser-mode использует только явный local development ID; список и создание групп используют entity/feature layers. Следующими остаются group dashboard и expense flow.
+4. Первый live vertical slice реализован: Telegram `initData` передаётся из Axios boundary, browser-mode использует только явный local development ID; список/создание групп и dashboard используют entity/feature layers. Следующий шаг — полноэкранный mobile-first expense flow.
 
 Для browser-mode Vite должен проксировать `/api` на backend, запущенный в `Development` (по умолчанию `http://localhost:5028`). Docker API на `5050` остаётся production-like и сознательно не принимает development identity.
 

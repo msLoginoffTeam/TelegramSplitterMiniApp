@@ -45,6 +45,11 @@ export type ExpensesGETQueryParameters = {
   expenseId: string ;
 }
 
+export type ExpensesPUTQueryParameters = {
+  groupId: string ;
+  expenseId: string ;
+}
+
 export type ExpensesDELETEQueryParameters = {
   groupId: string ;
   expenseId: string ;
@@ -756,6 +761,67 @@ export function setExpensesGETData(queryClient: QueryClient, updater: (data: Typ
  */
 export function setExpensesGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.ExpenseResponseDto | undefined) => Types.ExpenseResponseDto) {
   queryClient.setQueryData(queryKey, updater);
+}
+
+export function expensesPUTUrl(groupId: string, expenseId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+if (expenseId === undefined || expenseId === null)
+  throw new Error("The parameter 'expenseId' must be defined.");
+url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function expensesPUTMutationKey(groupId: string, expenseId: string): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'expensesPUT',
+      groupId as any,
+      expenseId as any,
+    ]);
+}
+
+/**
+ * Replaces an expense's editable fields and participant shares atomically.
+ * @param body (optional)
+ * @return OK
+ */
+export function useExpensesPUTMutation<TContext>(groupId: string, expenseId: string, options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Types.UpdateExpenseRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.ExpenseResponseDto, unknown, Types.UpdateExpenseRequestDto, TContext> {
+  const key = expensesPUTMutationKey(groupId, expenseId);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: (body: Types.UpdateExpenseRequestDto) => Client.expensesPUT(groupId, expenseId, body),
+    mutationKey: key,
+  });
+}
+
+type ExpensesPUT__MutationParameters = ExpensesPUTQueryParameters & {
+  body: Types.UpdateExpenseRequestDto;
+}
+
+/**
+ * Replaces an expense's editable fields and participant shares atomically.
+ * @param body (optional)
+ * @return OK
+ */
+export function useExpensesPUTMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, ExpensesPUT__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: ExpensesPUTQueryParameters}): UseMutationResult<Types.ExpenseResponseDto, unknown, ExpensesPUT__MutationParameters, TContext> {
+  const key = expensesPUTMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+return useMutation({
+  ...options,
+  mutationFn: (data: ExpensesPUT__MutationParameters) => Client.expensesPUT(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.body),
+  mutationKey: key,
+});
 }
 
 export function expensesDELETEUrl(groupId: string, expenseId: string): string {

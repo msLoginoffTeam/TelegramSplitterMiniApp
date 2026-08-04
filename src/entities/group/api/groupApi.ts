@@ -1,6 +1,12 @@
 import { CreateGroupRequestDto } from '@/shared/api/generated/client';
 import * as GeneratedClient from '@/shared/api/generated/client/Client';
-import type { GroupOverview } from '@/entities/group/model/types';
+import type {
+  ExpenseSummary,
+  GroupBalance,
+  GroupDashboard,
+  GroupMember,
+  GroupOverview,
+} from '@/entities/group/model/types';
 
 function toGroupOverview(group: { id?: string; title?: string | null }): GroupOverview {
   if (!group.id || !group.title) {
@@ -8,6 +14,60 @@ function toGroupOverview(group: { id?: string; title?: string | null }): GroupOv
   }
 
   return { id: group.id, title: group.title };
+}
+
+function toGroupMember(member: {
+  userId?: string;
+  displayName?: string | null;
+  permissions?: number[] | null;
+}): GroupMember {
+  if (!member.userId || !member.displayName) {
+    throw new Error('Backend returned a group member without an ID or name.');
+  }
+
+  return {
+    userId: member.userId,
+    displayName: member.displayName,
+    permissions: member.permissions ?? [],
+  };
+}
+
+function toBalance(balance: {
+  userId?: string;
+  displayName?: string | null;
+  balance?: number;
+}): GroupBalance {
+  if (!balance.userId || !balance.displayName || balance.balance === undefined) {
+    throw new Error('Backend returned an incomplete group balance.');
+  }
+
+  return { userId: balance.userId, displayName: balance.displayName, amount: balance.balance };
+}
+
+function toExpenseSummary(expense: {
+  id?: string;
+  title?: string | null;
+  totalAmount?: number;
+  payerName?: string | null;
+  createdAt?: Date;
+}): ExpenseSummary {
+  if (
+    !expense.id ||
+    !expense.title ||
+    expense.totalAmount === undefined ||
+    !expense.payerName ||
+    !expense.createdAt
+  ) {
+    throw new Error('Backend returned an incomplete expense.');
+  }
+
+  return {
+    id: expense.id,
+    title: expense.title,
+    totalAmount: expense.totalAmount,
+    payerName: expense.payerName,
+    createdAt: expense.createdAt,
+  };
 }
 
 export const groupApi = {
@@ -19,5 +79,27 @@ export const groupApi = {
   async createGroup(title: string): Promise<GroupOverview> {
     const group = await GeneratedClient.groupsPOST(new CreateGroupRequestDto({ title }));
     return toGroupOverview(group);
+  },
+
+  async getDashboard(groupId: string): Promise<GroupDashboard> {
+    const [group, balance, expenses, currentUser] = await Promise.all([
+      GeneratedClient.groupsGET(groupId),
+      GeneratedClient.balance(groupId),
+      GeneratedClient.expensesAll(groupId),
+      GeneratedClient.meGET(),
+    ]);
+
+    if (!group.id || !group.title || !currentUser.id) {
+      throw new Error('Backend returned an incomplete group dashboard.');
+    }
+
+    return {
+      id: group.id,
+      title: group.title,
+      members: (group.members ?? []).map(toGroupMember),
+      balances: (balance.balances ?? []).map(toBalance),
+      expenses: expenses.map(toExpenseSummary),
+      currentUserId: currentUser.id,
+    };
   },
 };

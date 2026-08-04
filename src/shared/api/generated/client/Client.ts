@@ -472,6 +472,72 @@ function processExpensesGET(response: AxiosResponse): Promise<Types.ExpenseRespo
 }
 
 /**
+ * Replaces an expense's editable fields and participant shares atomically.
+ * @param body (optional)
+ * @return OK
+ */
+export function expensesPUT(groupId: string, expenseId: string, body?: Types.UpdateExpenseRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+    if (expenseId === undefined || expenseId === null)
+      throw new Error("The parameter 'expenseId' must be defined.");
+    url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigExpensesPUT,
+        ...config,
+        data: content_,
+        method: "PUT",
+        url: url_,
+        headers: {
+            ..._requestConfigExpensesPUT?.headers,
+            "Content-Type": "application/json",
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processExpensesPUT(_response);
+    });
+}
+
+function processExpensesPUT(response: AxiosResponse): Promise<Types.ExpenseResponseDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        let result200: any = null;
+        let resultData200  = _responseText;
+        result200 = Types.ExpenseResponseDto.fromJS(resultData200);
+        return Promise.resolve<Types.ExpenseResponseDto>(result200);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<Types.ExpenseResponseDto>(null as any);
+}
+
+/**
  * Deletes an expense from the group.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense to delete.
@@ -2096,6 +2162,17 @@ export function setExpensesGETRequestConfig(value: Partial<AxiosRequestConfig>) 
 }
 export function patchExpensesGETRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
   _requestConfigExpensesGET = patch(_requestConfigExpensesGET ?? {});
+}
+
+let _requestConfigExpensesPUT: Partial<AxiosRequestConfig> | null;
+export function getExpensesPUTRequestConfig() {
+  return _requestConfigExpensesPUT;
+}
+export function setExpensesPUTRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesPUT = value;
+}
+export function patchExpensesPUTRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesPUT = patch(_requestConfigExpensesPUT ?? {});
 }
 
 let _requestConfigExpensesDELETE: Partial<AxiosRequestConfig> | null;

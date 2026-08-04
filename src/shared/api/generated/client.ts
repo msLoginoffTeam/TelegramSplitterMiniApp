@@ -953,6 +953,62 @@ export interface ITransferSuggestionsResponseDto {
     transfers?: TransferSuggestionDto[] | null;
 }
 
+export class UpdateExpenseRequestDto implements IUpdateExpenseRequestDto {
+    title?: string | null;
+    totalAmount?: number;
+    payerId?: string;
+    shares?: ExpenseShareCreateDto[] | null;
+
+    constructor(data?: IUpdateExpenseRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.totalAmount = _data["totalAmount"];
+            this.payerId = _data["payerId"];
+            if (Array.isArray(_data["shares"])) {
+                this.shares = [] as any;
+                for (let item of _data["shares"])
+                    this.shares!.push(ExpenseShareCreateDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateExpenseRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateExpenseRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["totalAmount"] = this.totalAmount;
+        data["payerId"] = this.payerId;
+        if (Array.isArray(this.shares)) {
+            data["shares"] = [];
+            for (let item of this.shares)
+                data["shares"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IUpdateExpenseRequestDto {
+    title?: string | null;
+    totalAmount?: number;
+    payerId?: string;
+    shares?: ExpenseShareCreateDto[] | null;
+}
+
 export class UpdateGroupMemberPermissionsRequestDto implements IUpdateGroupMemberPermissionsRequestDto {
     role?: GroupRole;
     permissions?: GroupPermission[] | null;

@@ -1,3 +1,86 @@
+.primaryAction,
+.retry {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+}
+
+.section {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.section h2,
+.muted {
+  margin: 0;
+}
+
+.section h2 {
+  font-size: 1.125rem;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.sectionHeading span,
+.muted {
+  color: var(--color-hint);
+}
+
+.balanceList,
+.expenseList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+
+.balanceList li,
+.expenseList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.balanceList li + li,
+.expenseList li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.balanceList strong[data-positive='true'] {
+  color: var(--color-positive);
+}
+
+.balanceList strong[data-negative='true'] {
+  color: var(--color-danger);
+}
+
+.expenseList li > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.expenseList span {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.expenseList b {
+  white-space: nowrap;
+}
+
 .navigation {
   display: grid;
   gap: var(--space-3);
