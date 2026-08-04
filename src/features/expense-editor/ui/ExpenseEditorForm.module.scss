@@ -1,0 +1,118 @@
+.form,
+.section,
+.participants {
+  display: grid;
+  gap: var(--space-4);
+}
+.field {
+  display: grid;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+.field input,
+.field select,
+.allocation input {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: var(--color-text);
+  font: inherit;
+}
+.section {
+  padding-top: var(--space-2);
+}
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.sectionHeading h2,
+.sectionHeading p {
+  margin: 0;
+}
+.sectionHeading h2 {
+  font-size: 1.125rem;
+}
+.sectionHeading p {
+  margin-top: 0.2rem;
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+.sectionHeading button {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 0.7rem;
+  background: transparent;
+  color: var(--color-accent);
+  font: inherit;
+  font-weight: 700;
+}
+.participants {
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+.participant {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+.participant + .participant {
+  border-top: 1px solid var(--color-border);
+}
+.participantName {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.participantName span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.participantName small {
+  color: var(--color-hint);
+}
+.allocation {
+  display: flex;
+  align-items: center;
+  width: 7.25rem;
+  color: var(--color-hint);
+}
+.allocation input {
+  min-width: 0;
+  text-align: right;
+}
+.allocation span {
+  margin-left: -1.8rem;
+  pointer-events: none;
+}
+.summary,
+.error {
+  margin: 0;
+}
+.summary {
+  color: var(--color-positive);
+}
+.summary[data-invalid='true'],
+.error {
+  color: var(--color-danger);
+}
+.submit {
+  width: 100%;
+  min-height: 3.25rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 800;
+}
+.submit:disabled {
+  opacity: 0.55;
+}

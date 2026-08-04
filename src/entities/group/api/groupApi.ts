@@ -19,15 +19,16 @@ function toGroupOverview(group: { id?: string; title?: string | null }): GroupOv
 function toGroupMember(member: {
   userId?: string;
   displayName?: string | null;
+  telegramId?: number;
   permissions?: number[] | null;
 }): GroupMember {
-  if (!member.userId || !member.displayName) {
-    throw new Error('Backend returned a group member without an ID or name.');
+  if (!member.userId) {
+    throw new Error('Backend returned a group member without an ID.');
   }
 
   return {
     userId: member.userId,
-    displayName: member.displayName,
+    displayName: member.displayName ?? `Участник ${member.telegramId ?? ''}`.trim(),
     permissions: member.permissions ?? [],
   };
 }
@@ -37,11 +38,15 @@ function toBalance(balance: {
   displayName?: string | null;
   balance?: number;
 }): GroupBalance {
-  if (!balance.userId || !balance.displayName || balance.balance === undefined) {
+  if (!balance.userId || balance.balance === undefined) {
     throw new Error('Backend returned an incomplete group balance.');
   }
 
-  return { userId: balance.userId, displayName: balance.displayName, amount: balance.balance };
+  return {
+    userId: balance.userId,
+    displayName: balance.displayName ?? 'Участник',
+    amount: balance.balance,
+  };
 }
 
 function toExpenseSummary(expense: {
@@ -51,13 +56,7 @@ function toExpenseSummary(expense: {
   payerName?: string | null;
   createdAt?: Date;
 }): ExpenseSummary {
-  if (
-    !expense.id ||
-    !expense.title ||
-    expense.totalAmount === undefined ||
-    !expense.payerName ||
-    !expense.createdAt
-  ) {
+  if (!expense.id || !expense.title || expense.totalAmount === undefined || !expense.createdAt) {
     throw new Error('Backend returned an incomplete expense.');
   }
 
@@ -65,7 +64,7 @@ function toExpenseSummary(expense: {
     id: expense.id,
     title: expense.title,
     totalAmount: expense.totalAmount,
-    payerName: expense.payerName,
+    payerName: expense.payerName ?? 'Участник',
     createdAt: expense.createdAt,
   };
 }

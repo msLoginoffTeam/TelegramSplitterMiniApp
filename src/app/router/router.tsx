@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppShell } from '@/app/ui/AppShell';
 import { routes } from '@/shared/config/routes';
+import { ExpenseCreatePage } from '@/pages/expense-create';
 import { GroupCreatePage } from '@/pages/group-create';
 import { GroupDetailsPage } from '@/pages/group-details';
 import { GroupSectionPage } from '@/pages/group-section';
@@ -18,12 +19,7 @@ export const router = createBrowserRouter([
       { path: 'groups/:groupId', element: <GroupDetailsPage /> },
       {
         path: 'groups/:groupId/expenses/new',
-        element: (
-          <GroupSectionPage
-            title="Новая трата"
-            description="Форма траты появится следующим коротким шагом."
-          />
-        ),
+        element: <ExpenseCreatePage />,
       },
       {
         path: 'groups/:groupId/payments/new',
