@@ -1,0 +1,22 @@
+.navigation {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.navigationItem {
+  display: grid;
+  gap: 0.25rem;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  color: var(--color-text);
+}
+
+.navigationItem span {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.navigationItem small {
+  color: var(--color-hint);
+}

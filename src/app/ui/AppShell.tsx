@@ -1,4 +1,6 @@
+import { Link, Outlet } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
+import { routes } from '@/shared/config/routes';
 import styles from '@/app/ui/AppShell.module.scss';
 
 export function AppShell() {
@@ -6,14 +8,15 @@ export function AppShell() {
 
   return (
     <main className={styles.shell}>
-      <p className={styles.eyebrow}>Telegram Splitter</p>
-      <h1>Совместные траты — без путаницы</h1>
-      <p className={styles.copy}>
-        Foundation готов. Следующий шаг — согласовать навигацию и сценарий создания траты.
-      </p>
-      <p className={styles.mode} data-testid="platform-kind">
-        Режим: {platform.kind === 'telegram' ? 'Telegram Mini App' : 'браузер'}
-      </p>
+      <header className={styles.header}>
+        <Link className={styles.brand} to={routes.groups}>
+          Splitter
+        </Link>
+        <span className={styles.mode} data-testid="platform-kind">
+          {platform.kind === 'telegram' ? 'Telegram' : 'Браузер'}
+        </span>
+      </header>
+      <Outlet />
     </main>
   );
 }

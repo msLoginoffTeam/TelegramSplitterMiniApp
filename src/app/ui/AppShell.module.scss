@@ -1,38 +1,25 @@
 .shell {
-  display: grid;
-  align-content: center;
   min-height: var(--app-viewport-height, 100dvh);
-  padding: calc(var(--safe-area-top) + var(--space-6)) var(--space-5)
-    calc(var(--safe-area-bottom) + var(--space-6));
-  gap: var(--space-4);
+  padding-top: var(--safe-area-top);
+  padding-bottom: var(--safe-area-bottom);
 }
 
-.eyebrow {
-  margin: 0;
-  color: var(--color-accent);
-  font-size: var(--font-size-caption);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) 0;
 }
 
-.shell h1 {
-  margin: 0;
-  max-width: 18ch;
+.brand {
   color: var(--color-text);
-  font-size: var(--font-size-title);
-  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
-.copy,
 .mode {
-  margin: 0;
-  max-width: 50ch;
   color: var(--color-hint);
-}
-
-.mode {
-  margin-top: var(--space-4);
-  color: var(--color-text);
   font-size: var(--font-size-caption);
 }
