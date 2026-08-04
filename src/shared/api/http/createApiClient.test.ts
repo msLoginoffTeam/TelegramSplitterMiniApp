@@ -23,4 +23,26 @@ describe('createApiClient', () => {
 
     expect(capturedRequest?.headers.get('X-Telegram-Init-Data')).toBe('signed-init-data');
   });
+
+  it('uses a development identity only when Telegram init data is unavailable', async () => {
+    const client = createApiClient({ getDevelopmentUserId: () => '123456' });
+    let capturedRequest: InternalAxiosRequestConfig | undefined;
+
+    const adapter: AxiosAdapter = async (request) => {
+      capturedRequest = request;
+      return {
+        data: {},
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: request,
+      };
+    };
+
+    client.defaults.adapter = adapter;
+    await client.get('/health');
+
+    expect(capturedRequest?.headers.get('X-Telegram-Dev-User-Id')).toBe('123456');
+    expect(capturedRequest?.headers.get('X-Telegram-Init-Data')).toBeUndefined();
+  });
 });

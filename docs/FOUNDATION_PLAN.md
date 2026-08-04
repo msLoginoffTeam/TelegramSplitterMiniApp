@@ -209,7 +209,7 @@ Dev минимум:
 - После проверки настроить deterministic `api:generate`, обновляющий `openapi/backend.json` и `src/shared/api/generated/` при локальной разработке.
 - Добавить `api:check`, который повторяет generation и завершается ошибкой при незакоммиченном diff.
 
-Текущий статус: актуальный Swagger endpoint проверен (21 route), snapshot и output сгенерированы. По подтверждённому решению `react-query-swagger` проверяется отдельным `tsconfig.generated.json` с выключенными только `noUnusedLocals`/`noUnusedParameters`; handwritten code остаётся strict. Generated code не редактировать.
+Текущий статус: актуальный Swagger endpoint проверен (21 route), snapshot и output сгенерированы. `react-query-swagger` добавляет лишние imports/locals, поэтому `noUnusedLocals`/`noUnusedParameters` не являются blocking TypeScript diagnostics. Строгая проверка типов, build и архитектурный lint остаются; generated code не редактировать.
 
 ### 8. Tests
 

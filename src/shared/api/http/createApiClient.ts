@@ -3,12 +3,14 @@ import { ApiError } from '@/shared/api/http/ApiError';
 import { getRuntimeConfig } from '@/shared/config/runtimeConfig';
 
 export interface CreateApiClientOptions {
+  baseURL?: string;
   getAuthPayload?: () => string | undefined;
+  getDevelopmentUserId?: () => string | undefined;
 }
 
 export function createApiClient(options: CreateApiClientOptions = {}): AxiosInstance {
   const client = axios.create({
-    baseURL: getRuntimeConfig().apiBaseUrl,
+    baseURL: options.baseURL ?? getRuntimeConfig().apiBaseUrl,
   });
 
   client.interceptors.request.use((request) => {
@@ -16,6 +18,12 @@ export function createApiClient(options: CreateApiClientOptions = {}): AxiosInst
 
     if (authPayload) {
       request.headers.set('X-Telegram-Init-Data', authPayload);
+    } else {
+      const developmentUserId = options.getDevelopmentUserId?.();
+
+      if (developmentUserId) {
+        request.headers.set('X-Telegram-Dev-User-Id', developmentUserId);
+      }
     }
 
     return request;

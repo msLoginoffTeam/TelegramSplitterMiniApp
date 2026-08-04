@@ -6,7 +6,10 @@ import { queryClient } from '@/app/providers/queryClient';
 export function AppProviders({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
-      <PlatformProvider>{children}</PlatformProvider>
+      <PlatformProvider>
+        <ApiClientProvider>{children}</ApiClientProvider>
+      </PlatformProvider>
     </QueryClientProvider>
   );
 }
+import { ApiClientProvider } from '@/app/providers/ApiClientProvider';
