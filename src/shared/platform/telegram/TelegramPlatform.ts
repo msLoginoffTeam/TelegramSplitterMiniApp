@@ -61,8 +61,12 @@ export class TelegramPlatform implements PlatformAdapter {
     }
 
     if (!viewport.isMounted()) {
-      await viewport.mount();
-      viewport.bindCssVars((key) => `--tg-viewport-${key}`);
+      // Some Telegram clients may not answer the viewport request promptly.
+      // Viewport CSS variables improve layout but must not block the entire app.
+      void viewport
+        .mount()
+        .then(() => viewport.bindCssVars((key) => `--tg-viewport-${key}`))
+        .catch(() => undefined);
     }
 
     if (backButton.isSupported() && !backButton.isMounted()) {
