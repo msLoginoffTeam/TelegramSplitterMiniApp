@@ -56,6 +56,8 @@ Frontend вынесен в отдельный репозиторий осозн�
 3. Навигационный каркас реализован без mock data: `/groups`, создание группы и разделы выбранной группы (траты, платежи, transfers, участники, настройки).
 4. Первый live vertical slice реализован: Telegram `initData` передаётся из Axios boundary, browser-mode использует только явный local development ID; список и создание групп используют entity/feature layers. Следующими остаются group dashboard и expense flow.
 
+Для browser-mode Vite должен проксировать `/api` на backend, запущенный в `Development` (по умолчанию `http://localhost:5028`). Docker API на `5050` остаётся production-like и сознательно не принимает development identity.
+
 ## Навигация по знаниям
 
 - Этот файл — frontend architecture и принятые решения.
