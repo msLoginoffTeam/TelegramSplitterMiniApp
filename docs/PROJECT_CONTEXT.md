@@ -58,6 +58,8 @@ Frontend вынесен в отдельный репозиторий осозн�
 
 Для browser-mode Vite должен проксировать `/api` на backend, запущенный в `Development` (по умолчанию `http://localhost:5028`). Docker API на `5050` остаётся production-like и сознательно не принимает development identity.
 
+Для теста Mini App через Cloudflare Quick Tunnel в `.env.development.local` указывается точный `VITE_DEV_ALLOWED_HOST` без `https://`; Vite не должен разрешать все внешние hosts.
+
 ## Навигация по знаниям
 
 - Этот файл — frontend architecture и принятые решения.

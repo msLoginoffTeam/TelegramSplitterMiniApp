@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
+      allowedHosts: env.VITE_DEV_ALLOWED_HOST ? [env.VITE_DEV_ALLOWED_HOST] : [],
       proxy: {
         '/api': {
           target: env.VITE_DEV_API_PROXY_TARGET || 'http://localhost:5050',
