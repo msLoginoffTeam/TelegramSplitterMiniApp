@@ -2305,7 +2305,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "userName": {
+          "displayName": {
             "type": "string",
             "nullable": true
           },
@@ -2487,7 +2487,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "fromUserName": {
+          "fromDisplayName": {
             "type": "string",
             "nullable": true
           },
@@ -2499,7 +2499,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "toUserName": {
+          "toDisplayName": {
             "type": "string",
             "nullable": true
           },
@@ -2566,7 +2566,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "fromUserName": {
+          "fromDisplayName": {
             "type": "string",
             "nullable": true
           },
@@ -2578,7 +2578,7 @@
             "type": "string",
             "format": "uuid"
           },
-          "toUserName": {
+          "toDisplayName": {
             "type": "string",
             "nullable": true
           },

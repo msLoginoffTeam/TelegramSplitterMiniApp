@@ -444,7 +444,7 @@ export interface IExpenseShareCreateDto {
 
 export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     userId?: string;
-    userName?: string | null;
+    displayName?: string | null;
     username?: string | null;
     amount?: number;
     isPaid?: boolean;
@@ -461,7 +461,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     init(_data?: any) {
         if (_data) {
             this.userId = _data["userId"];
-            this.userName = _data["userName"];
+            this.displayName = _data["displayName"];
             this.username = _data["username"];
             this.amount = _data["amount"];
             this.isPaid = _data["isPaid"];
@@ -478,7 +478,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
-        data["userName"] = this.userName;
+        data["displayName"] = this.displayName;
         data["username"] = this.username;
         data["amount"] = this.amount;
         data["isPaid"] = this.isPaid;
@@ -488,7 +488,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
 
 export interface IExpenseShareResponseDto {
     userId?: string;
-    userName?: string | null;
+    displayName?: string | null;
     username?: string | null;
     amount?: number;
     isPaid?: boolean;
@@ -781,10 +781,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
     id?: string;
     expenseId?: string | null;
     fromUserId?: string;
-    fromUserName?: string | null;
+    fromDisplayName?: string | null;
     fromUsername?: string | null;
     toUserId?: string;
-    toUserName?: string | null;
+    toDisplayName?: string | null;
     toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
@@ -804,10 +804,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
             this.id = _data["id"];
             this.expenseId = _data["expenseId"];
             this.fromUserId = _data["fromUserId"];
-            this.fromUserName = _data["fromUserName"];
+            this.fromDisplayName = _data["fromDisplayName"];
             this.fromUsername = _data["fromUsername"];
             this.toUserId = _data["toUserId"];
-            this.toUserName = _data["toUserName"];
+            this.toDisplayName = _data["toDisplayName"];
             this.toUsername = _data["toUsername"];
             this.createdByUserId = _data["createdByUserId"];
             this.amount = _data["amount"];
@@ -827,10 +827,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
         data["id"] = this.id;
         data["expenseId"] = this.expenseId;
         data["fromUserId"] = this.fromUserId;
-        data["fromUserName"] = this.fromUserName;
+        data["fromDisplayName"] = this.fromDisplayName;
         data["fromUsername"] = this.fromUsername;
         data["toUserId"] = this.toUserId;
-        data["toUserName"] = this.toUserName;
+        data["toDisplayName"] = this.toDisplayName;
         data["toUsername"] = this.toUsername;
         data["createdByUserId"] = this.createdByUserId;
         data["amount"] = this.amount;
@@ -843,10 +843,10 @@ export interface IPaymentResponseDto {
     id?: string;
     expenseId?: string | null;
     fromUserId?: string;
-    fromUserName?: string | null;
+    fromDisplayName?: string | null;
     fromUsername?: string | null;
     toUserId?: string;
-    toUserName?: string | null;
+    toDisplayName?: string | null;
     toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
@@ -955,10 +955,10 @@ export interface ITransferGroupOwnershipRequestDto {
 
 export class TransferSuggestionDto implements ITransferSuggestionDto {
     fromUserId?: string;
-    fromUserName?: string | null;
+    fromDisplayName?: string | null;
     fromUsername?: string | null;
     toUserId?: string;
-    toUserName?: string | null;
+    toDisplayName?: string | null;
     toUsername?: string | null;
     amount?: number;
 
@@ -974,10 +974,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
     init(_data?: any) {
         if (_data) {
             this.fromUserId = _data["fromUserId"];
-            this.fromUserName = _data["fromUserName"];
+            this.fromDisplayName = _data["fromDisplayName"];
             this.fromUsername = _data["fromUsername"];
             this.toUserId = _data["toUserId"];
-            this.toUserName = _data["toUserName"];
+            this.toDisplayName = _data["toDisplayName"];
             this.toUsername = _data["toUsername"];
             this.amount = _data["amount"];
         }
@@ -993,10 +993,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["fromUserId"] = this.fromUserId;
-        data["fromUserName"] = this.fromUserName;
+        data["fromDisplayName"] = this.fromDisplayName;
         data["fromUsername"] = this.fromUsername;
         data["toUserId"] = this.toUserId;
-        data["toUserName"] = this.toUserName;
+        data["toDisplayName"] = this.toDisplayName;
         data["toUsername"] = this.toUsername;
         data["amount"] = this.amount;
         return data;
@@ -1005,10 +1005,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
 
 export interface ITransferSuggestionDto {
     fromUserId?: string;
-    fromUserName?: string | null;
+    fromDisplayName?: string | null;
     fromUsername?: string | null;
     toUserId?: string;
-    toUserName?: string | null;
+    toDisplayName?: string | null;
     toUsername?: string | null;
     amount?: number;
 }
