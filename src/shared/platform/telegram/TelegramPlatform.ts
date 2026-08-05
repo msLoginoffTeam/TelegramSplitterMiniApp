@@ -23,6 +23,10 @@ export class TelegramPlatform implements PlatformAdapter {
     return initData.raw();
   }
 
+  public getStartParam(): string | undefined {
+    return initData.startParam();
+  }
+
   public bindBackButton(handler: () => void): () => void {
     if (!backButton.isSupported()) {
       return () => undefined;

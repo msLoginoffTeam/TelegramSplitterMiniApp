@@ -7,6 +7,8 @@ import { GroupDetailsPage } from '@/pages/group-details';
 import { GroupSectionPage } from '@/pages/group-section';
 import { GroupsPage } from '@/pages/groups';
 import { NotFoundPage } from '@/pages/not-found';
+import { GroupInvitePage } from '@/pages/group-invite';
+import { AcceptInvitePage } from '@/pages/accept-invite';
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +58,14 @@ export const router = createBrowserRouter([
             description="Здесь будут редкие настройки группы."
           />
         ),
+      },
+      {
+        path: 'groups/:groupId/invite',
+        element: <GroupInvitePage />,
+      },
+      {
+        path: 'invite/:token',
+        element: <AcceptInvitePage />,
       },
     ],
   },

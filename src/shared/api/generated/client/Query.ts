@@ -120,6 +120,10 @@ export type OwnershipQueryParameters = {
   groupId: string ;
 }
 
+export type InvitesQueryParameters = {
+  groupId: string ;
+}
+
 export type PaymentsAllQueryParameters = {
   groupId: string ;
 }
@@ -1946,6 +1950,87 @@ return useMutation({
   mutationFn: (data: Ownership__MutationParameters) => Client.ownership(data.groupId ?? options?.parameters?.groupId!, data.body),
   mutationKey: key,
 });
+}
+
+export function invitesUrl(groupId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/invites";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function invitesMutationKey(groupId: string): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'invites',
+      groupId as any,
+    ]);
+}
+
+/**
+ * @return Created
+ */
+export function useInvitesMutation<TContext>(groupId: string, options?: Omit<UseMutationOptions<Types.GroupInviteResponseDto, unknown, void, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.GroupInviteResponseDto, unknown, void, TContext> {
+  const key = invitesMutationKey(groupId);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: () => Client.invites(groupId),
+    mutationKey: key,
+  });
+}
+
+type Invites__MutationParameters = InvitesQueryParameters
+
+/**
+ * @return Created
+ */
+export function useInvitesMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.GroupInviteResponseDto, unknown, Invites__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: InvitesQueryParameters}): UseMutationResult<Types.GroupInviteResponseDto, unknown, Invites__MutationParameters, TContext> {
+  const key = invitesMutationKey(options?.parameters?.groupId!);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+return useMutation({
+  ...options,
+  mutationFn: (data: Invites__MutationParameters) => Client.invites(data.groupId ?? options?.parameters?.groupId!),
+  mutationKey: key,
+});
+}
+
+export function acceptUrl(): string {
+  let url_ = getBaseUrl() + "/api/group-invites/accept";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function acceptMutationKey(): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'accept',
+    ]);
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function useAcceptMutation<TContext>(options?: Omit<UseMutationOptions<Types.GroupOverviewResponseDto, unknown, Types.AcceptGroupInviteRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.GroupOverviewResponseDto, unknown, Types.AcceptGroupInviteRequestDto, TContext> {
+  const key = acceptMutationKey();
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: (body: Types.AcceptGroupInviteRequestDto) => Client.accept(body),
+    mutationKey: key,
+  });
 }
 
 export function paymentsAllUrl(groupId: string): string {

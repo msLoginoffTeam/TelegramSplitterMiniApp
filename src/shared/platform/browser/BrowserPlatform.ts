@@ -11,6 +11,10 @@ export class BrowserPlatform implements PlatformAdapter {
     return undefined;
   }
 
+  public getStartParam(): undefined {
+    return undefined;
+  }
+
   public bindBackButton(_handler: () => void): () => void {
     return () => undefined;
   }

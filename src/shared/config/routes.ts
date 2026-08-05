@@ -7,4 +7,6 @@ export const routes = {
   transfers: (groupId: string) => `/groups/${groupId}/transfers`,
   members: (groupId: string) => `/groups/${groupId}/members`,
   settings: (groupId: string) => `/groups/${groupId}/settings`,
+  invite: (groupId: string) => `/groups/${groupId}/invite`,
+  acceptInvite: '/invite/:token',
 } as const;

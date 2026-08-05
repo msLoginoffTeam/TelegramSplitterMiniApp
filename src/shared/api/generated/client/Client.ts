@@ -1651,6 +1651,132 @@ function processOwnership(response: AxiosResponse): Promise<void> {
 }
 
 /**
+ * @return Created
+ */
+export function invites(groupId: string, config?: AxiosRequestConfig | undefined): Promise<Types.GroupInviteResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/invites";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+      url_ = url_.replace(/[?&]$/, "");
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigInvites,
+        ...config,
+        method: "POST",
+        url: url_,
+        headers: {
+            ..._requestConfigInvites?.headers,
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processInvites(_response);
+    });
+}
+
+function processInvites(response: AxiosResponse): Promise<Types.GroupInviteResponseDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 201) {
+        const _responseText = response.data;
+        let result201: any = null;
+        let resultData201  = _responseText;
+        result201 = Types.GroupInviteResponseDto.fromJS(resultData201);
+        return Promise.resolve<Types.GroupInviteResponseDto>(result201);
+
+    } else if (status === 400) {
+        const _responseText = response.data;
+        let result400: any = null;
+        let resultData400  = _responseText;
+        result400 = Types.ProblemDetails.fromJS(resultData400);
+        return throwException("Bad Request", status, _responseText, _headers, result400);
+
+    } else {
+        const _responseText = response.data;
+        let resultdefault: any = null;
+        let resultDatadefault  = _responseText;
+        resultdefault = Types.ProblemDetails.fromJS(resultDatadefault);
+        return throwException("Error", status, _responseText, _headers, resultdefault);
+
+    }
+}
+
+/**
+ * @param body (optional)
+ * @return OK
+ */
+export function accept(body?: Types.AcceptGroupInviteRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.GroupOverviewResponseDto> {
+    let url_ = getBaseUrl() + "/api/group-invites/accept";
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigAccept,
+        ...config,
+        data: content_,
+        method: "POST",
+        url: url_,
+        headers: {
+            ..._requestConfigAccept?.headers,
+            "Content-Type": "application/json",
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processAccept(_response);
+    });
+}
+
+function processAccept(response: AxiosResponse): Promise<Types.GroupOverviewResponseDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        let result200: any = null;
+        let resultData200  = _responseText;
+        result200 = Types.GroupOverviewResponseDto.fromJS(resultData200);
+        return Promise.resolve<Types.GroupOverviewResponseDto>(result200);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<Types.GroupOverviewResponseDto>(null as any);
+}
+
+/**
  * Retrieves all payments (expense-based and direct) in the group.
  * @param groupId ID of the group.
  * @return OK
@@ -2360,6 +2486,28 @@ export function setOwnershipRequestConfig(value: Partial<AxiosRequestConfig>) {
 }
 export function patchOwnershipRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
   _requestConfigOwnership = patch(_requestConfigOwnership ?? {});
+}
+
+let _requestConfigInvites: Partial<AxiosRequestConfig> | null;
+export function getInvitesRequestConfig() {
+  return _requestConfigInvites;
+}
+export function setInvitesRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigInvites = value;
+}
+export function patchInvitesRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigInvites = patch(_requestConfigInvites ?? {});
+}
+
+let _requestConfigAccept: Partial<AxiosRequestConfig> | null;
+export function getAcceptRequestConfig() {
+  return _requestConfigAccept;
+}
+export function setAcceptRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigAccept = value;
+}
+export function patchAcceptRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigAccept = patch(_requestConfigAccept ?? {});
 }
 
 let _requestConfigPaymentsAll: Partial<AxiosRequestConfig> | null;

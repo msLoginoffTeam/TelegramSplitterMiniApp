@@ -63,6 +63,8 @@ export function GroupDetailsPage() {
   );
   const canCreateExpense =
     currentMember?.permissions.includes(groupPermissions.createExpense) ?? false;
+  const canManageMembers =
+    currentMember?.permissions.includes(groupPermissions.manageMembers) ?? false;
 
   const navigationItems = [
     {
@@ -94,6 +96,11 @@ export function GroupDetailsPage() {
       {canCreateExpense ? (
         <Link className={styles.primaryAction} to={routes.createExpense(groupId)}>
           Добавить трату
+        </Link>
+      ) : null}
+      {canManageMembers ? (
+        <Link className={styles.secondaryAction} to={routes.invite(groupId)}>
+          Пригласить участника
         </Link>
       ) : null}
 

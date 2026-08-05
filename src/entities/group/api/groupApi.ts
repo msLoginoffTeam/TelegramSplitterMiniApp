@@ -1,4 +1,5 @@
 import { CreateGroupRequestDto } from '@/shared/api/generated/client';
+import { AcceptGroupInviteRequestDto } from '@/shared/api/generated/client';
 import * as GeneratedClient from '@/shared/api/generated/client/Client';
 import type {
   ExpenseSummary,
@@ -77,6 +78,15 @@ export const groupApi = {
 
   async createGroup(title: string): Promise<GroupOverview> {
     const group = await GeneratedClient.groupsPOST(new CreateGroupRequestDto({ title }));
+    return toGroupOverview(group);
+  },
+
+  async createInvite(groupId: string) {
+    return GeneratedClient.invites(groupId);
+  },
+
+  async acceptInvite(token: string): Promise<GroupOverview> {
+    const group = await GeneratedClient.accept(new AcceptGroupInviteRequestDto({ token }));
     return toGroupOverview(group);
   },
 

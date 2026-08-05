@@ -5,6 +5,7 @@ const sdk = vi.hoisted(() => ({
   init: vi.fn(),
   initData: {
     raw: vi.fn<() => string | undefined>(() => 'signed-init-data'),
+    startParam: vi.fn<() => string | undefined>(() => undefined),
     restore: vi.fn(),
   },
   themeParams: {

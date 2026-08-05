@@ -18,6 +18,42 @@ export * as Query from './client/Query';
 
 
 //-----Types.File-----
+export class AcceptGroupInviteRequestDto implements IAcceptGroupInviteRequestDto {
+    token?: string | null;
+
+    constructor(data?: IAcceptGroupInviteRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): AcceptGroupInviteRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AcceptGroupInviteRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        return data;
+    }
+}
+
+export interface IAcceptGroupInviteRequestDto {
+    token?: string | null;
+}
+
 export class AddGroupUserRequestDto implements IAddGroupUserRequestDto {
     telegramId?: number;
 
@@ -448,6 +484,46 @@ export interface IExpenseShareResponseDto {
     userName?: string | null;
     amount?: number;
     isPaid?: boolean;
+}
+
+export class GroupInviteResponseDto implements IGroupInviteResponseDto {
+    inviteUrl?: string | null;
+    expiresAtUtc?: Date;
+
+    constructor(data?: IGroupInviteResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.inviteUrl = _data["inviteUrl"];
+            this.expiresAtUtc = _data["expiresAtUtc"] ? new Date(_data["expiresAtUtc"].toString()) : <any>null;
+        }
+    }
+
+    static fromJS(data: any): GroupInviteResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GroupInviteResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["inviteUrl"] = this.inviteUrl;
+        data["expiresAtUtc"] = this.expiresAtUtc && this.expiresAtUtc.toISOString();
+        return data;
+    }
+}
+
+export interface IGroupInviteResponseDto {
+    inviteUrl?: string | null;
+    expiresAtUtc?: Date;
 }
 
 export class GroupMemberResponseDto implements IGroupMemberResponseDto {
