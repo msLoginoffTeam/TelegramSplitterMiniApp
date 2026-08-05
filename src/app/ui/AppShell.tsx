@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { routes } from '@/shared/config/routes';
 import styles from '@/app/ui/AppShell.module.scss';
@@ -8,11 +8,21 @@ export function AppShell() {
   const platform = usePlatform();
   const navigate = useNavigate();
   const location = useLocation();
+  const handledInviteToken = useRef<string | undefined>(undefined);
 
   useEffect(() => {
     const startParam = platform.getStartParam();
-    if (startParam?.startsWith('invite_') && !location.pathname.startsWith('/invite/')) {
-      navigate(`/invite/${encodeURIComponent(startParam.slice('invite_'.length))}`, {
+    const inviteToken = startParam?.startsWith('invite_')
+      ? startParam.slice('invite_'.length)
+      : undefined;
+
+    if (
+      inviteToken &&
+      !location.pathname.startsWith('/invite/') &&
+      handledInviteToken.current !== inviteToken
+    ) {
+      handledInviteToken.current = inviteToken;
+      navigate(`/invite/${encodeURIComponent(inviteToken)}`, {
         replace: true,
       });
     }
