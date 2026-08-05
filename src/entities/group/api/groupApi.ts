@@ -101,7 +101,7 @@ export const groupApi = {
       GeneratedClient.groupsGET(groupId),
       GeneratedClient.balance(groupId),
       GeneratedClient.expensesAll(groupId),
-      GeneratedClient.meGET(),
+      GeneratedClient.me(),
     ]);
 
     if (!group.id || !group.title || !currentUser.id) {

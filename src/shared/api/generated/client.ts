@@ -1233,42 +1233,6 @@ export interface IUpdatePaymentRequestDto {
     amount?: number;
 }
 
-export class UpdateUserRequestDto implements IUpdateUserRequestDto {
-    displayName?: string | null;
-
-    constructor(data?: IUpdateUserRequestDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.displayName = _data["displayName"];
-        }
-    }
-
-    static fromJS(data: any): UpdateUserRequestDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateUserRequestDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["displayName"] = this.displayName;
-        return data;
-    }
-}
-
-export interface IUpdateUserRequestDto {
-    displayName?: string | null;
-}
-
 export class UserBalanceResponseDto implements IUserBalanceResponseDto {
     userId?: string;
     balance?: number;
@@ -1502,7 +1466,7 @@ export function initPersister() {
   addResultTypeFactory('Client___groupsAll', (data: any) => { const result = new GroupOverviewResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___groupsGET', (data: any) => { const result = new GroupResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___paymentsAll', (data: any) => { const result = new PaymentResponseDto(); result.init(data); return result; });
-  addResultTypeFactory('Client___meGET', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
+  addResultTypeFactory('Client___me', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
 
 
 }

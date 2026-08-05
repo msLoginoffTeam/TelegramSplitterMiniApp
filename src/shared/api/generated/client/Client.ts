@@ -2107,17 +2107,17 @@ function processPaymentsDELETE(response: AxiosResponse): Promise<void> {
  * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function meGET(config?: AxiosRequestConfig | undefined): Promise<Types.UserResponseDto> {
+export function me(config?: AxiosRequestConfig | undefined): Promise<Types.UserResponseDto> {
     let url_ = getBaseUrl() + "/api/users/me";
       url_ = url_.replace(/[?&]$/, "");
 
     let options_: AxiosRequestConfig = {
-        ..._requestConfigMeGET,
+        ..._requestConfigMe,
         ...config,
         method: "GET",
         url: url_,
         headers: {
-            ..._requestConfigMeGET?.headers,
+            ..._requestConfigMe?.headers,
             "Accept": "text/plain",
             ...config?.headers,
         }
@@ -2130,11 +2130,11 @@ export function meGET(config?: AxiosRequestConfig | undefined): Promise<Types.Us
             throw _error;
         }
     }).then((_response: AxiosResponse) => {
-        return processMeGET(_response);
+        return processMe(_response);
     });
 }
 
-function processMeGET(response: AxiosResponse): Promise<Types.UserResponseDto> {
+function processMe(response: AxiosResponse): Promise<Types.UserResponseDto> {
     const status = response.status;
     let _headers: any = {};
     if (response.headers && typeof response.headers === "object") {
@@ -2156,62 +2156,6 @@ function processMeGET(response: AxiosResponse): Promise<Types.UserResponseDto> {
         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
     }
     return Promise.resolve<Types.UserResponseDto>(null as any);
-}
-
-/**
- * Updates the authenticated user's profile.
- * @param body (optional) Updated user data.
- * @return OK
- */
-export function mePUT(body?: Types.UpdateUserRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<void> {
-    let url_ = getBaseUrl() + "/api/users/me";
-      url_ = url_.replace(/[?&]$/, "");
-
-    const content_ = JSON.stringify(body);
-
-    let options_: AxiosRequestConfig = {
-        ..._requestConfigMePUT,
-        ...config,
-        data: content_,
-        method: "PUT",
-        url: url_,
-        headers: {
-            ..._requestConfigMePUT?.headers,
-            "Content-Type": "application/json",
-            ...config?.headers,
-        }
-    };
-
-    return getAxios().request(options_).catch((_error: any) => {
-        if (isAxiosError(_error) && _error.response) {
-            return _error.response;
-        } else {
-            throw _error;
-        }
-    }).then((_response: AxiosResponse) => {
-        return processMePUT(_response);
-    });
-}
-
-function processMePUT(response: AxiosResponse): Promise<void> {
-    const status = response.status;
-    let _headers: any = {};
-    if (response.headers && typeof response.headers === "object") {
-        for (let k in response.headers) {
-            if (response.headers.hasOwnProperty(k)) {
-                _headers[k] = response.headers[k];
-            }
-        }
-    }
-    if (status === 200) {
-        const _responseText = response.data;
-        return Promise.resolve<void>(null as any);
-
-    } else if (status !== 200 && status !== 204) {
-        const _responseText = response.data;
-        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-    }
-    return Promise.resolve<void>(null as any);
 }
 let _requestConfigBalance: Partial<AxiosRequestConfig> | null;
 export function getBalanceRequestConfig() {
@@ -2565,24 +2509,13 @@ export function patchPaymentsDELETERequestConfig(patch: (value: Partial<AxiosReq
   _requestConfigPaymentsDELETE = patch(_requestConfigPaymentsDELETE ?? {});
 }
 
-let _requestConfigMeGET: Partial<AxiosRequestConfig> | null;
-export function getMeGETRequestConfig() {
-  return _requestConfigMeGET;
+let _requestConfigMe: Partial<AxiosRequestConfig> | null;
+export function getMeRequestConfig() {
+  return _requestConfigMe;
 }
-export function setMeGETRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigMeGET = value;
+export function setMeRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigMe = value;
 }
-export function patchMeGETRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigMeGET = patch(_requestConfigMeGET ?? {});
-}
-
-let _requestConfigMePUT: Partial<AxiosRequestConfig> | null;
-export function getMePUTRequestConfig() {
-  return _requestConfigMePUT;
-}
-export function setMePUTRequestConfig(value: Partial<AxiosRequestConfig>) {
-  _requestConfigMePUT = value;
-}
-export function patchMePUTRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
-  _requestConfigMePUT = patch(_requestConfigMePUT ?? {});
+export function patchMeRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigMe = patch(_requestConfigMe ?? {});
 }

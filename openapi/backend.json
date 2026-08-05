@@ -2119,42 +2119,6 @@
             "TelegramInitData": []
           }
         ]
-      },
-      "put": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Updates the authenticated user's profile.",
-        "requestBody": {
-          "description": "Updated user data.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserRequestDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserRequestDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUserRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        },
-        "security": [
-          {
-            "TelegramInitData": []
-          }
-        ]
       }
     }
   },
@@ -2699,16 +2663,6 @@
           "amount": {
             "type": "number",
             "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "UpdateUserRequestDto": {
-        "type": "object",
-        "properties": {
-          "displayName": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

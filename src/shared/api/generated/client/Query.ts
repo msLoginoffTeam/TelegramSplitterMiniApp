@@ -2370,30 +2370,30 @@ return useMutation({
 });
 }
 
-export function meGETUrl(): string {
+export function meUrl(): string {
   let url_ = getBaseUrl() + "/api/users/me";
   url_ = url_.replace(/[?&]$/, "");
   return url_;
 }
 
-let meGETDefaultOptions: Omit<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryFn'>> = {
+let meDefaultOptions: Omit<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.UserResponseDto, unknown, Types.UserResponseDto>, 'queryFn'>> = {
 };
-export function getMeGETDefaultOptions() {
-  return meGETDefaultOptions;
+export function getMeDefaultOptions() {
+  return meDefaultOptions;
 };
-export function setMeGETDefaultOptions(options: typeof meGETDefaultOptions) {
-  meGETDefaultOptions = options;
+export function setMeDefaultOptions(options: typeof meDefaultOptions) {
+  meDefaultOptions = options;
 }
 
-export function meGETQueryKey(): QueryKey;
-export function meGETQueryKey(...params: any[]): QueryKey {
+export function meQueryKey(): QueryKey;
+export function meQueryKey(...params: any[]): QueryKey {
   return trimArrayEnd([
       'Client',
-      'meGET',
+      'me',
     ]);
 }
-export function __meGET(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
-  return Client.meGET(
+export function __me(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.me(
 axiosConfig    );
 }
 
@@ -2401,8 +2401,8 @@ axiosConfig    );
  * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
-export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+export function useMeQuery<TSelectData = Types.UserResponseDto, TError = unknown>(options?: Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useMeQuery<TSelectData = Types.UserResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
   let options: UseQueryOptions<Types.UserResponseDto, TError, TSelectData> | undefined = undefined;
   let axiosConfig: AxiosRequestConfig |undefined = undefined;
 
@@ -2414,9 +2414,9 @@ export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unkn
   options = addMetaToOptions(options, metaContext);
 
   return useQuery<Types.UserResponseDto, TError, TSelectData>({
-    queryFn: axiosConfig ? (context) => __meGET(context, axiosConfig) : __meGET,
-    queryKey: meGETQueryKey(),
-    ...meGETDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>,
+    queryFn: axiosConfig ? (context) => __me(context, axiosConfig) : __me,
+    queryKey: meQueryKey(),
+    ...meDefaultOptions as unknown as Omit<UseQueryOptions<Types.UserResponseDto, TError, TSelectData>, 'queryKey'>,
     ...options,
   });
 }
@@ -2424,8 +2424,8 @@ export function useMeGETQuery<TSelectData = Types.UserResponseDto, TError = unkn
  * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function setMeGETData(queryClient: QueryClient, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto, ) {
-  queryClient.setQueryData(meGETQueryKey(),
+export function setMeData(queryClient: QueryClient, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto, ) {
+  queryClient.setQueryData(meQueryKey(),
     updater
   );
 }
@@ -2434,37 +2434,6 @@ export function setMeGETData(queryClient: QueryClient, updater: (data: Types.Use
  * Retrieves the authenticated user's profile.
  * @return OK
  */
-export function setMeGETDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto) {
+export function setMeDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.UserResponseDto | undefined) => Types.UserResponseDto) {
   queryClient.setQueryData(queryKey, updater);
-}
-
-export function mePUTUrl(): string {
-  let url_ = getBaseUrl() + "/api/users/me";
-  url_ = url_.replace(/[?&]$/, "");
-  return url_;
-}
-
-export function mePUTMutationKey(): MutationKey {
-  return trimArrayEnd([
-      'Client',
-      'mePUT',
-    ]);
-}
-
-/**
- * Updates the authenticated user's profile.
- * @param body (optional) Updated user data.
- * @return OK
- */
-export function useMePUTMutation<TContext>(options?: Omit<UseMutationOptions<void, unknown, Types.UpdateUserRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<void, unknown, Types.UpdateUserRequestDto, TContext> {
-  const key = mePUTMutationKey();
-
-  const metaContext = useContext(QueryMetaContext);
-  options = addMetaToOptions(options, metaContext);
-
-  return useMutation({
-    ...options,
-    mutationFn: (body: Types.UpdateUserRequestDto) => Client.mePUT(body),
-    mutationKey: key,
-  });
 }
