@@ -20,5 +20,6 @@ export function useGroupDashboardQuery(groupId: string, enabled: boolean) {
     queryKey: groupQueryKeys.detail(groupId),
     queryFn: () => groupApi.getDashboard(groupId),
     enabled,
+    refetchOnMount: 'always',
   });
 }

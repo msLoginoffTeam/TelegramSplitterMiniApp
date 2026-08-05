@@ -24,7 +24,11 @@ export class TelegramPlatform implements PlatformAdapter {
   }
 
   public getStartParam(): string | undefined {
-    return initData.startParam();
+    const fromInitData = initData.startParam();
+    if (fromInitData) return fromInitData;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    return searchParams.get('tgWebAppStartParam') ?? searchParams.get('startapp') ?? undefined;
   }
 
   public bindBackButton(handler: () => void): () => void {

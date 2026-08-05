@@ -7,6 +7,7 @@ export type GroupMember = {
   userId: string;
   displayName: string;
   username?: string;
+  isOwner: boolean;
   permissions: number[];
 };
 

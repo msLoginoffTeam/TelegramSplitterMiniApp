@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAcceptGroupInvite } from '@/entities/group';
 import { PageLayout } from '@/shared/ui';
@@ -6,17 +6,19 @@ import { PageLayout } from '@/shared/ui';
 export function AcceptInvitePage() {
   const { token } = useParams();
   const navigate = useNavigate();
-  const { mutate, data, isError } = useAcceptGroupInvite();
+  const { mutateAsync, isError } = useAcceptGroupInvite();
+  const acceptanceStarted = useRef(false);
 
   useEffect(() => {
-    if (token) mutate(token);
-  }, [mutate, token]);
+    if (!token || acceptanceStarted.current) return;
 
-  useEffect(() => {
-    if (data) {
-      navigate(`/groups/${data.id}`, { replace: true });
-    }
-  }, [data, navigate]);
+    acceptanceStarted.current = true;
+    void mutateAsync(token)
+      .then((group) => {
+        navigate(`/groups/${group.id}`, { replace: true });
+      })
+      .catch(() => undefined);
+  }, [mutateAsync, navigate, token]);
 
   return (
     <PageLayout

@@ -6,6 +6,7 @@ import { ExpenseDetailsPage } from '@/pages/expense-details';
 import { GroupCreatePage } from '@/pages/group-create';
 import { GroupDetailsPage } from '@/pages/group-details';
 import { GroupSectionPage } from '@/pages/group-section';
+import { MembersPage } from '@/pages/members';
 import { GroupsPage } from '@/pages/groups';
 import { NotFoundPage } from '@/pages/not-found';
 import { GroupInvitePage } from '@/pages/group-invite';
@@ -48,12 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'groups/:groupId/members',
-        element: (
-          <GroupSectionPage
-            title="Участники"
-            description="Здесь будут состав группы и права доступа."
-          />
-        ),
+        element: <MembersPage />,
       },
       {
         path: 'groups/:groupId/settings',

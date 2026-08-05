@@ -22,6 +22,7 @@ function toGroupMember(member: {
   displayName?: string | null;
   username?: string | null;
   telegramId?: number;
+  isOwner?: boolean;
   permissions?: number[] | null;
 }): GroupMember {
   if (!member.userId) {
@@ -32,6 +33,7 @@ function toGroupMember(member: {
     userId: member.userId,
     displayName: member.displayName ?? `Участник ${member.telegramId ?? ''}`.trim(),
     username: member.username ?? undefined,
+    isOwner: member.isOwner ?? false,
     permissions: member.permissions ?? [],
   };
 }

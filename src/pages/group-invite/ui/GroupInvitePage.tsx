@@ -39,6 +39,10 @@ export function GroupInvitePage() {
           <button onClick={copyInvite} type="button">
             Скопировать ссылку
           </button>
+          <p>
+            Если Telegram сначала покажет кнопку «Старт», нажмите её и затем снова откройте эту же
+            ссылку. Так параметр приглашения попадёт в Mini App.
+          </p>
           <small>
             {inviteMutation.data.expiresAtUtc
               ? `Действует до ${new Date(inviteMutation.data.expiresAtUtc).toLocaleString('ru-RU')}`
