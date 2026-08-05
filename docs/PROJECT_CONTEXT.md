@@ -4,6 +4,11 @@
 
 ## Репозиторий
 
+## Рабочий Git-процесс
+
+- Codex не выполняет `git commit` и `git push` без отдельного явного разрешения пользователя.
+- После правок Codex оставляет рабочий diff, проверяет сборку/форматирование и предлагает сообщение для коммита; пользователь сначала проверяет изменения и коммитит их самостоятельно.
+
 - GitHub: <https://github.com/msLoginoffTeam/TelegramSplitterMiniApp>
 - Локальная каноническая копия: `/Users/max/RiderProjects/TelegramSplitterMiniApp`
 - Backend: <https://github.com/msLoginoffTeam/TelegramSplitter>
