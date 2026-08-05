@@ -2295,6 +2295,10 @@
             "type": "string",
             "nullable": true
           },
+          "payerUsername": {
+            "type": "string",
+            "nullable": true
+          },
           "createdByUserId": {
             "type": "string",
             "format": "uuid"
@@ -2341,6 +2345,10 @@
             "type": "string",
             "nullable": true
           },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
           "amount": {
             "type": "number",
             "format": "double"
@@ -2377,6 +2385,10 @@
             "format": "int64"
           },
           "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
             "type": "string",
             "nullable": true
           },
@@ -2515,11 +2527,19 @@
             "type": "string",
             "nullable": true
           },
+          "fromUsername": {
+            "type": "string",
+            "nullable": true
+          },
           "toUserId": {
             "type": "string",
             "format": "uuid"
           },
           "toUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "toUsername": {
             "type": "string",
             "nullable": true
           },
@@ -2586,11 +2606,19 @@
             "type": "string",
             "nullable": true
           },
+          "fromUsername": {
+            "type": "string",
+            "nullable": true
+          },
           "toUserId": {
             "type": "string",
             "format": "uuid"
           },
           "toUserName": {
+            "type": "string",
+            "nullable": true
+          },
+          "toUsername": {
             "type": "string",
             "nullable": true
           },
@@ -2699,6 +2727,10 @@
           "displayName": {
             "type": "string",
             "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2715,6 +2747,10 @@
             "format": "int64"
           },
           "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
             "type": "string",
             "nullable": true
           }

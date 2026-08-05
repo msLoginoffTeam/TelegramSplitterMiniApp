@@ -72,6 +72,16 @@
   color: var(--color-positive);
 }
 
+.person {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.person small {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
 .balanceList strong[data-negative='true'] {
   color: var(--color-danger);
 }

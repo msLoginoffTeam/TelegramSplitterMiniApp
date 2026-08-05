@@ -6,12 +6,14 @@ export type GroupOverview = {
 export type GroupMember = {
   userId: string;
   displayName: string;
+  username?: string;
   permissions: number[];
 };
 
 export type GroupBalance = {
   userId: string;
   displayName: string;
+  username?: string;
   amount: number;
 };
 
@@ -20,6 +22,7 @@ export type ExpenseSummary = {
   title: string;
   totalAmount: number;
   payerName: string;
+  payerUsername?: string;
   createdAt: Date;
 };
 

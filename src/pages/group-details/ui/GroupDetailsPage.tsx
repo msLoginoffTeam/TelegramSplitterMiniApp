@@ -110,8 +110,11 @@ export function GroupDetailsPage() {
           <ul className={styles.balanceList}>
             {dashboard.balances.map((balance) => (
               <li key={balance.userId}>
-                <span>
-                  {balance.userId === dashboard.currentUserId ? 'Вы' : balance.displayName}
+                <span className={styles.person}>
+                  <strong>
+                    {balance.userId === dashboard.currentUserId ? 'Вы' : balance.displayName}
+                  </strong>
+                  {balance.username ? <small>@{balance.username}</small> : null}
                 </span>
                 <strong data-positive={balance.amount > 0} data-negative={balance.amount < 0}>
                   {balance.amount > 0 ? '+' : ''}
@@ -137,6 +140,7 @@ export function GroupDetailsPage() {
                 <div>
                   <strong>{expense.title}</strong>
                   <span>Заплатил {expense.payerName}</span>
+                  {expense.payerUsername ? <small>@{expense.payerUsername}</small> : null}
                 </div>
                 <b>{formatRubles(expense.totalAmount)}</b>
               </li>

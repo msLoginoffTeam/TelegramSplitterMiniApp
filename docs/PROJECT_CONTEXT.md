@@ -1,6 +1,6 @@
 # Telegram Splitter Mini App — контекст
 
-Обновлено: 2026-08-04.
+Обновлено: 2026-08-06.
 
 ## Репозиторий
 
@@ -54,11 +54,14 @@ Frontend вынесен в отдельный репозиторий осозн�
 1. Foundation реализован в `main`: React/Vite scaffold, platform adapters, Axios boundary, generated API artifacts и quality CI готовы.
 2. Backend handoff завершён: актуальный OpenAPI-контракт включает Telegram authentication, Users API, groups, permissions, траты, платежи и transfers.
 3. Навигационный каркас реализован без mock data: `/groups`, создание группы и разделы выбранной группы (траты, платежи, transfers, участники, настройки).
-4. Первый live vertical slice реализован: Telegram `initData` передаётся из Axios boundary, browser-mode использует только явный local development ID; список/создание групп, dashboard и mobile-first создание траты используют entity/feature layers. Следующий шаг — редактирование и удаление траты через общий editor.
+4. Первый live vertical slice реализован: Telegram `initData` передаётся из Axios boundary, browser-mode использует только явный local development ID; список/создание групп, dashboard и mobile-first создание траты используют entity/feature layers.
+5. Invite flow реализован: backend хранит SHA-256-хэш многоразового expiring token, сам получает username бота через Telegram `getMe`, а Mini App создаёт ссылку и принимает `startapp=invite_<token>`. Следующие продуктовые срезы — expense CRUD, payments и transfers.
 
 Для browser-mode Vite должен проксировать `/api` на backend, запущенный в `Development` (по умолчанию `http://localhost:5028`). Docker API на `5050` остаётся production-like и сознательно не принимает development identity.
 
 Для теста Mini App через Cloudflare Quick Tunnel в `.env.development.local` указывается точный `VITE_DEV_ALLOWED_HOST` без `https://`; Vite не должен разрешать все внешние hosts.
+
+Telegram Bot API не предоставляет полный список участников чата. Автосинхронизация чата поэтому должна использовать события новых участников/сообщений и доступных администраторов; импорт всех исторических участников через Bot API невозможен.
 
 ## Навигация по знаниям
 

@@ -131,6 +131,7 @@ export function ExpenseEditorForm({
           {members.map((member) => (
             <option key={member.userId} value={member.userId}>
               {member.userId === currentUserId ? 'Вы' : member.displayName}
+              {member.username ? ` (@${member.username})` : ''}
             </option>
           ))}
         </select>
@@ -162,7 +163,10 @@ export function ExpenseEditorForm({
                     onChange={() => toggleParticipant(member.userId)}
                     type="checkbox"
                   />
-                  <span>{member.userId === currentUserId ? 'Вы' : member.displayName}</span>
+                  <span>
+                    {member.userId === currentUserId ? 'Вы' : member.displayName}
+                    {member.username ? <small>@{member.username}</small> : null}
+                  </span>
                   {isPayer ? <small>плательщик</small> : null}
                 </label>
                 {isSelected ? (

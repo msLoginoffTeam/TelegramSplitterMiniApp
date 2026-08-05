@@ -20,6 +20,7 @@ function toGroupOverview(group: { id?: string; title?: string | null }): GroupOv
 function toGroupMember(member: {
   userId?: string;
   displayName?: string | null;
+  username?: string | null;
   telegramId?: number;
   permissions?: number[] | null;
 }): GroupMember {
@@ -30,6 +31,7 @@ function toGroupMember(member: {
   return {
     userId: member.userId,
     displayName: member.displayName ?? `Участник ${member.telegramId ?? ''}`.trim(),
+    username: member.username ?? undefined,
     permissions: member.permissions ?? [],
   };
 }
@@ -37,6 +39,7 @@ function toGroupMember(member: {
 function toBalance(balance: {
   userId?: string;
   displayName?: string | null;
+  username?: string | null;
   balance?: number;
 }): GroupBalance {
   if (!balance.userId || balance.balance === undefined) {
@@ -46,6 +49,7 @@ function toBalance(balance: {
   return {
     userId: balance.userId,
     displayName: balance.displayName ?? 'Участник',
+    username: balance.username ?? undefined,
     amount: balance.balance,
   };
 }
@@ -55,6 +59,7 @@ function toExpenseSummary(expense: {
   title?: string | null;
   totalAmount?: number;
   payerName?: string | null;
+  payerUsername?: string | null;
   createdAt?: Date;
 }): ExpenseSummary {
   if (!expense.id || !expense.title || expense.totalAmount === undefined || !expense.createdAt) {
@@ -66,6 +71,7 @@ function toExpenseSummary(expense: {
     title: expense.title,
     totalAmount: expense.totalAmount,
     payerName: expense.payerName ?? 'Участник',
+    payerUsername: expense.payerUsername ?? undefined,
     createdAt: expense.createdAt,
   };
 }

@@ -71,9 +71,18 @@
   min-width: 0;
 }
 .participantName span {
+  display: grid;
+  gap: 0.15rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.participantName span small {
+  overflow: hidden;
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+  font-weight: 400;
+  text-overflow: ellipsis;
 }
 .participantName small {
   color: var(--color-hint);

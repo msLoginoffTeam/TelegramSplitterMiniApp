@@ -328,6 +328,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
     totalAmount?: number;
     payerId?: string;
     payerName?: string | null;
+    payerUsername?: string | null;
     createdByUserId?: string;
     createdAt?: Date;
     isDraft?: boolean;
@@ -349,6 +350,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
             this.totalAmount = _data["totalAmount"];
             this.payerId = _data["payerId"];
             this.payerName = _data["payerName"];
+            this.payerUsername = _data["payerUsername"];
             this.createdByUserId = _data["createdByUserId"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>null;
             this.isDraft = _data["isDraft"];
@@ -374,6 +376,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
         data["totalAmount"] = this.totalAmount;
         data["payerId"] = this.payerId;
         data["payerName"] = this.payerName;
+        data["payerUsername"] = this.payerUsername;
         data["createdByUserId"] = this.createdByUserId;
         data["createdAt"] = this.createdAt && this.createdAt.toISOString();
         data["isDraft"] = this.isDraft;
@@ -392,6 +395,7 @@ export interface IExpenseResponseDto {
     totalAmount?: number;
     payerId?: string;
     payerName?: string | null;
+    payerUsername?: string | null;
     createdByUserId?: string;
     createdAt?: Date;
     isDraft?: boolean;
@@ -441,6 +445,7 @@ export interface IExpenseShareCreateDto {
 export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     userId?: string;
     userName?: string | null;
+    username?: string | null;
     amount?: number;
     isPaid?: boolean;
 
@@ -457,6 +462,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
         if (_data) {
             this.userId = _data["userId"];
             this.userName = _data["userName"];
+            this.username = _data["username"];
             this.amount = _data["amount"];
             this.isPaid = _data["isPaid"];
         }
@@ -473,6 +479,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
         data = typeof data === 'object' ? data : {};
         data["userId"] = this.userId;
         data["userName"] = this.userName;
+        data["username"] = this.username;
         data["amount"] = this.amount;
         data["isPaid"] = this.isPaid;
         return data;
@@ -482,6 +489,7 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
 export interface IExpenseShareResponseDto {
     userId?: string;
     userName?: string | null;
+    username?: string | null;
     amount?: number;
     isPaid?: boolean;
 }
@@ -530,6 +538,7 @@ export class GroupMemberResponseDto implements IGroupMemberResponseDto {
     userId?: string;
     telegramId?: number;
     displayName?: string | null;
+    username?: string | null;
     isOwner?: boolean;
     role?: GroupRole;
     permissions?: GroupPermission[] | null;
@@ -548,6 +557,7 @@ export class GroupMemberResponseDto implements IGroupMemberResponseDto {
             this.userId = _data["userId"];
             this.telegramId = _data["telegramId"];
             this.displayName = _data["displayName"];
+            this.username = _data["username"];
             this.isOwner = _data["isOwner"];
             this.role = _data["role"];
             if (Array.isArray(_data["permissions"])) {
@@ -570,6 +580,7 @@ export class GroupMemberResponseDto implements IGroupMemberResponseDto {
         data["userId"] = this.userId;
         data["telegramId"] = this.telegramId;
         data["displayName"] = this.displayName;
+        data["username"] = this.username;
         data["isOwner"] = this.isOwner;
         data["role"] = this.role;
         if (Array.isArray(this.permissions)) {
@@ -585,6 +596,7 @@ export interface IGroupMemberResponseDto {
     userId?: string;
     telegramId?: number;
     displayName?: string | null;
+    username?: string | null;
     isOwner?: boolean;
     role?: GroupRole;
     permissions?: GroupPermission[] | null;
@@ -770,8 +782,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
     expenseId?: string | null;
     fromUserId?: string;
     fromUserName?: string | null;
+    fromUsername?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
     timestamp?: Date;
@@ -791,8 +805,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
             this.expenseId = _data["expenseId"];
             this.fromUserId = _data["fromUserId"];
             this.fromUserName = _data["fromUserName"];
+            this.fromUsername = _data["fromUsername"];
             this.toUserId = _data["toUserId"];
             this.toUserName = _data["toUserName"];
+            this.toUsername = _data["toUsername"];
             this.createdByUserId = _data["createdByUserId"];
             this.amount = _data["amount"];
             this.timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>null;
@@ -812,8 +828,10 @@ export class PaymentResponseDto implements IPaymentResponseDto {
         data["expenseId"] = this.expenseId;
         data["fromUserId"] = this.fromUserId;
         data["fromUserName"] = this.fromUserName;
+        data["fromUsername"] = this.fromUsername;
         data["toUserId"] = this.toUserId;
         data["toUserName"] = this.toUserName;
+        data["toUsername"] = this.toUsername;
         data["createdByUserId"] = this.createdByUserId;
         data["amount"] = this.amount;
         data["timestamp"] = this.timestamp && this.timestamp.toISOString();
@@ -826,8 +844,10 @@ export interface IPaymentResponseDto {
     expenseId?: string | null;
     fromUserId?: string;
     fromUserName?: string | null;
+    fromUsername?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
     timestamp?: Date;
@@ -936,8 +956,10 @@ export interface ITransferGroupOwnershipRequestDto {
 export class TransferSuggestionDto implements ITransferSuggestionDto {
     fromUserId?: string;
     fromUserName?: string | null;
+    fromUsername?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    toUsername?: string | null;
     amount?: number;
 
     constructor(data?: ITransferSuggestionDto) {
@@ -953,8 +975,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
         if (_data) {
             this.fromUserId = _data["fromUserId"];
             this.fromUserName = _data["fromUserName"];
+            this.fromUsername = _data["fromUsername"];
             this.toUserId = _data["toUserId"];
             this.toUserName = _data["toUserName"];
+            this.toUsername = _data["toUsername"];
             this.amount = _data["amount"];
         }
     }
@@ -970,8 +994,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
         data = typeof data === 'object' ? data : {};
         data["fromUserId"] = this.fromUserId;
         data["fromUserName"] = this.fromUserName;
+        data["fromUsername"] = this.fromUsername;
         data["toUserId"] = this.toUserId;
         data["toUserName"] = this.toUserName;
+        data["toUsername"] = this.toUsername;
         data["amount"] = this.amount;
         return data;
     }
@@ -980,8 +1006,10 @@ export class TransferSuggestionDto implements ITransferSuggestionDto {
 export interface ITransferSuggestionDto {
     fromUserId?: string;
     fromUserName?: string | null;
+    fromUsername?: string | null;
     toUserId?: string;
     toUserName?: string | null;
+    toUsername?: string | null;
     amount?: number;
 }
 
@@ -1245,6 +1273,7 @@ export class UserBalanceResponseDto implements IUserBalanceResponseDto {
     userId?: string;
     balance?: number;
     displayName?: string | null;
+    username?: string | null;
 
     constructor(data?: IUserBalanceResponseDto) {
         if (data) {
@@ -1260,6 +1289,7 @@ export class UserBalanceResponseDto implements IUserBalanceResponseDto {
             this.userId = _data["userId"];
             this.balance = _data["balance"];
             this.displayName = _data["displayName"];
+            this.username = _data["username"];
         }
     }
 
@@ -1275,6 +1305,7 @@ export class UserBalanceResponseDto implements IUserBalanceResponseDto {
         data["userId"] = this.userId;
         data["balance"] = this.balance;
         data["displayName"] = this.displayName;
+        data["username"] = this.username;
         return data;
     }
 }
@@ -1283,12 +1314,14 @@ export interface IUserBalanceResponseDto {
     userId?: string;
     balance?: number;
     displayName?: string | null;
+    username?: string | null;
 }
 
 export class UserResponseDto implements IUserResponseDto {
     id?: string;
     telegramId?: number;
     displayName?: string | null;
+    username?: string | null;
 
     constructor(data?: IUserResponseDto) {
         if (data) {
@@ -1304,6 +1337,7 @@ export class UserResponseDto implements IUserResponseDto {
             this.id = _data["id"];
             this.telegramId = _data["telegramId"];
             this.displayName = _data["displayName"];
+            this.username = _data["username"];
         }
     }
 
@@ -1319,6 +1353,7 @@ export class UserResponseDto implements IUserResponseDto {
         data["id"] = this.id;
         data["telegramId"] = this.telegramId;
         data["displayName"] = this.displayName;
+        data["username"] = this.username;
         return data;
     }
 }
@@ -1327,6 +1362,7 @@ export interface IUserResponseDto {
     id?: string;
     telegramId?: number;
     displayName?: string | null;
+    username?: string | null;
 }
 //-----/CustomTypes.File-----
 
