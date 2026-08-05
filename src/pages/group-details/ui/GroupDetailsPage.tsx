@@ -137,12 +137,14 @@ export function GroupDetailsPage() {
           <ul className={styles.expenseList}>
             {dashboard.expenses.map((expense) => (
               <li key={expense.id}>
-                <div>
-                  <strong>{expense.title}</strong>
-                  <span>Заплатил {expense.payerName}</span>
-                  {expense.payerUsername ? <small>@{expense.payerUsername}</small> : null}
-                </div>
-                <b>{formatRubles(expense.totalAmount)}</b>
+                <Link className={styles.expenseLink} to={routes.expense(groupId, expense.id)}>
+                  <div>
+                    <strong>{expense.title}</strong>
+                    <span>Заплатил {expense.payerName}</span>
+                    {expense.payerUsername ? <small>@{expense.payerUsername}</small> : null}
+                  </div>
+                  <b>{formatRubles(expense.totalAmount)}</b>
+                </Link>
               </li>
             ))}
           </ul>

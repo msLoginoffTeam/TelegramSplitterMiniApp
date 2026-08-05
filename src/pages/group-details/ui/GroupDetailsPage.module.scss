@@ -91,12 +91,26 @@
   gap: 0.2rem;
 }
 
+.expenseLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-4);
+  color: inherit;
+}
+
+.expenseLink > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
 .expenseList span {
   color: var(--color-hint);
   font-size: var(--font-size-caption);
 }
 
-.expenseList b {
+.expenseLink b {
   white-space: nowrap;
 }
 

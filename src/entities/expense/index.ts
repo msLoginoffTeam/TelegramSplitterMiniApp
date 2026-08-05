@@ -1,2 +1,3 @@
 export { expenseApi } from './api/expenseApi';
-export type { ExpenseWriteInput } from './model/types';
+export { useExpenseQuery } from './api/expenseQueries';
+export type { Expense, ExpenseShare, ExpenseWriteInput } from './model/types';

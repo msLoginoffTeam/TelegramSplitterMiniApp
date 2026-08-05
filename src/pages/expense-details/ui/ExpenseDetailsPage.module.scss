@@ -1,0 +1,82 @@
+.section,
+.editor {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.shareList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+
+.shareList li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.shareList li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.shareList li > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.shareList li > span:last-child {
+  text-align: right;
+}
+
+.shareList small {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.editor {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+
+.editor summary {
+  color: var(--color-accent);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.action,
+.dangerAction,
+.backLink {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font: inherit;
+  font-weight: 700;
+}
+
+.action {
+  border: 0;
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.dangerAction {
+  border: 1px solid var(--color-danger);
+  background: transparent;
+  color: var(--color-danger);
+}
+
+.backLink {
+  color: var(--color-accent);
+}

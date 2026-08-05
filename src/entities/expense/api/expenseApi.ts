@@ -1,20 +1,84 @@
-import { CreateExpenseRequestDto, ExpenseShareCreateDto } from '@/shared/api/generated/client';
+import {
+  CreateExpenseRequestDto,
+  ExpenseResponseDto,
+  ExpenseShareCreateDto,
+  UpdateExpenseRequestDto,
+} from '@/shared/api/generated/client';
 import * as GeneratedClient from '@/shared/api/generated/client/Client';
-import type { ExpenseWriteInput } from '@/entities/expense/model/types';
+import type { Expense, ExpenseWriteInput } from '@/entities/expense/model/types';
+
+function toExpense(response: ExpenseResponseDto): Expense {
+  if (
+    !response.id ||
+    !response.title ||
+    response.totalAmount === undefined ||
+    !response.payerId ||
+    !response.createdByUserId ||
+    !response.createdAt
+  ) {
+    throw new Error('Backend returned an incomplete expense.');
+  }
+
+  return {
+    id: response.id,
+    title: response.title,
+    totalAmount: response.totalAmount,
+    payerId: response.payerId,
+    payerName: response.payerName ?? 'Участник',
+    payerUsername: response.payerUsername ?? undefined,
+    createdByUserId: response.createdByUserId,
+    createdAt: response.createdAt,
+    isDraft: response.isDraft ?? false,
+    shares: (response.shares ?? []).map((share) => ({
+      userId: share.userId ?? '',
+      displayName: share.displayName ?? 'Участник',
+      username: share.username ?? undefined,
+      amount: share.amount ?? 0,
+      isPaid: share.isPaid ?? false,
+    })),
+  };
+}
+
+function toShares(input: ExpenseWriteInput) {
+  return input.shares
+    .filter((share) => share.userId !== input.payerId)
+    .map((share) => new ExpenseShareCreateDto(share));
+}
 
 export const expenseApi = {
-  create(groupId: string, input: ExpenseWriteInput) {
-    return GeneratedClient.expensesPOST(
+  async create(groupId: string, input: ExpenseWriteInput) {
+    const response = await GeneratedClient.expensesPOST(
       groupId,
       new CreateExpenseRequestDto({
         title: input.title,
         totalAmount: input.totalAmount,
         payerId: input.payerId,
         isDraft: false,
-        shares: input.shares
-          .filter((share) => share.userId !== input.payerId)
-          .map((share) => new ExpenseShareCreateDto(share)),
+        shares: toShares(input),
       }),
     );
+    return toExpense(response);
+  },
+
+  async get(groupId: string, expenseId: string) {
+    return toExpense(await GeneratedClient.expensesGET(groupId, expenseId));
+  },
+
+  async update(groupId: string, expenseId: string, input: ExpenseWriteInput) {
+    const response = await GeneratedClient.expensesPUT(
+      groupId,
+      expenseId,
+      new UpdateExpenseRequestDto({
+        title: input.title,
+        totalAmount: input.totalAmount,
+        payerId: input.payerId,
+        shares: toShares(input),
+      }),
+    );
+    return toExpense(response);
+  },
+
+  remove(groupId: string, expenseId: string) {
+    return GeneratedClient.expensesDELETE(groupId, expenseId);
   },
 };
