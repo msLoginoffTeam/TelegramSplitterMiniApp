@@ -11,24 +11,45 @@ export function AppShell() {
   const handledInviteToken = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    const startParam = platform.getStartParam();
-    const inviteToken = startParam?.startsWith('invite_')
-      ? startParam.slice('invite_'.length)
-      : undefined;
-    const currentInviteToken = location.pathname.startsWith('/invite/')
-      ? decodeURIComponent(location.pathname.slice('/invite/'.length))
-      : undefined;
+    let retryTimeout: number | undefined;
+    let attempts = 0;
 
-    if (
-      inviteToken &&
-      currentInviteToken !== inviteToken &&
-      handledInviteToken.current !== inviteToken
-    ) {
-      handledInviteToken.current = inviteToken;
-      navigate(`/invite/${encodeURIComponent(inviteToken)}`, {
-        replace: true,
-      });
-    }
+    const handleInvite = () => {
+      const startParam = platform.getStartParam();
+      const inviteToken = startParam?.startsWith('invite_')
+        ? startParam.slice('invite_'.length)
+        : undefined;
+      const currentInviteToken = location.pathname.startsWith('/invite/')
+        ? decodeURIComponent(location.pathname.slice('/invite/'.length))
+        : undefined;
+
+      if (
+        inviteToken &&
+        currentInviteToken !== inviteToken &&
+        handledInviteToken.current !== inviteToken
+      ) {
+        handledInviteToken.current = inviteToken;
+        navigate(`/invite/${encodeURIComponent(inviteToken)}`, {
+          replace: true,
+        });
+        return;
+      }
+
+      // Telegram may populate its native bridge shortly after React has mounted.
+      // Retry briefly so a direct invite link is not lost to that initialization race.
+      attempts += 1;
+      if (platform.kind === 'telegram' && attempts < 16) {
+        retryTimeout = window.setTimeout(handleInvite, 200);
+      }
+    };
+
+    handleInvite();
+
+    return () => {
+      if (retryTimeout !== undefined) {
+        window.clearTimeout(retryTimeout);
+      }
+    };
   }, [location.hash, location.pathname, location.search, navigate, platform]);
 
   return (

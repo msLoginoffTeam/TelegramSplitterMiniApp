@@ -5,6 +5,7 @@ import {
   initData,
   miniApp,
   retrieveLaunchParams,
+  retrieveRawLaunchParams,
   themeParams,
   viewport,
 } from '@tma.js/sdk-react';
@@ -42,11 +43,18 @@ export class TelegramPlatform implements PlatformAdapter {
       if (nested) return nested;
     }
 
+    const telegramStartParam = getNativeTelegramStartParam();
+    if (telegramStartParam) return telegramStartParam;
+
     try {
       const launchParams = retrieveLaunchParams();
       const fromLaunchParams =
         launchParams.tgWebAppData?.start_param ?? launchParams.tgWebAppStartParam;
       if (fromLaunchParams) return fromLaunchParams;
+
+      const rawLaunchParams = retrieveRawLaunchParams();
+      const fromRawLaunchParams = readStartParam(rawLaunchParams);
+      if (fromRawLaunchParams) return fromRawLaunchParams;
     } catch {
       // Browser-like Telegram clients may not expose parseable launch params.
     }
@@ -107,4 +115,23 @@ export class TelegramPlatform implements PlatformAdapter {
 
     miniApp.ready();
   }
+}
+
+function getNativeTelegramStartParam(): string | undefined {
+  const telegram = (
+    window as typeof window & {
+      Telegram?: { WebApp?: { initDataUnsafe?: { start_param?: string } } };
+    }
+  ).Telegram;
+
+  return telegram?.WebApp?.initDataUnsafe?.start_param;
+}
+
+function readStartParam(rawParams: string): string | undefined {
+  const params = new URLSearchParams(rawParams.replace(/^#/, ''));
+  const direct = params.get('tgWebAppStartParam') ?? params.get('startapp');
+  if (direct) return direct;
+
+  const webAppData = params.get('tgWebAppData');
+  return webAppData ? (new URLSearchParams(webAppData).get('start_param') ?? undefined) : undefined;
 }

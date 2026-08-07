@@ -11,13 +11,27 @@ import { GroupsPage } from '@/pages/groups';
 import { NotFoundPage } from '@/pages/not-found';
 import { GroupInvitePage } from '@/pages/group-invite';
 import { AcceptInvitePage } from '@/pages/accept-invite';
+import { usePlatform } from '@/app/providers/PlatformProvider';
+
+function IndexRedirect() {
+  const platform = usePlatform();
+  const startParam = platform.getStartParam();
+
+  if (startParam?.startsWith('invite_')) {
+    return (
+      <Navigate replace to={`/invite/${encodeURIComponent(startParam.slice('invite_'.length))}`} />
+    );
+  }
+
+  return <Navigate replace to={routes.groups} />;
+}
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,
     children: [
-      { index: true, element: <Navigate replace to={routes.groups} /> },
+      { index: true, element: <IndexRedirect /> },
       { path: 'groups', element: <GroupsPage /> },
       { path: 'groups/new', element: <GroupCreatePage /> },
       { path: 'groups/:groupId', element: <GroupDetailsPage /> },

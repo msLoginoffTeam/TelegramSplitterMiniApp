@@ -9,6 +9,7 @@ const sdk = vi.hoisted(() => ({
     restore: vi.fn(),
   },
   retrieveLaunchParams: vi.fn(() => ({})),
+  retrieveRawLaunchParams: vi.fn<() => string>(() => ''),
   themeParams: {
     isMounted: vi.fn<() => boolean>(() => false),
     mount: vi.fn(),
@@ -48,6 +49,7 @@ describe('platform adapters', () => {
   afterEach(() => {
     sdk.isTMA.mockReturnValue(false);
     vi.clearAllMocks();
+    delete (window as typeof window & { Telegram?: unknown }).Telegram;
   });
 
   it('selects BrowserPlatform outside Telegram', () => {
@@ -89,5 +91,27 @@ describe('platform adapters', () => {
     expect(new TelegramPlatform().getStartParam()).toBe('invite_new_token');
 
     window.history.replaceState({}, '', '/');
+  });
+
+  it('reads the invite start parameter from the native Telegram WebApp object', () => {
+    sdk.initData.startParam.mockReturnValue(undefined);
+    sdk.retrieveLaunchParams.mockReturnValue({});
+    (
+      window as typeof window & {
+        Telegram?: { WebApp: { initDataUnsafe: { start_param: string } } };
+      }
+    ).Telegram = {
+      WebApp: { initDataUnsafe: { start_param: 'invite_native_token' } },
+    };
+
+    expect(new TelegramPlatform().getStartParam()).toBe('invite_native_token');
+  });
+
+  it('reads the invite start parameter from raw Telegram launch params', () => {
+    sdk.initData.startParam.mockReturnValue(undefined);
+    sdk.retrieveLaunchParams.mockReturnValue({});
+    sdk.retrieveRawLaunchParams.mockReturnValue('tgWebAppStartParam=invite_raw_token');
+
+    expect(new TelegramPlatform().getStartParam()).toBe('invite_raw_token');
   });
 });
