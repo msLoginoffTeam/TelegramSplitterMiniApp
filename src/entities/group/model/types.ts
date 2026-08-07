@@ -8,6 +8,7 @@ export type GroupMember = {
   displayName: string;
   username?: string;
   isOwner: boolean;
+  role: number;
   permissions: number[];
 };
 

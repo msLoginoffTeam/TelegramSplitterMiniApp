@@ -15,10 +15,13 @@ export function AppShell() {
     const inviteToken = startParam?.startsWith('invite_')
       ? startParam.slice('invite_'.length)
       : undefined;
+    const currentInviteToken = location.pathname.startsWith('/invite/')
+      ? decodeURIComponent(location.pathname.slice('/invite/'.length))
+      : undefined;
 
     if (
       inviteToken &&
-      !location.pathname.startsWith('/invite/') &&
+      currentInviteToken !== inviteToken &&
       handledInviteToken.current !== inviteToken
     ) {
       handledInviteToken.current = inviteToken;
@@ -26,7 +29,7 @@ export function AppShell() {
         replace: true,
       });
     }
-  }, [location.pathname, navigate, platform]);
+  }, [location.hash, location.pathname, location.search, navigate, platform]);
 
   return (
     <main className={styles.shell}>

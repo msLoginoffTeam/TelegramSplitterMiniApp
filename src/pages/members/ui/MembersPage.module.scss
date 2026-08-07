@@ -8,9 +8,7 @@
 }
 
 .list li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
   gap: var(--space-3);
   padding: var(--space-4);
 }
@@ -22,6 +20,95 @@
 .person {
   display: grid;
   gap: 0.2rem;
+}
+
+.memberHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.role {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+  text-align: right;
+}
+
+.permissions {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.field select {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.7rem;
+  background: var(--color-background);
+  color: inherit;
+  font: inherit;
+}
+
+.permissionList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 0.7rem;
+}
+
+.permissionList legend {
+  padding: 0 var(--space-2);
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.permission {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-caption);
+}
+
+.permission input {
+  margin-top: 0.15rem;
+  accent-color: var(--color-accent);
+}
+
+.save,
+.remove {
+  width: fit-content;
+  padding: 0.7rem 0.85rem;
+  border: 0;
+  border-radius: 0.7rem;
+  font: inherit;
+  font-weight: 700;
+}
+
+.save {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.remove {
+  background: transparent;
+  color: var(--color-danger, #c62828);
+}
+
+.save:disabled,
+.remove:disabled,
+.field select:disabled {
+  opacity: 0.6;
 }
 
 .list small {
@@ -38,4 +125,20 @@
   color: #ffffff;
   font: inherit;
   font-weight: 700;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger, #c62828);
+}
+
+.invite {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
 }

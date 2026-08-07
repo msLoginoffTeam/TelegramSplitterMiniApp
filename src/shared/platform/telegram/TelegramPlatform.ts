@@ -4,6 +4,7 @@ import {
   init,
   initData,
   miniApp,
+  retrieveLaunchParams,
   themeParams,
   viewport,
 } from '@tma.js/sdk-react';
@@ -24,11 +25,33 @@ export class TelegramPlatform implements PlatformAdapter {
   }
 
   public getStartParam(): string | undefined {
-    const fromInitData = initData.startParam();
-    if (fromInitData) return fromInitData;
+    // Telegram can expose launch parameters either in tgWebAppData or as a
+    // top-level query/hash parameter depending on the client and launch path.
+    for (const rawParams of [window.location.search, window.location.hash]) {
+      const value = rawParams.replace(/^#/, '');
+      if (!value) continue;
 
-    const searchParams = new URLSearchParams(window.location.search);
-    return searchParams.get('tgWebAppStartParam') ?? searchParams.get('startapp') ?? undefined;
+      const params = new URLSearchParams(value);
+      const direct = params.get('tgWebAppStartParam') ?? params.get('startapp');
+      if (direct) return direct;
+
+      const fromWebAppData = params.get('tgWebAppData');
+      const nested = fromWebAppData
+        ? new URLSearchParams(fromWebAppData).get('start_param')
+        : undefined;
+      if (nested) return nested;
+    }
+
+    try {
+      const launchParams = retrieveLaunchParams();
+      const fromLaunchParams =
+        launchParams.tgWebAppData?.start_param ?? launchParams.tgWebAppStartParam;
+      if (fromLaunchParams) return fromLaunchParams;
+    } catch {
+      // Browser-like Telegram clients may not expose parseable launch params.
+    }
+
+    return initData.startParam() || undefined;
   }
 
   public bindBackButton(handler: () => void): () => void {

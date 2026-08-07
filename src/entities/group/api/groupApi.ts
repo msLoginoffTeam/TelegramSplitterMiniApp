@@ -1,5 +1,10 @@
-import { CreateGroupRequestDto } from '@/shared/api/generated/client';
-import { AcceptGroupInviteRequestDto } from '@/shared/api/generated/client';
+import {
+  AcceptGroupInviteRequestDto,
+  CreateGroupRequestDto,
+  GroupPermission as ApiGroupPermission,
+  GroupRole as ApiGroupRole,
+  UpdateGroupMemberPermissionsRequestDto,
+} from '@/shared/api/generated/client';
 import * as GeneratedClient from '@/shared/api/generated/client/Client';
 import type {
   ExpenseSummary,
@@ -23,6 +28,7 @@ function toGroupMember(member: {
   username?: string | null;
   telegramId?: number;
   isOwner?: boolean;
+  role?: number;
   permissions?: number[] | null;
 }): GroupMember {
   if (!member.userId) {
@@ -34,6 +40,7 @@ function toGroupMember(member: {
     displayName: member.displayName ?? `Участник ${member.telegramId ?? ''}`.trim(),
     username: member.username ?? undefined,
     isOwner: member.isOwner ?? false,
+    role: member.role ?? 4,
     permissions: member.permissions ?? [],
   };
 }
@@ -96,6 +103,26 @@ export const groupApi = {
   async acceptInvite(token: string): Promise<GroupOverview> {
     const group = await GeneratedClient.accept(new AcceptGroupInviteRequestDto({ token }));
     return toGroupOverview(group);
+  },
+
+  removeMember(groupId: string, userId: string): Promise<void> {
+    return GeneratedClient.usersDELETE(groupId, userId);
+  },
+
+  updateMemberPermissions(
+    groupId: string,
+    userId: string,
+    role: number,
+    permissions?: number[],
+  ): Promise<void> {
+    return GeneratedClient.permissions(
+      groupId,
+      userId,
+      new UpdateGroupMemberPermissionsRequestDto({
+        role: role as ApiGroupRole,
+        permissions: permissions?.map((permission) => permission as ApiGroupPermission),
+      }),
+    );
   },
 
   async getDashboard(groupId: string): Promise<GroupDashboard> {

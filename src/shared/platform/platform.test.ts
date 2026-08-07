@@ -8,6 +8,7 @@ const sdk = vi.hoisted(() => ({
     startParam: vi.fn<() => string | undefined>(() => undefined),
     restore: vi.fn(),
   },
+  retrieveLaunchParams: vi.fn(() => ({})),
   themeParams: {
     isMounted: vi.fn<() => boolean>(() => false),
     mount: vi.fn(),
@@ -68,5 +69,25 @@ describe('platform adapters', () => {
     expect(sdk.initData.restore).toHaveBeenCalledTimes(1);
     expect(sdk.miniApp.ready).toHaveBeenCalledTimes(1);
     expect(platform.getInitData()).toBe('signed-init-data');
+  });
+
+  it('reads the invite start parameter from Telegram hash launch params', () => {
+    sdk.initData.startParam.mockReturnValue(undefined);
+    sdk.retrieveLaunchParams.mockReturnValue({});
+    window.history.replaceState({}, '', '/#tgWebAppStartParam=invite_token');
+
+    expect(new TelegramPlatform().getStartParam()).toBe('invite_token');
+
+    window.history.replaceState({}, '', '/');
+  });
+
+  it('prefers a current URL invite over stale init data', () => {
+    sdk.initData.startParam.mockReturnValue('invite_old_token');
+    sdk.retrieveLaunchParams.mockReturnValue({});
+    window.history.replaceState({}, '', '/?startapp=invite_new_token');
+
+    expect(new TelegramPlatform().getStartParam()).toBe('invite_new_token');
+
+    window.history.replaceState({}, '', '/');
   });
 });
