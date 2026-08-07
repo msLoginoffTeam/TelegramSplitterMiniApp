@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 
 $dockerReadyBy = (Get-Date).AddMinutes(5)
 do {
