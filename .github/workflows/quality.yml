@@ -42,5 +42,5 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Deploy exact main commit
-        shell: pwsh
+        shell: powershell
         run: ./scripts/deploy-production.ps1
