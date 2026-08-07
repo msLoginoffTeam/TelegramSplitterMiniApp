@@ -67,11 +67,18 @@ function toExpenseSummary(expense: {
   id?: string;
   title?: string | null;
   totalAmount?: number;
+  payerId?: string;
   payerName?: string | null;
   payerUsername?: string | null;
   createdAt?: Date;
 }): ExpenseSummary {
-  if (!expense.id || !expense.title || expense.totalAmount === undefined || !expense.createdAt) {
+  if (
+    !expense.id ||
+    !expense.title ||
+    expense.totalAmount === undefined ||
+    !expense.payerId ||
+    !expense.createdAt
+  ) {
     throw new Error('Backend returned an incomplete expense.');
   }
 
@@ -79,6 +86,7 @@ function toExpenseSummary(expense: {
     id: expense.id,
     title: expense.title,
     totalAmount: expense.totalAmount,
+    payerId: expense.payerId,
     payerName: expense.payerName ?? 'Участник',
     payerUsername: expense.payerUsername ?? undefined,
     createdAt: expense.createdAt,

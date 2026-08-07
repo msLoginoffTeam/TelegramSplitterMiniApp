@@ -12,6 +12,9 @@ import { NotFoundPage } from '@/pages/not-found';
 import { GroupInvitePage } from '@/pages/group-invite';
 import { AcceptInvitePage } from '@/pages/accept-invite';
 import { usePlatform } from '@/app/providers/PlatformProvider';
+import { PaymentCreatePage } from '@/pages/payment-create';
+import { PaymentDetailsPage } from '@/pages/payment-details';
+import { PaymentsPage } from '@/pages/payments';
 
 function IndexRedirect() {
   const platform = usePlatform();
@@ -44,13 +47,16 @@ export const router = createBrowserRouter([
         element: <ExpenseDetailsPage />,
       },
       {
+        path: 'groups/:groupId/payments',
+        element: <PaymentsPage />,
+      },
+      {
         path: 'groups/:groupId/payments/new',
-        element: (
-          <GroupSectionPage
-            title="Новый платёж"
-            description="Здесь будет фиксация перевода между участниками."
-          />
-        ),
+        element: <PaymentCreatePage />,
+      },
+      {
+        path: 'groups/:groupId/payments/:paymentId',
+        element: <PaymentDetailsPage />,
       },
       {
         path: 'groups/:groupId/transfers',

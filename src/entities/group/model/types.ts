@@ -23,6 +23,7 @@ export type ExpenseSummary = {
   id: string;
   title: string;
   totalAmount: number;
+  payerId: string;
   payerName: string;
   payerUsername?: string;
   createdAt: Date;

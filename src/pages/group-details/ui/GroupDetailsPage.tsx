@@ -63,6 +63,8 @@ export function GroupDetailsPage() {
   );
   const canCreateExpense =
     currentMember?.permissions.includes(groupPermissions.createExpense) ?? false;
+  const canCreatePayment =
+    currentMember?.permissions.includes(groupPermissions.createPayment) ?? false;
   const canManageMembers =
     currentMember?.permissions.includes(groupPermissions.manageMembers) ?? false;
 
@@ -73,9 +75,9 @@ export function GroupDetailsPage() {
       description: 'Кто заплатил и как разделить сумму.',
     },
     {
-      to: routes.createPayment(groupId),
-      label: 'Добавить платёж',
-      description: 'Зафиксировать перевод между участниками.',
+      to: routes.payments(groupId),
+      label: 'Платежи',
+      description: 'Переводы и погашения трат.',
     },
     {
       to: routes.transfers(groupId),
@@ -96,6 +98,11 @@ export function GroupDetailsPage() {
       {canCreateExpense ? (
         <Link className={styles.primaryAction} to={routes.createExpense(groupId)}>
           Добавить трату
+        </Link>
+      ) : null}
+      {canCreatePayment ? (
+        <Link className={styles.secondaryAction} to={routes.createPayment(groupId)}>
+          Добавить платёж
         </Link>
       ) : null}
       {canManageMembers ? (

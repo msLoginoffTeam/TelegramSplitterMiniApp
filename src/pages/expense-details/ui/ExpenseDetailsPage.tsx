@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { useExpenseQuery } from '@/entities/expense';
 import { groupPermissions, useGroupDashboardQuery } from '@/entities/group';
+import { useGroupPaymentsQuery } from '@/entities/payment';
 import { useDeleteExpense } from '@/features/delete-expense';
 import { ExpenseEditorForm, type ExpenseEditorInitialValues } from '@/features/expense-editor';
 import { useUpdateExpense } from '@/features/update-expense';
@@ -26,6 +27,10 @@ export function ExpenseDetailsPage() {
     expenseId ?? '',
     Boolean(groupId && expenseId) && canRequest,
   );
+  const paymentsQuery = useGroupPaymentsQuery(
+    groupId ?? '',
+    Boolean(groupId && expenseId) && canRequest,
+  );
   const updateExpense = useUpdateExpense(groupId ?? '', expenseId ?? '');
   const deleteExpense = useDeleteExpense(groupId ?? '', expenseId ?? '');
 
@@ -40,7 +45,7 @@ export function ExpenseDetailsPage() {
       />
     );
   }
-  if (expenseQuery.isPending || dashboardQuery.isPending) {
+  if (expenseQuery.isPending || dashboardQuery.isPending || paymentsQuery.isPending) {
     return (
       <PageLayout
         backTo={routes.group(groupId)}
@@ -52,6 +57,7 @@ export function ExpenseDetailsPage() {
   }
   if (
     expenseQuery.isError ||
+    paymentsQuery.isError ||
     !expenseQuery.data ||
     dashboardQuery.isError ||
     !dashboardQuery.data
@@ -82,6 +88,8 @@ export function ExpenseDetailsPage() {
   const canDelete = currentMember?.permissions.includes(
     isAuthor ? groupPermissions.deleteOwnExpense : groupPermissions.deleteAnyExpense,
   );
+  const canCreatePayment =
+    currentMember?.permissions.includes(groupPermissions.createPayment) ?? false;
   const initialValues: ExpenseEditorInitialValues = {
     title: expense.title,
     totalAmount: expense.totalAmount,
@@ -91,6 +99,9 @@ export function ExpenseDetailsPage() {
       expense.shares.map((share) => [share.userId, Math.round(share.amount * 100)]),
     ),
   };
+  const payments = (paymentsQuery.data ?? [])
+    .filter((payment) => payment.expenseId === expenseId)
+    .sort((first, second) => second.timestamp.getTime() - first.timestamp.getTime());
 
   return (
     <PageLayout
@@ -134,6 +145,36 @@ export function ExpenseDetailsPage() {
           ))}
         </ul>
       </section>
+
+      <section className={styles.section}>
+        <h2>Платежи по трате</h2>
+        {payments.length ? (
+          <ul className={styles.paymentList}>
+            {payments.map((payment) => (
+              <li key={payment.id}>
+                <span>
+                  <strong>
+                    {payment.fromUserId === dashboard.currentUserId
+                      ? 'Вы'
+                      : payment.fromDisplayName}{' '}
+                    → {payment.toUserId === dashboard.currentUserId ? 'вы' : payment.toDisplayName}
+                  </strong>
+                  <small>{payment.timestamp.toLocaleString('ru-RU')}</small>
+                </span>
+                <b>{formatRubles(payment.amount)}</b>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.muted}>Платежей по этой трате пока нет.</p>
+        )}
+      </section>
+
+      {canCreatePayment ? (
+        <Link className={styles.action} to={routes.createExpensePayment(groupId, expenseId)}>
+          Добавить платёж к трате
+        </Link>
+      ) : null}
 
       {canDelete ? (
         <button

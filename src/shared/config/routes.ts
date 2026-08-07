@@ -6,7 +6,11 @@ export const routes = {
   expense: (groupId: string, expenseId: string) => `/groups/${groupId}/expenses/${expenseId}`,
   editExpense: (groupId: string, expenseId: string) =>
     `/groups/${groupId}/expenses/${expenseId}/edit`,
+  payments: (groupId: string) => `/groups/${groupId}/payments`,
   createPayment: (groupId: string) => `/groups/${groupId}/payments/new`,
+  payment: (groupId: string, paymentId: string) => `/groups/${groupId}/payments/${paymentId}`,
+  createExpensePayment: (groupId: string, expenseId: string) =>
+    `/groups/${groupId}/payments/new?expenseId=${encodeURIComponent(expenseId)}`,
   transfers: (groupId: string) => `/groups/${groupId}/transfers`,
   members: (groupId: string) => `/groups/${groupId}/members`,
   settings: (groupId: string) => `/groups/${groupId}/settings`,
