@@ -11,7 +11,6 @@ import styles from './PaymentDetailsPage.module.scss';
 
 export function PaymentDetailsPage() {
   const { groupId, paymentId } = useParams();
-  const navigate = useNavigate();
   const platform = usePlatform();
   const hasDevelopmentIdentity = Boolean(getRuntimeConfig().developmentTelegramUserId);
   const canRequest =
