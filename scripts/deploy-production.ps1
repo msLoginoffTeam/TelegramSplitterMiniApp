@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $dockerReadyBy = (Get-Date).AddMinutes(5)
 do {
-    docker info *> $null
+    $null = docker info 2>$null
     if ($LASTEXITCODE -eq 0) {
         break
     }
