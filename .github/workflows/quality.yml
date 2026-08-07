@@ -30,3 +30,17 @@ jobs:
       - run: corepack yarn test
       - run: corepack yarn build
       - run: corepack yarn api:check
+
+  deploy:
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, windows, splitter-prod]
+    concurrency:
+      group: splitter-frontend-production
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy exact main commit
+        shell: pwsh
+        run: ./scripts/deploy-production.ps1
