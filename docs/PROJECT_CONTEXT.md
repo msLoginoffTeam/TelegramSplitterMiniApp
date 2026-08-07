@@ -44,6 +44,7 @@ Frontend вынесен в отдельный репозиторий осозн�
 - Тема Telegram, safe areas, Back/Main Button и haptics оборачиваются в отдельный platform adapter, чтобы не размазывать Telegram API по UI.
 - Telegram-specific SDK запрещено импортировать из `entities`, `features`, `widgets` и `pages`.
 - Compose этого репозитория поднимает только статический frontend через Nginx. `/api` проксируется в настраиваемый `API_UPSTREAM`; backend и PostgreSQL живут в backend-репозитории.
+- Production Compose находится в `compose.production.yml`: frontend соединяется с backend по внешней Docker-сети `splitter-internal`, слушает только loopback Windows host, а публичный HTTPS обеспечивает Tailscale Funnel. CD выполняется self-hosted GitHub Actions runner с label `splitter-prod`; подробности — `docs/DEPLOYMENT_WINDOWS.md`.
 - Полный foundation-план: `docs/FOUNDATION_PLAN.md`.
 
 ## Контракт с backend

@@ -36,7 +36,7 @@ docker compose up --build
 
 Mini App будет доступен на <http://localhost:5173>. Это независимый web-only Compose; продуктовые запросы `/api/*` проксируются в `API_UPSTREAM`, по умолчанию `http://host.docker.internal:5050`. Для локального API из Rider сначала поднимите только БД командой `docker compose up -d db` в backend-репозитории, затем запустите API из IDE.
 
-Скопируйте `.env.example` в `.env`, если нужны другие адреса или порты. Для сервера обязательно задайте `API_UPSTREAM` как внешний HTTPS origin API; точную схему reverse proxy и доменов ещё нужно согласовать.
+Скопируйте `.env.example` в `.env`, если нужны другие адреса или порты. Для production используется отдельный `compose.production.yml`: API остаётся во внутренней Docker-сети, а Mini App публикуется через Tailscale Funnel. Инструкции для Windows-host и CD: [`docs/DEPLOYMENT_WINDOWS.md`](docs/DEPLOYMENT_WINDOWS.md).
 
 ## Related repositories
 
@@ -48,3 +48,4 @@ Mini App будет доступен на <http://localhost:5173>. Это нез
 - `docs/PROJECT_CONTEXT.md` — frontend scope, architecture and next steps.
 - `docs/KNOWN_ISSUES.md` — frontend-specific risks and unresolved decisions.
 - `AGENTS.md` — guidance for future Codex sessions.
+- `docs/DEPLOYMENT_WINDOWS.md` — production deployment на Windows через Tailscale Funnel и GitHub Actions.

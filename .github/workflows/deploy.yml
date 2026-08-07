@@ -1,0 +1,23 @@
+name: Deploy production frontend
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: splitter-frontend-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    needs: quality
+    runs-on: [self-hosted, windows, splitter-prod]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy exact main commit
+        shell: pwsh
+        run: ./scripts/deploy-production.ps1
