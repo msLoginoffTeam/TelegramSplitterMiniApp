@@ -92,6 +92,12 @@ export type ParticipantsDELETEQueryParameters = {
   userId: string ;
 }
 
+export type SettlementQueryParameters = {
+  groupId: string ;
+  expenseId: string ;
+  userId: string ;
+}
+
 export type GroupsAllQueryParameters = {
   telegramChatId?: number | undefined ;
 }
@@ -1429,6 +1435,73 @@ export function useParticipantsDELETEMutationWithParameters<TContext>(options?: 
 return useMutation({
   ...options,
   mutationFn: (data: ParticipantsDELETE__MutationParameters) => Client.participantsDELETE(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.userId ?? options?.parameters?.userId!),
+  mutationKey: key,
+});
+}
+
+export function settlementUrl(groupId: string, expenseId: string, userId: string): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}/settlement";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+if (expenseId === undefined || expenseId === null)
+  throw new Error("The parameter 'expenseId' must be defined.");
+url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
+if (userId === undefined || userId === null)
+  throw new Error("The parameter 'userId' must be defined.");
+url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+export function settlementMutationKey(groupId: string, expenseId: string, userId: string): MutationKey {
+  return trimArrayEnd([
+      'Client',
+      'settlement',
+      groupId as any,
+      expenseId as any,
+      userId as any,
+    ]);
+}
+
+/**
+ * Marks an unpaid participant share as settled manually, or returns it to unpaid state.
+The manual status never changes group balances or suggested transfers.
+ * @param body (optional)
+ * @return OK
+ */
+export function useSettlementMutation<TContext>(groupId: string, expenseId: string, userId: string, options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Types.UpdateExpenseShareSettlementRequestDto, TContext>, 'mutationKey' | 'mutationFn'>): UseMutationResult<Types.ExpenseResponseDto, unknown, Types.UpdateExpenseShareSettlementRequestDto, TContext> {
+  const key = settlementMutationKey(groupId, expenseId, userId);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useMutation({
+    ...options,
+    mutationFn: (body: Types.UpdateExpenseShareSettlementRequestDto) => Client.settlement(groupId, expenseId, userId, body),
+    mutationKey: key,
+  });
+}
+
+type Settlement__MutationParameters = SettlementQueryParameters & {
+  body: Types.UpdateExpenseShareSettlementRequestDto;
+}
+
+/**
+ * Marks an unpaid participant share as settled manually, or returns it to unpaid state.
+The manual status never changes group balances or suggested transfers.
+ * @param body (optional)
+ * @return OK
+ */
+export function useSettlementMutationWithParameters<TContext>(options?: Omit<UseMutationOptions<Types.ExpenseResponseDto, unknown, Settlement__MutationParameters, TContext>, 'mutationKey' | 'mutationFn'> & { parameters?: SettlementQueryParameters}): UseMutationResult<Types.ExpenseResponseDto, unknown, Settlement__MutationParameters, TContext> {
+  const key = settlementMutationKey(options?.parameters?.groupId!, options?.parameters?.expenseId!, options?.parameters?.userId!);
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+return useMutation({
+  ...options,
+  mutationFn: (data: Settlement__MutationParameters) => Client.settlement(data.groupId ?? options?.parameters?.groupId!, data.expenseId ?? options?.parameters?.expenseId!, data.userId ?? options?.parameters?.userId!, data.body),
   mutationKey: key,
 });
 }

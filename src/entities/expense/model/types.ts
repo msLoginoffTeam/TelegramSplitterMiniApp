@@ -14,6 +14,8 @@ export type ExpenseShare = {
   username?: string;
   amount: number;
   isPaid: boolean;
+  isPaidByPayments: boolean;
+  isManuallySettled: boolean;
 };
 
 export type Expense = {

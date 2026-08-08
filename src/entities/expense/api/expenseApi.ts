@@ -2,6 +2,7 @@ import {
   CreateExpenseRequestDto,
   ExpenseResponseDto,
   ExpenseShareCreateDto,
+  UpdateExpenseShareSettlementRequestDto,
   UpdateExpenseRequestDto,
 } from '@/shared/api/generated/client';
 import * as GeneratedClient from '@/shared/api/generated/client/Client';
@@ -35,6 +36,8 @@ function toExpense(response: ExpenseResponseDto): Expense {
       username: share.username ?? undefined,
       amount: share.amount ?? 0,
       isPaid: share.isPaid ?? false,
+      isPaidByPayments: share.isPaidByPayments ?? false,
+      isManuallySettled: share.isManuallySettled ?? false,
     })),
   };
 }
@@ -80,5 +83,21 @@ export const expenseApi = {
 
   remove(groupId: string, expenseId: string) {
     return GeneratedClient.expensesDELETE(groupId, expenseId);
+  },
+
+  async updateShareSettlement(
+    groupId: string,
+    expenseId: string,
+    userId: string,
+    isManuallySettled: boolean,
+  ) {
+    return toExpense(
+      await GeneratedClient.settlement(
+        groupId,
+        expenseId,
+        userId,
+        new UpdateExpenseShareSettlementRequestDto({ isManuallySettled }),
+      ),
+    );
   },
 };

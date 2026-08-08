@@ -37,13 +37,47 @@
   gap: 0.2rem;
 }
 
-.shareList li > span:last-child {
+.shareSummary {
+  align-items: flex-end;
   text-align: right;
 }
 
 .shareList small {
   color: var(--color-hint);
   font-size: var(--font-size-caption);
+}
+
+.shareList small[data-settlement='payments'] {
+  color: var(--color-positive);
+}
+
+.shareList small[data-settlement='manual'] {
+  color: var(--color-accent);
+}
+
+.shareList small[data-settlement='unpaid'] {
+  color: var(--color-danger);
+}
+
+.settlementHint {
+  margin: 0;
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.settlementAction {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 0.6rem;
+  background: transparent;
+  color: var(--color-accent);
+  font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.settlementAction:disabled {
+  opacity: 0.55;
 }
 
 .paymentList li {
@@ -56,13 +90,19 @@
 }
 
 .paymentList small,
-.muted {
+.muted,
+.error {
   color: var(--color-hint);
   font-size: var(--font-size-caption);
 }
 
 .muted {
   margin: 0;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
 }
 
 .editor {

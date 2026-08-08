@@ -6,6 +6,7 @@ import { useGroupPaymentsQuery } from '@/entities/payment';
 import { useDeleteExpense } from '@/features/delete-expense';
 import { ExpenseEditorForm, type ExpenseEditorInitialValues } from '@/features/expense-editor';
 import { useUpdateExpense } from '@/features/update-expense';
+import { useUpdateExpenseShareSettlement } from '@/features/update-expense-share-settlement';
 import { routes } from '@/shared/config/routes';
 import { getRuntimeConfig } from '@/shared/config/runtimeConfig';
 import { formatRubles } from '@/shared/lib/money';
@@ -32,6 +33,7 @@ export function ExpenseDetailsPage() {
     Boolean(groupId && expenseId) && canRequest,
   );
   const updateExpense = useUpdateExpense(groupId ?? '', expenseId ?? '');
+  const updateShareSettlement = useUpdateExpenseShareSettlement(groupId ?? '', expenseId ?? '');
   const deleteExpense = useDeleteExpense(groupId ?? '', expenseId ?? '');
 
   if (!groupId || !expenseId) return null;
@@ -128,22 +130,63 @@ export function ExpenseDetailsPage() {
 
       <section className={styles.section}>
         <h2>Распределение</h2>
+        <p className={styles.settlementHint}>
+          Ручное закрытие меняет только статус этой траты, а не общий баланс группы.
+        </p>
         <ul className={styles.shareList}>
-          {expense.shares.map((share) => (
-            <li key={share.userId}>
-              <span>
-                <strong>
-                  {share.userId === expense.payerId ? 'Плательщик' : share.displayName}
-                </strong>
-                {share.username ? <small>@{share.username}</small> : null}
-              </span>
-              <span>
-                {formatRubles(share.amount)}
-                <small>{share.isPaid ? 'Оплачено' : 'Не оплачено'}</small>
-              </span>
-            </li>
-          ))}
+          {expense.shares.map((share) => {
+            const isPayer = share.userId === expense.payerId;
+            const canUpdateSettlement = canEdit && !isPayer && !share.isPaidByPayments;
+            const settlementLabel = isPayer
+              ? 'Учтено как плательщик'
+              : share.isPaidByPayments
+                ? 'Оплачено платежами'
+                : share.isManuallySettled
+                  ? 'Закрыто вручную'
+                  : `Осталось оплатить ${formatRubles(share.amount)}`;
+
+            return (
+              <li key={share.userId}>
+                <span>
+                  <strong>{isPayer ? 'Плательщик' : share.displayName}</strong>
+                  {share.username ? <small>@{share.username}</small> : null}
+                </span>
+                <span className={styles.shareSummary}>
+                  <strong>{formatRubles(share.amount)}</strong>
+                  <small
+                    data-settlement={
+                      share.isPaidByPayments
+                        ? 'payments'
+                        : share.isManuallySettled
+                          ? 'manual'
+                          : 'unpaid'
+                    }
+                  >
+                    {settlementLabel}
+                  </small>
+                  {canUpdateSettlement ? (
+                    <button
+                      className={styles.settlementAction}
+                      disabled={updateShareSettlement.isPending}
+                      onClick={() =>
+                        updateShareSettlement.mutate({
+                          userId: share.userId,
+                          isManuallySettled: !share.isManuallySettled,
+                        })
+                      }
+                      type="button"
+                    >
+                      {share.isManuallySettled ? 'Вернуть в долг' : 'Закрыть вручную'}
+                    </button>
+                  ) : null}
+                </span>
+              </li>
+            );
+          })}
         </ul>
+        {updateShareSettlement.isError ? (
+          <p className={styles.error}>Не удалось обновить статус доли. Попробуйте ещё раз.</p>
+        ) : null}
       </section>
 
       <section className={styles.section}>

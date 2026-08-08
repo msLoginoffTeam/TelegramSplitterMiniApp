@@ -572,6 +572,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     username?: string | null;
     amount?: number;
     isPaid?: boolean;
+    isPaidByPayments?: boolean;
+    isManuallySettled?: boolean;
 
     constructor(data?: IExpenseShareResponseDto) {
         if (data) {
@@ -589,6 +591,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
             this.username = _data["username"];
             this.amount = _data["amount"];
             this.isPaid = _data["isPaid"];
+            this.isPaidByPayments = _data["isPaidByPayments"];
+            this.isManuallySettled = _data["isManuallySettled"];
         }
     }
 
@@ -606,6 +610,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
         data["username"] = this.username;
         data["amount"] = this.amount;
         data["isPaid"] = this.isPaid;
+        data["isPaidByPayments"] = this.isPaidByPayments;
+        data["isManuallySettled"] = this.isManuallySettled;
         return data;
     }
 }
@@ -616,6 +622,8 @@ export interface IExpenseShareResponseDto {
     username?: string | null;
     amount?: number;
     isPaid?: boolean;
+    isPaidByPayments?: boolean;
+    isManuallySettled?: boolean;
 }
 
 export class GroupInviteResponseDto implements IGroupInviteResponseDto {
@@ -1235,6 +1243,42 @@ export interface IUpdateExpenseRequestDto {
     totalAmount?: number;
     payerId?: string;
     shares?: ExpenseShareCreateDto[] | null;
+}
+
+export class UpdateExpenseShareSettlementRequestDto implements IUpdateExpenseShareSettlementRequestDto {
+    isManuallySettled?: boolean;
+
+    constructor(data?: IUpdateExpenseShareSettlementRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.isManuallySettled = _data["isManuallySettled"];
+        }
+    }
+
+    static fromJS(data: any): UpdateExpenseShareSettlementRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateExpenseShareSettlementRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["isManuallySettled"] = this.isManuallySettled;
+        return data;
+    }
+}
+
+export interface IUpdateExpenseShareSettlementRequestDto {
+    isManuallySettled?: boolean;
 }
 
 export class UpdateGroupMemberPermissionsRequestDto implements IUpdateGroupMemberPermissionsRequestDto {

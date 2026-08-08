@@ -1054,6 +1054,76 @@ function processParticipantsDELETE(response: AxiosResponse): Promise<void> {
 }
 
 /**
+ * Marks an unpaid participant share as settled manually, or returns it to unpaid state.
+The manual status never changes group balances or suggested transfers.
+ * @param body (optional)
+ * @return OK
+ */
+export function settlement(groupId: string, expenseId: string, userId: string, body?: Types.UpdateExpenseShareSettlementRequestDto | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.ExpenseResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}/settlement";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+    if (expenseId === undefined || expenseId === null)
+      throw new Error("The parameter 'expenseId' must be defined.");
+    url_ = url_.replace("{expenseId}", encodeURIComponent("" + expenseId));
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+      url_ = url_.replace(/[?&]$/, "");
+
+    const content_ = JSON.stringify(body);
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigSettlement,
+        ...config,
+        data: content_,
+        method: "PUT",
+        url: url_,
+        headers: {
+            ..._requestConfigSettlement?.headers,
+            "Content-Type": "application/json",
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processSettlement(_response);
+    });
+}
+
+function processSettlement(response: AxiosResponse): Promise<Types.ExpenseResponseDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        let result200: any = null;
+        let resultData200  = _responseText;
+        result200 = Types.ExpenseResponseDto.fromJS(resultData200);
+        return Promise.resolve<Types.ExpenseResponseDto>(result200);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<Types.ExpenseResponseDto>(null as any);
+}
+
+/**
  * Retrieves groups the authenticated user belongs to.
  * @return OK
  */
@@ -2399,6 +2469,17 @@ export function setParticipantsDELETERequestConfig(value: Partial<AxiosRequestCo
 }
 export function patchParticipantsDELETERequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
   _requestConfigParticipantsDELETE = patch(_requestConfigParticipantsDELETE ?? {});
+}
+
+let _requestConfigSettlement: Partial<AxiosRequestConfig> | null;
+export function getSettlementRequestConfig() {
+  return _requestConfigSettlement;
+}
+export function setSettlementRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigSettlement = value;
+}
+export function patchSettlementRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigSettlement = patch(_requestConfigSettlement ?? {});
 }
 
 let _requestConfigMy: Partial<AxiosRequestConfig> | null;

@@ -977,6 +977,89 @@
         ]
       }
     },
+    "/api/groups/{groupId}/expenses/{expenseId}/participants/{userId}/settlement": {
+      "put": {
+        "tags": [
+          "Expenses"
+        ],
+        "summary": "Marks an unpaid participant share as settled manually, or returns it to unpaid state.\nThe manual status never changes group balances or suggested transfers.",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "expenseId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExpenseShareSettlementRequestDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExpenseShareSettlementRequestDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExpenseShareSettlementRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpenseResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
+      }
+    },
     "/api/groups/my": {
       "get": {
         "tags": [
@@ -2451,6 +2534,12 @@
           },
           "isPaid": {
             "type": "boolean"
+          },
+          "isPaidByPayments": {
+            "type": "boolean"
+          },
+          "isManuallySettled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -2759,6 +2848,15 @@
               "$ref": "#/components/schemas/ExpenseShareCreateDto"
             },
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateExpenseShareSettlementRequestDto": {
+        "type": "object",
+        "properties": {
+          "isManuallySettled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

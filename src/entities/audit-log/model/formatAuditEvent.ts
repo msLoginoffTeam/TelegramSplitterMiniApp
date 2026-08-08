@@ -31,6 +31,7 @@ const fieldLabels: Record<string, string> = {
   UserName: 'Участник',
   MemberUserName: 'Участник',
   Participant: 'Участник',
+  IsManuallySettled: 'Ручное закрытие',
   ExpenseTitle: 'Трата',
   FromParticipant: 'Отправитель',
   ToParticipant: 'Получатель',
@@ -145,6 +146,13 @@ function formatShareTitle(event: AuditLogEvent): string {
   const context = [participant, expenseTitle ? `в трате «${expenseTitle}»` : undefined]
     .filter((value): value is string => Boolean(value))
     .join(' ');
+  const manualSettlement = event.newValues.IsManuallySettled;
+
+  if (typeof manualSettlement === 'boolean') {
+    const action = manualSettlement ? 'Вручную закрыта доля' : 'Доля снова считается долгом';
+    return context ? `${action} ${context}` : action;
+  }
+
   const action =
     event.operation === 'Deleted'
       ? 'Удалена доля'
