@@ -94,6 +94,7 @@ export function ExpenseDetailsPage() {
     currentMember?.permissions.includes(groupPermissions.createPayment) ?? false;
   const initialValues: ExpenseEditorInitialValues = {
     title: expense.title,
+    description: expense.description,
     totalAmount: expense.totalAmount,
     payerId: expense.payerId,
     participantIds: expense.shares.map((share) => share.userId),
@@ -121,6 +122,7 @@ export function ExpenseDetailsPage() {
             : 'В распределении ниже видно, какие доли ещё нужно закрыть.'}
         </span>
       </section>
+      {expense.description ? <p className={styles.description}>{expense.description}</p> : null}
       {canEdit ? (
         <details className={styles.editor}>
           <summary>Редактировать трату</summary>

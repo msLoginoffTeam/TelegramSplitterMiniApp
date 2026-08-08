@@ -1,73 +1,109 @@
-.primaryAction,
 .retry {
   width: fit-content;
   padding: 0.75rem 1rem;
   border: 0;
   border-radius: 0.75rem;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   font: inherit;
   font-weight: 700;
 }
 
-.secondaryAction {
-  width: fit-content;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-accent);
-  border-radius: 0.75rem;
-  color: var(--color-accent);
-  font-weight: 700;
-}
-
-.section {
+.overview,
+.actions,
+.sections {
   display: grid;
   gap: var(--space-3);
   min-width: 0;
 }
 
-.section h2,
-.muted {
-  margin: 0;
+.overview {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
 }
 
-.section h2 {
-  font-size: 1.125rem;
-}
-
-.sectionHeading {
+.overview summary {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
+  padding: var(--space-4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.overview summary::-webkit-details-marker {
+  display: none;
+}
+
+.overview summary > span:first-child {
+  display: grid;
+  gap: 0.2rem;
   min-width: 0;
 }
 
-.sectionHeading span,
-.muted {
+.overview summary small,
+.muted,
+.expenseList span,
+.paymentList span,
+.person small,
+.actionsHeading p,
+.navigationItem small {
   color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.overview summary > span:last-child {
+  color: var(--color-hint);
+  font-size: 1.25rem;
+  transition: transform 0.15s ease;
+}
+
+.overview[open] summary > span:last-child {
+  transform: rotate(180deg);
+}
+
+.overviewBody {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.muted,
+.actionsHeading h2,
+.actionsHeading p {
+  margin: 0;
 }
 
 .balanceList,
-.expenseList {
+.expenseList,
+.paymentList {
   display: grid;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   list-style: none;
   border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  border-radius: 0.85rem;
+  background: var(--color-surface-raised);
 }
 
 .balanceList li,
-.expenseList li {
+.expenseList li,
+.paymentList li {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-4);
-  padding: var(--space-4);
+  min-width: 0;
+  padding: var(--space-3);
 }
 
 .balanceList li + li,
-.expenseList li + li {
+.expenseList li + li,
+.paymentList li + li {
   border-top: 1px solid var(--color-border);
 }
 
@@ -75,23 +111,14 @@
   color: var(--color-positive);
 }
 
-.person {
-  display: grid;
-  gap: 0.2rem;
-}
-
-.person small {
-  color: var(--color-hint);
-  font-size: var(--font-size-caption);
-}
-
 .balanceList strong[data-negative='true'] {
   color: var(--color-danger);
 }
 
-.expenseList li > div {
+.person {
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .expenseLink {
@@ -99,9 +126,15 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: var(--space-4);
+  gap: var(--space-3);
   min-width: 0;
   color: inherit;
+}
+
+.expenseLink > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
 }
 
 .expenseTitle {
@@ -114,46 +147,71 @@
 .settledBadge {
   padding: 0.15rem 0.4rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-positive) 14%, #ffffff);
+  background: #123d2a;
   color: var(--color-positive);
   font-size: var(--font-size-caption);
   font-weight: 700;
 }
 
-.expenseLink > div {
-  display: grid;
-  gap: 0.2rem;
-  min-width: 0;
-}
-
-.expenseList span {
-  color: var(--color-hint);
-  font-size: var(--font-size-caption);
-}
-
-.expenseLink b {
+.expenseLink span,
+.expenseLink small {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.expenseLink b {
+  flex: none;
+  white-space: nowrap;
+}
+
+.allLink {
+  width: fit-content;
+  color: var(--color-accent);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.actionsHeading {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.actionsHeading h2 {
+  font-size: 1.125rem;
+}
+
+.actionList,
 .navigation {
   display: grid;
   gap: var(--space-3);
 }
 
+.actionPrimary,
+.actionItem,
 .navigationItem {
   display: grid;
   gap: 0.25rem;
   padding: var(--space-4);
-  border: 1px solid var(--color-border);
   border-radius: 1rem;
+}
+
+.actionPrimary {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.actionPrimary small {
+  color: var(--color-on-accent-muted);
+}
+
+.actionItem,
+.navigationItem {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   color: var(--color-text);
 }
 
-.navigationItem span {
+.navigationItem strong {
   color: var(--color-accent);
-  font-weight: 700;
-}
-
-.navigationItem small {
-  color: var(--color-hint);
 }

@@ -9,6 +9,7 @@ export type Payment = {
   toUsername?: string;
   createdByUserId: string;
   amount: number;
+  description?: string;
   timestamp: Date;
 };
 
@@ -18,10 +19,12 @@ export type CreatePaymentInput =
       fromUserId: string;
       toUserId: string;
       amount: number;
+      description?: string;
     }
   | {
       kind: 'expense';
       expenseId: string;
       fromUserId: string;
       amount: number;
+      description?: string;
     };

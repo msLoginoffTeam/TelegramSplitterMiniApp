@@ -5,6 +5,7 @@
   list-style: none;
   border: 1px solid var(--color-border);
   border-radius: 1rem;
+  background: var(--color-surface);
 }
 
 .list li {
@@ -73,6 +74,7 @@
   padding: var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: 0.7rem;
+  background: var(--color-surface-raised);
 }
 
 .permissionList legend {
@@ -105,7 +107,7 @@
 
 .save {
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
 }
 
 .remove {
@@ -130,7 +132,7 @@
   border: 0;
   border-radius: 0.75rem;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   font: inherit;
   font-weight: 700;
 }
@@ -146,7 +148,7 @@
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   font-weight: 700;
   text-decoration: none;
 }

@@ -82,6 +82,7 @@ function PaymentDetailsContent({
     >
       <section className={styles.details}>
         <p>{expenseTitle ? `Погашение: ${expenseTitle}` : 'Просто перевод'}</p>
+        {payment.description ? <p className={styles.description}>{payment.description}</p> : null}
         <small>Платёж создан {payment.timestamp.toLocaleString('ru-RU')}.</small>
       </section>
 

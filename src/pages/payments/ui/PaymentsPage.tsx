@@ -124,6 +124,7 @@ export function PaymentsPage() {
                 ) : (
                   <small>Просто перевод</small>
                 )}
+                {payment.description ? <small>{payment.description}</small> : null}
                 <small>{payment.timestamp.toLocaleString('ru-RU')}</small>
               </Link>
               <b>{formatRubles(payment.amount)}</b>

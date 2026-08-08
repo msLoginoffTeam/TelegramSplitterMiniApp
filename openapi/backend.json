@@ -2386,6 +2386,10 @@
           "amount": {
             "type": "number",
             "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2394,6 +2398,10 @@
         "type": "object",
         "properties": {
           "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
@@ -2447,6 +2455,10 @@
           "amount": {
             "type": "number",
             "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2459,6 +2471,10 @@
             "format": "uuid"
           },
           "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
@@ -2736,6 +2752,10 @@
             "type": "number",
             "format": "double"
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -2834,6 +2854,10 @@
             "type": "string",
             "nullable": true
           },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "totalAmount": {
             "type": "number",
             "format": "double"
@@ -2893,6 +2917,10 @@
           "amount": {
             "type": "number",
             "format": "double"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

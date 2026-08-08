@@ -12,6 +12,11 @@
   color: var(--color-hint);
 }
 
+.description {
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
 .danger {
   width: fit-content;
   padding: 0.75rem 1rem;

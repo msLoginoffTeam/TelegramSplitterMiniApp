@@ -22,6 +22,7 @@ export type GroupBalance = {
 export type ExpenseSummary = {
   id: string;
   title: string;
+  description?: string;
   totalAmount: number;
   payerId: string;
   payerName: string;

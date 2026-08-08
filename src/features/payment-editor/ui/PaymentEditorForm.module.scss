@@ -10,14 +10,23 @@
 }
 
 .field input,
-.field select {
+.field select,
+.field textarea {
   width: 100%;
   padding: 0.8rem 0.9rem;
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  background: #ffffff;
+  background: var(--color-surface);
   color: var(--color-text);
   font: inherit;
+}
+.field textarea {
+  resize: vertical;
+}
+.field span small {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+  font-weight: 400;
 }
 
 .receiver,
@@ -43,7 +52,7 @@
   border: 0;
   border-radius: 0.9rem;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
   font: inherit;
   font-weight: 800;
 }

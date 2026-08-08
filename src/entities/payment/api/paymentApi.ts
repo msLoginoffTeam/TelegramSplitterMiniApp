@@ -29,6 +29,7 @@ function toPayment(response: PaymentResponseDto): Payment {
     toUsername: response.toUsername ?? undefined,
     createdByUserId: response.createdByUserId,
     amount: response.amount,
+    description: response.description ?? undefined,
     timestamp: response.timestamp,
   };
 }
@@ -47,6 +48,7 @@ export const paymentApi = {
             expenseId: input.expenseId,
             fromUserId: input.fromUserId,
             amount: input.amount,
+            description: input.description,
           }),
         ),
       );
@@ -59,6 +61,7 @@ export const paymentApi = {
           fromUserId: input.fromUserId,
           toUserId: input.toUserId,
           amount: input.amount,
+          description: input.description,
         }),
       ),
     );

@@ -10,6 +10,7 @@
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: 0.9rem;
+  background: var(--color-surface);
 }
 
 .expenseSettlement strong {
@@ -25,6 +26,12 @@
   font-size: var(--font-size-caption);
 }
 
+.description {
+  margin: 0;
+  color: var(--color-hint);
+  overflow-wrap: anywhere;
+}
+
 .section h2 {
   margin: 0;
   font-size: 1.125rem;
@@ -38,6 +45,7 @@
   list-style: none;
   border: 1px solid var(--color-border);
   border-radius: 1rem;
+  background: var(--color-surface);
 }
 
 .shareList li,
@@ -130,6 +138,7 @@
   padding: var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: 1rem;
+  background: var(--color-surface);
 }
 
 .editor summary {
@@ -151,7 +160,7 @@
 .action {
   border: 0;
   background: var(--color-accent);
-  color: #ffffff;
+  color: var(--color-on-accent);
 }
 
 .dangerAction {

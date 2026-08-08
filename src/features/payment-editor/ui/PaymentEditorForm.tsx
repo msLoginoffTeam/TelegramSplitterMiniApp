@@ -42,6 +42,7 @@ export function PaymentEditorForm({
     initialToUserId ?? members.find((member) => member.userId !== currentUserId)?.userId ?? '',
   );
   const [amountInput, setAmountInput] = useState(initialAmount?.toString() ?? '');
+  const [description, setDescription] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
 
@@ -89,12 +90,14 @@ export function PaymentEditorForm({
               expenseId: selectedExpense!.id,
               fromUserId,
               amount: amountKopecks / 100,
+              description: description.trim() || undefined,
             }
           : {
               kind: 'direct',
               fromUserId,
               toUserId,
               amount: amountKopecks / 100,
+              description: description.trim() || undefined,
             },
       );
     } catch {
@@ -179,6 +182,19 @@ export function PaymentEditorForm({
           step="0.01"
           type="number"
           value={amountInput}
+        />
+      </label>
+
+      <label className={styles.field}>
+        <span>
+          Комментарий <small>необязательно</small>
+        </span>
+        <textarea
+          maxLength={1000}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Например, вернул за билеты"
+          rows={3}
+          value={description}
         />
       </label>
 

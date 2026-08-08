@@ -66,6 +66,7 @@ function toBalance(balance: {
 function toExpenseSummary(expense: {
   id?: string;
   title?: string | null;
+  description?: string | null;
   totalAmount?: number;
   payerId?: string;
   payerName?: string | null;
@@ -86,6 +87,7 @@ function toExpenseSummary(expense: {
   return {
     id: expense.id,
     title: expense.title,
+    description: expense.description ?? undefined,
     totalAmount: expense.totalAmount,
     payerId: expense.payerId,
     payerName: expense.payerName ?? 'Участник',

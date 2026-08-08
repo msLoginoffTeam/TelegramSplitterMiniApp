@@ -7,6 +7,7 @@ import styles from '@/features/expense-editor/ui/ExpenseEditorForm.module.scss';
 
 export type ExpenseEditorInitialValues = {
   title: string;
+  description?: string;
   totalAmount: number;
   payerId: string;
   participantIds: string[];
@@ -32,6 +33,7 @@ export function ExpenseEditorForm({
   const initialParticipantIds =
     initialValues?.participantIds ?? members.map((member) => member.userId);
   const [title, setTitle] = useState(initialValues?.title ?? '');
+  const [description, setDescription] = useState(initialValues?.description ?? '');
   const [totalInput, setTotalInput] = useState(
     initialValues ? String(initialValues.totalAmount) : '',
   );
@@ -85,6 +87,7 @@ export function ExpenseEditorForm({
     try {
       await onSave({
         title: title.trim(),
+        description: description.trim() || undefined,
         totalAmount: totalKopecks / 100,
         payerId,
         shares: participantIds.map((userId) => ({
@@ -102,13 +105,26 @@ export function ExpenseEditorForm({
   return (
     <form className={styles.form} onSubmit={submit}>
       <label className={styles.field}>
-        <span>За что</span>
+        <span>Название</span>
         <input
           autoComplete="off"
           autoFocus
           onChange={(event) => setTitle(event.target.value)}
           placeholder="Например, ужин"
           value={title}
+        />
+      </label>
+
+      <label className={styles.field}>
+        <span>
+          Комментарий <small>необязательно</small>
+        </span>
+        <textarea
+          maxLength={1000}
+          onChange={(event) => setDescription(event.target.value)}
+          placeholder="Например, продукты на ужин"
+          rows={3}
+          value={description}
         />
       </label>
 

@@ -262,6 +262,7 @@ export class CreateDirectPaymentRequestDto implements ICreateDirectPaymentReques
     fromUserId?: string;
     toUserId?: string;
     amount?: number;
+    description?: string | null;
 
     constructor(data?: ICreateDirectPaymentRequestDto) {
         if (data) {
@@ -277,6 +278,7 @@ export class CreateDirectPaymentRequestDto implements ICreateDirectPaymentReques
             this.fromUserId = _data["fromUserId"];
             this.toUserId = _data["toUserId"];
             this.amount = _data["amount"];
+            this.description = _data["description"];
         }
     }
 
@@ -292,6 +294,7 @@ export class CreateDirectPaymentRequestDto implements ICreateDirectPaymentReques
         data["fromUserId"] = this.fromUserId;
         data["toUserId"] = this.toUserId;
         data["amount"] = this.amount;
+        data["description"] = this.description;
         return data;
     }
 }
@@ -300,10 +303,12 @@ export interface ICreateDirectPaymentRequestDto {
     fromUserId?: string;
     toUserId?: string;
     amount?: number;
+    description?: string | null;
 }
 
 export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     isDraft?: boolean;
@@ -321,6 +326,7 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
+            this.description = _data["description"];
             this.totalAmount = _data["totalAmount"];
             this.payerId = _data["payerId"];
             this.isDraft = _data["isDraft"];
@@ -342,6 +348,7 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
+        data["description"] = this.description;
         data["totalAmount"] = this.totalAmount;
         data["payerId"] = this.payerId;
         data["isDraft"] = this.isDraft;
@@ -356,6 +363,7 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
 
 export interface ICreateExpenseRequestDto {
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     isDraft?: boolean;
@@ -406,6 +414,7 @@ export class CreatePaymentForExpenseRequestDto implements ICreatePaymentForExpen
     expenseId?: string;
     fromUserId?: string;
     amount?: number;
+    description?: string | null;
 
     constructor(data?: ICreatePaymentForExpenseRequestDto) {
         if (data) {
@@ -421,6 +430,7 @@ export class CreatePaymentForExpenseRequestDto implements ICreatePaymentForExpen
             this.expenseId = _data["expenseId"];
             this.fromUserId = _data["fromUserId"];
             this.amount = _data["amount"];
+            this.description = _data["description"];
         }
     }
 
@@ -436,6 +446,7 @@ export class CreatePaymentForExpenseRequestDto implements ICreatePaymentForExpen
         data["expenseId"] = this.expenseId;
         data["fromUserId"] = this.fromUserId;
         data["amount"] = this.amount;
+        data["description"] = this.description;
         return data;
     }
 }
@@ -444,11 +455,13 @@ export interface ICreatePaymentForExpenseRequestDto {
     expenseId?: string;
     fromUserId?: string;
     amount?: number;
+    description?: string | null;
 }
 
 export class ExpenseResponseDto implements IExpenseResponseDto {
     id?: string;
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     payerName?: string | null;
@@ -471,6 +484,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.description = _data["description"];
             this.totalAmount = _data["totalAmount"];
             this.payerId = _data["payerId"];
             this.payerName = _data["payerName"];
@@ -497,6 +511,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["description"] = this.description;
         data["totalAmount"] = this.totalAmount;
         data["payerId"] = this.payerId;
         data["payerName"] = this.payerName;
@@ -516,6 +531,7 @@ export class ExpenseResponseDto implements IExpenseResponseDto {
 export interface IExpenseResponseDto {
     id?: string;
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     payerName?: string | null;
@@ -920,6 +936,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
     toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
+    description?: string | null;
     timestamp?: Date;
 
     constructor(data?: IPaymentResponseDto) {
@@ -943,6 +960,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
             this.toUsername = _data["toUsername"];
             this.createdByUserId = _data["createdByUserId"];
             this.amount = _data["amount"];
+            this.description = _data["description"];
             this.timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>null;
         }
     }
@@ -966,6 +984,7 @@ export class PaymentResponseDto implements IPaymentResponseDto {
         data["toUsername"] = this.toUsername;
         data["createdByUserId"] = this.createdByUserId;
         data["amount"] = this.amount;
+        data["description"] = this.description;
         data["timestamp"] = this.timestamp && this.timestamp.toISOString();
         return data;
     }
@@ -982,6 +1001,7 @@ export interface IPaymentResponseDto {
     toUsername?: string | null;
     createdByUserId?: string;
     amount?: number;
+    description?: string | null;
     timestamp?: Date;
 }
 
@@ -1191,6 +1211,7 @@ export interface ITransferSuggestionsResponseDto {
 
 export class UpdateExpenseRequestDto implements IUpdateExpenseRequestDto {
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     shares?: ExpenseShareCreateDto[] | null;
@@ -1207,6 +1228,7 @@ export class UpdateExpenseRequestDto implements IUpdateExpenseRequestDto {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
+            this.description = _data["description"];
             this.totalAmount = _data["totalAmount"];
             this.payerId = _data["payerId"];
             if (Array.isArray(_data["shares"])) {
@@ -1227,6 +1249,7 @@ export class UpdateExpenseRequestDto implements IUpdateExpenseRequestDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
+        data["description"] = this.description;
         data["totalAmount"] = this.totalAmount;
         data["payerId"] = this.payerId;
         if (Array.isArray(this.shares)) {
@@ -1240,6 +1263,7 @@ export class UpdateExpenseRequestDto implements IUpdateExpenseRequestDto {
 
 export interface IUpdateExpenseRequestDto {
     title?: string | null;
+    description?: string | null;
     totalAmount?: number;
     payerId?: string;
     shares?: ExpenseShareCreateDto[] | null;
@@ -1367,6 +1391,7 @@ export interface IUpdateGroupRequestDto {
 
 export class UpdatePaymentRequestDto implements IUpdatePaymentRequestDto {
     amount?: number;
+    description?: string | null;
 
     constructor(data?: IUpdatePaymentRequestDto) {
         if (data) {
@@ -1380,6 +1405,7 @@ export class UpdatePaymentRequestDto implements IUpdatePaymentRequestDto {
     init(_data?: any) {
         if (_data) {
             this.amount = _data["amount"];
+            this.description = _data["description"];
         }
     }
 
@@ -1393,12 +1419,14 @@ export class UpdatePaymentRequestDto implements IUpdatePaymentRequestDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["amount"] = this.amount;
+        data["description"] = this.description;
         return data;
     }
 }
 
 export interface IUpdatePaymentRequestDto {
     amount?: number;
+    description?: string | null;
 }
 
 export class UserBalanceResponseDto implements IUserBalanceResponseDto {

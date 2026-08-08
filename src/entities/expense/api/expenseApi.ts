@@ -23,6 +23,7 @@ function toExpense(response: ExpenseResponseDto): Expense {
   return {
     id: response.id,
     title: response.title,
+    description: response.description ?? undefined,
     totalAmount: response.totalAmount,
     payerId: response.payerId,
     payerName: response.payerName ?? 'Участник',
@@ -54,6 +55,7 @@ export const expenseApi = {
       groupId,
       new CreateExpenseRequestDto({
         title: input.title,
+        description: input.description,
         totalAmount: input.totalAmount,
         payerId: input.payerId,
         isDraft: false,
@@ -73,6 +75,7 @@ export const expenseApi = {
       expenseId,
       new UpdateExpenseRequestDto({
         title: input.title,
+        description: input.description,
         totalAmount: input.totalAmount,
         payerId: input.payerId,
         shares: toShares(input),

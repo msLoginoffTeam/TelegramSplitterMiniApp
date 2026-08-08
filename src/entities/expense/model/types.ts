@@ -1,5 +1,6 @@
 export type ExpenseWriteInput = {
   title: string;
+  description?: string;
   totalAmount: number;
   payerId: string;
   shares: Array<{
@@ -21,6 +22,7 @@ export type ExpenseShare = {
 export type Expense = {
   id: string;
   title: string;
+  description?: string;
   totalAmount: number;
   payerId: string;
   payerName: string;
