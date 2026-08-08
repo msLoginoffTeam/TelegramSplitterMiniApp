@@ -15,6 +15,7 @@ import { usePlatform } from '@/app/providers/PlatformProvider';
 import { PaymentCreatePage } from '@/pages/payment-create';
 import { PaymentDetailsPage } from '@/pages/payment-details';
 import { PaymentsPage } from '@/pages/payments';
+import { AuditLogPage } from '@/pages/audit-log';
 
 function IndexRedirect() {
   const platform = usePlatform();
@@ -66,6 +67,10 @@ export const router = createBrowserRouter([
             description="Здесь появится список оптимальных расчётов."
           />
         ),
+      },
+      {
+        path: 'groups/:groupId/history',
+        element: <AuditLogPage />,
       },
       {
         path: 'groups/:groupId/members',

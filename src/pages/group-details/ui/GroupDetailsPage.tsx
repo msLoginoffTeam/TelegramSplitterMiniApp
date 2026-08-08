@@ -84,6 +84,11 @@ export function GroupDetailsPage() {
       label: 'Итоговые переводы',
       description: 'Посмотреть, кто кому должен.',
     },
+    {
+      to: routes.auditLog(groupId),
+      label: 'История',
+      description: 'Посмотреть изменения в группе.',
+    },
     { to: routes.members(groupId), label: 'Участники', description: 'Состав группы и доступы.' },
     { to: routes.settings(groupId), label: 'Настройки', description: 'Параметры группы.' },
   ];

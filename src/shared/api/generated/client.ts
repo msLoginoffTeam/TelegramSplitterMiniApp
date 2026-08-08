@@ -90,6 +90,130 @@ export interface IAddGroupUserRequestDto {
     telegramId?: number;
 }
 
+export class AuditLogEntryResponseDto implements IAuditLogEntryResponseDto {
+    id?: string;
+    occurredAtUtc?: Date;
+    actorTelegramId?: number | null;
+    actorDisplayName?: string | null;
+    actorUsername?: string | null;
+    subjectType?: string | null;
+    operation?: string | null;
+    entityKeyJson?: string | null;
+    oldValuesJson?: string | null;
+    newValuesJson?: string | null;
+
+    constructor(data?: IAuditLogEntryResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.occurredAtUtc = _data["occurredAtUtc"] ? new Date(_data["occurredAtUtc"].toString()) : <any>null;
+            this.actorTelegramId = _data["actorTelegramId"];
+            this.actorDisplayName = _data["actorDisplayName"];
+            this.actorUsername = _data["actorUsername"];
+            this.subjectType = _data["subjectType"];
+            this.operation = _data["operation"];
+            this.entityKeyJson = _data["entityKeyJson"];
+            this.oldValuesJson = _data["oldValuesJson"];
+            this.newValuesJson = _data["newValuesJson"];
+        }
+    }
+
+    static fromJS(data: any): AuditLogEntryResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogEntryResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["occurredAtUtc"] = this.occurredAtUtc && this.occurredAtUtc.toISOString();
+        data["actorTelegramId"] = this.actorTelegramId;
+        data["actorDisplayName"] = this.actorDisplayName;
+        data["actorUsername"] = this.actorUsername;
+        data["subjectType"] = this.subjectType;
+        data["operation"] = this.operation;
+        data["entityKeyJson"] = this.entityKeyJson;
+        data["oldValuesJson"] = this.oldValuesJson;
+        data["newValuesJson"] = this.newValuesJson;
+        return data;
+    }
+}
+
+export interface IAuditLogEntryResponseDto {
+    id?: string;
+    occurredAtUtc?: Date;
+    actorTelegramId?: number | null;
+    actorDisplayName?: string | null;
+    actorUsername?: string | null;
+    subjectType?: string | null;
+    operation?: string | null;
+    entityKeyJson?: string | null;
+    oldValuesJson?: string | null;
+    newValuesJson?: string | null;
+}
+
+export class AuditLogPageResponseDto implements IAuditLogPageResponseDto {
+    entries?: AuditLogEntryResponseDto[] | null;
+    hasMore?: boolean;
+    nextOffset?: number | null;
+
+    constructor(data?: IAuditLogPageResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["entries"])) {
+                this.entries = [] as any;
+                for (let item of _data["entries"])
+                    this.entries!.push(AuditLogEntryResponseDto.fromJS(item));
+            }
+            this.hasMore = _data["hasMore"];
+            this.nextOffset = _data["nextOffset"];
+        }
+    }
+
+    static fromJS(data: any): AuditLogPageResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuditLogPageResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.entries)) {
+            data["entries"] = [];
+            for (let item of this.entries)
+                data["entries"].push(item.toJSON());
+        }
+        data["hasMore"] = this.hasMore;
+        data["nextOffset"] = this.nextOffset;
+        return data;
+    }
+}
+
+export interface IAuditLogPageResponseDto {
+    entries?: AuditLogEntryResponseDto[] | null;
+    hasMore?: boolean;
+    nextOffset?: number | null;
+}
+
 export class BalanceResponseDto implements IBalanceResponseDto {
     balances?: UserBalanceResponseDto[] | null;
 
@@ -1456,6 +1580,7 @@ export function getResultTypeClassKey(queryKey: QueryKey): string {
 
 export function initPersister() {
 
+  addResultTypeFactory('Client___auditLog', (data: any) => { const result = new AuditLogPageResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___balance', (data: any) => { const result = new BalanceResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___transfers', (data: any) => { const result = new TransferSuggestionsResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___history', (data: any) => { const result = new OperationHistoryResponseDto(); result.init(data); return result; });

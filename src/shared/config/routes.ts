@@ -12,6 +12,7 @@ export const routes = {
   createExpensePayment: (groupId: string, expenseId: string) =>
     `/groups/${groupId}/payments/new?expenseId=${encodeURIComponent(expenseId)}`,
   transfers: (groupId: string) => `/groups/${groupId}/transfers`,
+  auditLog: (groupId: string) => `/groups/${groupId}/history`,
   members: (groupId: string) => `/groups/${groupId}/members`,
   settings: (groupId: string) => `/groups/${groupId}/settings`,
   invite: (groupId: string) => `/groups/${groupId}/invite`,

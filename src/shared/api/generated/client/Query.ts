@@ -18,6 +18,12 @@ import * as Client from './Client'
 export { Client };
 import type { AxiosRequestConfig } from 'axios';
 
+export type AuditLogQueryParameters = {
+  groupId: string ;
+  offset?: number | undefined ;
+  take?: number | undefined ;
+}
+
 export type BalanceQueryParameters = {
   groupId: string ;
 }
@@ -144,6 +150,115 @@ export type PaymentsPUTQueryParameters = {
 export type PaymentsDELETEQueryParameters = {
   groupId: string ;
   paymentId: string ;
+}
+
+export function auditLogUrl(groupId: string, offset?: number | undefined, take?: number | undefined): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/audit-log?";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+if (offset === null)
+    throw new Error("The parameter 'offset' cannot be null.");
+else if (offset !== undefined)
+    url_ += "offset=" + encodeURIComponent("" + offset) + "&";
+if (take === null)
+    throw new Error("The parameter 'take' cannot be null.");
+else if (take !== undefined)
+    url_ += "take=" + encodeURIComponent("" + take) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+let auditLogDefaultOptions: Omit<UseQueryOptions<Types.AuditLogPageResponseDto, unknown, Types.AuditLogPageResponseDto>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.AuditLogPageResponseDto, unknown, Types.AuditLogPageResponseDto>, 'queryFn'>> = {
+};
+export function getAuditLogDefaultOptions() {
+  return auditLogDefaultOptions;
+};
+export function setAuditLogDefaultOptions(options: typeof auditLogDefaultOptions) {
+  auditLogDefaultOptions = options;
+}
+
+export function auditLogQueryKey(dto: AuditLogQueryParameters): QueryKey;
+export function auditLogQueryKey(groupId: string, offset?: number | undefined, take?: number | undefined): QueryKey;
+export function auditLogQueryKey(...params: any[]): QueryKey {
+  if (params.length === 1 && isParameterObject(params[0])) {
+    const { groupId, offset, take,  } = params[0] as AuditLogQueryParameters;
+
+    return trimArrayEnd([
+        'Client',
+        'auditLog',
+        groupId as any,
+        offset as any,
+        take as any,
+      ]);
+  } else {
+    return trimArrayEnd([
+        'Client',
+        'auditLog',
+        ...params
+      ]);
+  }
+}
+export function __auditLog(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.auditLog(
+      context.queryKey[2] as string,       context.queryKey[3] as number | undefined,       context.queryKey[4] as number | undefined,axiosConfig    );
+}
+
+export function useAuditLogQuery<TSelectData = Types.AuditLogPageResponseDto, TError = unknown>(dto: AuditLogQueryParameters, options?: Omit<UseQueryOptions<Types.AuditLogPageResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+/**
+ * Returns the newest audit events for a group.
+ * @param offset (optional)
+ * @param take (optional)
+ * @return OK
+ */
+export function useAuditLogQuery<TSelectData = Types.AuditLogPageResponseDto, TError = unknown>(groupId: string, offset?: number | undefined, take?: number | undefined, options?: Omit<UseQueryOptions<Types.AuditLogPageResponseDto, TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useAuditLogQuery<TSelectData = Types.AuditLogPageResponseDto, TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+  let options: UseQueryOptions<Types.AuditLogPageResponseDto, TError, TSelectData> | undefined = undefined;
+  let axiosConfig: AxiosRequestConfig |undefined = undefined;
+  let groupId: any = undefined;
+  let offset: any = undefined;
+  let take: any = undefined;
+
+  if (params.length > 0) {
+    if (isParameterObject(params[0])) {
+      ({ groupId, offset, take,  } = params[0] as AuditLogQueryParameters);
+      options = params[1];
+      axiosConfig = params[2];
+    } else {
+      [groupId, offset, take, options, axiosConfig] = params;
+    }
+  }
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useQuery<Types.AuditLogPageResponseDto, TError, TSelectData>({
+    queryFn: axiosConfig ? (context) => __auditLog(context, axiosConfig) : __auditLog,
+    queryKey: auditLogQueryKey(groupId, offset, take),
+    ...auditLogDefaultOptions as unknown as Omit<UseQueryOptions<Types.AuditLogPageResponseDto, TError, TSelectData>, 'queryKey'>,
+    ...options,
+  });
+}
+/**
+ * Returns the newest audit events for a group.
+ * @param offset (optional)
+ * @param take (optional)
+ * @return OK
+ */
+export function setAuditLogData(queryClient: QueryClient, updater: (data: Types.AuditLogPageResponseDto | undefined) => Types.AuditLogPageResponseDto, groupId: string, offset?: number | undefined, take?: number | undefined) {
+  queryClient.setQueryData(auditLogQueryKey(groupId, offset, take),
+    updater
+  );
+}
+
+/**
+ * Returns the newest audit events for a group.
+ * @param offset (optional)
+ * @param take (optional)
+ * @return OK
+ */
+export function setAuditLogDataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.AuditLogPageResponseDto | undefined) => Types.AuditLogPageResponseDto) {
+  queryClient.setQueryData(queryKey, updater);
 }
 
 export function balanceUrl(groupId: string): string {

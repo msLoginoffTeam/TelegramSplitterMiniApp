@@ -14,6 +14,74 @@ import { throwException, isAxiosError } from '../client';
 import { getAxios, getBaseUrl } from './helpers';
 
 /**
+ * Returns the newest audit events for a group.
+ * @param offset (optional)
+ * @param take (optional)
+ * @return OK
+ */
+export function auditLog(groupId: string, offset?: number | undefined, take?: number | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.AuditLogPageResponseDto> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/audit-log?";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+    if (offset === null)
+        throw new Error("The parameter 'offset' cannot be null.");
+    else if (offset !== undefined)
+        url_ += "offset=" + encodeURIComponent("" + offset) + "&";
+    if (take === null)
+        throw new Error("The parameter 'take' cannot be null.");
+    else if (take !== undefined)
+        url_ += "take=" + encodeURIComponent("" + take) + "&";
+      url_ = url_.replace(/[?&]$/, "");
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigAuditLog,
+        ...config,
+        method: "GET",
+        url: url_,
+        headers: {
+            ..._requestConfigAuditLog?.headers,
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processAuditLog(_response);
+    });
+}
+
+function processAuditLog(response: AxiosResponse): Promise<Types.AuditLogPageResponseDto> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        let result200: any = null;
+        let resultData200  = _responseText;
+        result200 = Types.AuditLogPageResponseDto.fromJS(resultData200);
+        return Promise.resolve<Types.AuditLogPageResponseDto>(result200);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<Types.AuditLogPageResponseDto>(null as any);
+}
+
+/**
  * Returns the current balance summary for the specified group.
  * @param groupId ID of the group to get balances for.
  * @return OK
@@ -2157,6 +2225,17 @@ function processMe(response: AxiosResponse): Promise<Types.UserResponseDto> {
     }
     return Promise.resolve<Types.UserResponseDto>(null as any);
 }
+let _requestConfigAuditLog: Partial<AxiosRequestConfig> | null;
+export function getAuditLogRequestConfig() {
+  return _requestConfigAuditLog;
+}
+export function setAuditLogRequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigAuditLog = value;
+}
+export function patchAuditLogRequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigAuditLog = patch(_requestConfigAuditLog ?? {});
+}
+
 let _requestConfigBalance: Partial<AxiosRequestConfig> | null;
 export function getBalanceRequestConfig() {
   return _requestConfigBalance;
