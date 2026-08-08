@@ -22,6 +22,7 @@
 .section {
   display: grid;
   gap: var(--space-3);
+  min-width: 0;
 }
 
 .section h2,
@@ -37,6 +38,8 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: var(--space-3);
+  min-width: 0;
 }
 
 .sectionHeading span,
@@ -97,6 +100,7 @@
   justify-content: space-between;
   width: 100%;
   gap: var(--space-4);
+  min-width: 0;
   color: inherit;
 }
 
@@ -119,6 +123,7 @@
 .expenseLink > div {
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .expenseList span {

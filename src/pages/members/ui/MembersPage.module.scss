@@ -20,6 +20,12 @@
 .person {
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
+}
+
+.person strong,
+.person small {
+  overflow-wrap: anywhere;
 }
 
 .memberHeader {
@@ -27,10 +33,12 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
+  min-width: 0;
 }
 
 .role {
   color: var(--color-hint);
+  flex: none;
   font-size: var(--font-size-caption);
   text-align: right;
 }

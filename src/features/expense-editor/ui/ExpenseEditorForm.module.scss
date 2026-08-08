@@ -3,6 +3,7 @@
 .participants {
   display: grid;
   gap: var(--space-4);
+  min-width: 0;
 }
 .field {
   display: grid;
@@ -28,6 +29,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
+  min-width: 0;
 }
 .sectionHeading h2,
 .sectionHeading p {
@@ -59,6 +61,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
+  min-width: 0;
   padding: var(--space-3) var(--space-4);
 }
 .participant + .participant {
@@ -66,6 +69,7 @@
 }
 .participantName {
   display: flex;
+  flex: 1 1 0;
   align-items: center;
   gap: var(--space-2);
   min-width: 0;
@@ -88,18 +92,34 @@
   color: var(--color-hint);
 }
 .allocation {
+  position: relative;
   display: flex;
   align-items: center;
+  flex: 0 0 7.25rem;
   width: 7.25rem;
   color: var(--color-hint);
 }
 .allocation input {
   min-width: 0;
+  padding-right: 2.35rem;
   text-align: right;
 }
 .allocation span {
-  margin-left: -1.8rem;
+  position: absolute;
+  right: 0.9rem;
   pointer-events: none;
+}
+
+@media (max-width: 360px) {
+  .participant {
+    padding-right: var(--space-3);
+    padding-left: var(--space-3);
+  }
+
+  .allocation {
+    flex-basis: 6.5rem;
+    width: 6.5rem;
+  }
 }
 .summary,
 .error {

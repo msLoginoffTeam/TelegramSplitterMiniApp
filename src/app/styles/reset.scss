@@ -14,3 +14,17 @@ textarea,
 select {
   font: inherit;
 }
+
+input,
+textarea,
+select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
