@@ -16,6 +16,7 @@ import { PaymentCreatePage } from '@/pages/payment-create';
 import { PaymentDetailsPage } from '@/pages/payment-details';
 import { PaymentsPage } from '@/pages/payments';
 import { AuditLogPage } from '@/pages/audit-log';
+import { TransfersPage } from '@/pages/transfers';
 
 function IndexRedirect() {
   const platform = usePlatform();
@@ -61,12 +62,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'groups/:groupId/transfers',
-        element: (
-          <GroupSectionPage
-            title="Итоговые переводы"
-            description="Здесь появится список оптимальных расчётов."
-          />
-        ),
+        element: <TransfersPage />,
       },
       {
         path: 'groups/:groupId/history',

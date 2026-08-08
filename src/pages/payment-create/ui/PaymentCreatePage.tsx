@@ -18,6 +18,9 @@ export function PaymentCreatePage() {
   const dashboardQuery = useGroupDashboardQuery(groupId ?? '', Boolean(groupId) && canRequestGroup);
   const createPayment = useCreatePayment(groupId ?? '');
   const initialExpenseId = searchParams.get('expenseId') ?? undefined;
+  const initialFromUserId = searchParams.get('fromUserId') ?? undefined;
+  const initialToUserId = searchParams.get('toUserId') ?? undefined;
+  const initialAmount = parseInitialAmount(searchParams.get('amount'));
 
   if (!groupId) return null;
   if (!canRequestGroup) {
@@ -88,6 +91,9 @@ export function PaymentCreatePage() {
           payerName: expense.payerName,
         }))}
         initialExpenseId={initialExpenseId}
+        initialFromUserId={initialFromUserId}
+        initialToUserId={initialToUserId}
+        initialAmount={initialAmount}
         members={dashboard.members}
         onSave={async (input) => {
           await createPayment.mutateAsync(input);
@@ -97,4 +103,11 @@ export function PaymentCreatePage() {
       />
     </PageLayout>
   );
+}
+
+function parseInitialAmount(value: string | null): number | undefined {
+  if (!value) return undefined;
+
+  const amount = Number(value);
+  return Number.isFinite(amount) && amount > 0 ? amount : undefined;
 }

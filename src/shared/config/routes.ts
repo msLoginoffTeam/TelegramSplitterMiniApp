@@ -1,3 +1,9 @@
+type SuggestedTransferPayment = {
+  fromUserId: string;
+  toUserId: string;
+  amount: number;
+};
+
 export const routes = {
   groups: '/groups',
   createGroup: '/groups/new',
@@ -8,6 +14,15 @@ export const routes = {
     `/groups/${groupId}/expenses/${expenseId}/edit`,
   payments: (groupId: string) => `/groups/${groupId}/payments`,
   createPayment: (groupId: string) => `/groups/${groupId}/payments/new`,
+  createSuggestedTransferPayment: (groupId: string, transfer: SuggestedTransferPayment) => {
+    const searchParams = new URLSearchParams({
+      fromUserId: transfer.fromUserId,
+      toUserId: transfer.toUserId,
+      amount: transfer.amount.toString(),
+    });
+
+    return `/groups/${groupId}/payments/new?${searchParams.toString()}`;
+  },
   payment: (groupId: string, paymentId: string) => `/groups/${groupId}/payments/${paymentId}`,
   createExpensePayment: (groupId: string, expenseId: string) =>
     `/groups/${groupId}/payments/new?expenseId=${encodeURIComponent(expenseId)}`,

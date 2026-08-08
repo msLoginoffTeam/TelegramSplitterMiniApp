@@ -14,7 +14,10 @@ export type PaymentExpenseOption = {
 interface PaymentEditorFormProps {
   currentUserId: string;
   expenses: PaymentExpenseOption[];
+  initialAmount?: number;
   initialExpenseId?: string;
+  initialFromUserId?: string;
+  initialToUserId?: string;
   members: GroupMember[];
   onSave: (input: CreatePaymentInput) => Promise<void>;
 }
@@ -22,18 +25,23 @@ interface PaymentEditorFormProps {
 export function PaymentEditorForm({
   currentUserId,
   expenses,
+  initialAmount,
   initialExpenseId,
+  initialFromUserId,
+  initialToUserId,
   members,
   onSave,
 }: PaymentEditorFormProps) {
   const [kind, setKind] = useState<'direct' | 'expense'>(initialExpenseId ? 'expense' : 'direct');
   const [expenseId, setExpenseId] = useState(initialExpenseId ?? expenses[0]?.id ?? '');
   const selectedExpense = expenses.find((expense) => expense.id === expenseId);
-  const [fromUserId, setFromUserId] = useState(currentUserId || members[0]?.userId || '');
-  const [toUserId, setToUserId] = useState(
-    members.find((member) => member.userId !== currentUserId)?.userId ?? '',
+  const [fromUserId, setFromUserId] = useState(
+    initialFromUserId ?? currentUserId ?? members[0]?.userId ?? '',
   );
-  const [amountInput, setAmountInput] = useState('');
+  const [toUserId, setToUserId] = useState(
+    initialToUserId ?? members.find((member) => member.userId !== currentUserId)?.userId ?? '',
+  );
+  const [amountInput, setAmountInput] = useState(initialAmount?.toString() ?? '');
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>();
 

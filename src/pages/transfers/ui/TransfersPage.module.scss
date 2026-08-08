@@ -1,0 +1,92 @@
+.hint,
+.settled p {
+  margin: 0;
+  color: var(--color-hint);
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+
+.list li {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.list li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.transfer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.people {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.people span {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.people strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.people small {
+  overflow: hidden;
+  color: var(--color-hint);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.people > b {
+  color: var(--color-hint);
+}
+
+.amount {
+  flex: none;
+  white-space: nowrap;
+}
+
+.action,
+.retry {
+  width: fit-content;
+  padding: 0.7rem 0.9rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+}
+
+.settled {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+}
+
+.settled h2 {
+  margin: 0;
+}
