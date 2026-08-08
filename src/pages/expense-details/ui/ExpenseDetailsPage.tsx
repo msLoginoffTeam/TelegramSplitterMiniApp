@@ -104,6 +104,7 @@ export function ExpenseDetailsPage() {
   const payments = (paymentsQuery.data ?? [])
     .filter((payment) => payment.expenseId === expenseId)
     .sort((first, second) => second.timestamp.getTime() - first.timestamp.getTime());
+  const isSettled = expense.shares.every((share) => share.isPaid);
 
   return (
     <PageLayout
@@ -112,6 +113,14 @@ export function ExpenseDetailsPage() {
       title={expense.title}
       description={`${formatRubles(expense.totalAmount)} · заплатил ${expense.payerName}`}
     >
+      <section className={styles.expenseSettlement} data-settled={isSettled}>
+        <strong>{isSettled ? '✓ Трата закрыта' : 'Трата ещё не закрыта'}</strong>
+        <span>
+          {isSettled
+            ? 'Все доли оплачены платежами или закрыты вручную.'
+            : 'В распределении ниже видно, какие доли ещё нужно закрыть.'}
+        </span>
+      </section>
       {canEdit ? (
         <details className={styles.editor}>
           <summary>Редактировать трату</summary>

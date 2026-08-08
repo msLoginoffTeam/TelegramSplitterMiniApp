@@ -4,6 +4,27 @@
   gap: var(--space-3);
 }
 
+.expenseSettlement {
+  display: grid;
+  gap: 0.2rem;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+}
+
+.expenseSettlement strong {
+  color: var(--color-danger);
+}
+
+.expenseSettlement[data-settled='true'] strong {
+  color: var(--color-positive);
+}
+
+.expenseSettlement span {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
 .section h2 {
   margin: 0;
   font-size: 1.125rem;

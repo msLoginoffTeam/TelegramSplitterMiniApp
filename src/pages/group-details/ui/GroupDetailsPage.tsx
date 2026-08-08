@@ -151,7 +151,12 @@ export function GroupDetailsPage() {
               <li key={expense.id}>
                 <Link className={styles.expenseLink} to={routes.expense(groupId, expense.id)}>
                   <div>
-                    <strong>{expense.title}</strong>
+                    <strong className={styles.expenseTitle}>
+                      {expense.title}
+                      {expense.isSettled ? (
+                        <span className={styles.settledBadge}>✓ Закрыта</span>
+                      ) : null}
+                    </strong>
                     <span>Заплатил {expense.payerName}</span>
                     {expense.payerUsername ? <small>@{expense.payerUsername}</small> : null}
                   </div>

@@ -27,6 +27,7 @@ export type ExpenseSummary = {
   payerName: string;
   payerUsername?: string;
   createdAt: Date;
+  isSettled: boolean;
 };
 
 export type GroupDashboard = {

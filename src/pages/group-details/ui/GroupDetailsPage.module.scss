@@ -100,6 +100,22 @@
   color: inherit;
 }
 
+.expenseTitle {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.settledBadge {
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-positive) 14%, #ffffff);
+  color: var(--color-positive);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
 .expenseLink > div {
   display: grid;
   gap: 0.2rem;
