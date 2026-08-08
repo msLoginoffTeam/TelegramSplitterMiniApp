@@ -2,6 +2,8 @@ import axios, { type AxiosInstance } from 'axios';
 import { ApiError } from '@/shared/api/http/ApiError';
 import { getRuntimeConfig } from '@/shared/config/runtimeConfig';
 
+const requestTimeoutMs = 15_000;
+
 export interface CreateApiClientOptions {
   baseURL?: string;
   getAuthPayload?: () => string | undefined;
@@ -11,6 +13,7 @@ export interface CreateApiClientOptions {
 export function createApiClient(options: CreateApiClientOptions = {}): AxiosInstance {
   const client = axios.create({
     baseURL: options.baseURL ?? getRuntimeConfig().apiBaseUrl,
+    timeout: requestTimeoutMs,
   });
 
   client.interceptors.request.use((request) => {

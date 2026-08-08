@@ -3,6 +3,12 @@ import { describe, expect, it } from 'vitest';
 import { createApiClient } from '@/shared/api/http/createApiClient';
 
 describe('createApiClient', () => {
+  it('limits a stalled request to 15 seconds', () => {
+    const client = createApiClient();
+
+    expect(client.defaults.timeout).toBe(15_000);
+  });
+
   it('injects Telegram init data through the supplied callback', async () => {
     const client = createApiClient({ getAuthPayload: () => 'signed-init-data' });
     let capturedRequest: InternalAxiosRequestConfig | undefined;
