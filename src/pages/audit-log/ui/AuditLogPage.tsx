@@ -1,6 +1,12 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
-import { formatAuditEvent, useGroupAuditLogQuery } from '@/entities/audit-log';
+import {
+  formatAuditEvent,
+  formatEntityKey,
+  getAuditFieldChanges,
+  useGroupAuditLogQuery,
+} from '@/entities/audit-log';
 import { getRuntimeConfig } from '@/shared/config/runtimeConfig';
 import { routes } from '@/shared/config/routes';
 import { PageLayout } from '@/shared/ui';
@@ -14,6 +20,7 @@ export function AuditLogPage() {
       ? Boolean(platform.getInitData())
       : Boolean(getRuntimeConfig().developmentTelegramUserId);
   const auditLogQuery = useGroupAuditLogQuery(groupId ?? '', Boolean(groupId) && canRequest);
+  const [expandedEventId, setExpandedEventId] = useState<string>();
 
   if (!groupId) return null;
   if (!canRequest) {
@@ -65,14 +72,61 @@ export function AuditLogPage() {
           {events.map((event) => {
             const presentation = formatAuditEvent(event);
             const actor = event.actorDisplayName ?? event.actorUsername ?? 'Участник';
+            const changes = getAuditFieldChanges(event);
+            const isExpanded = expandedEventId === event.id;
 
             return (
               <li key={event.id}>
-                <strong>{presentation.title}</strong>
-                {presentation.details ? <span>{presentation.details}</span> : null}
-                <small>
-                  {actor} · {event.occurredAtUtc.toLocaleString('ru-RU')}
-                </small>
+                <button
+                  aria-expanded={isExpanded}
+                  className={styles.eventButton}
+                  onClick={() =>
+                    setExpandedEventId((current) => (current === event.id ? undefined : event.id))
+                  }
+                  type="button"
+                >
+                  <span className={styles.eventSummary}>
+                    <strong>{presentation.title}</strong>
+                    {presentation.details ? <span>{presentation.details}</span> : null}
+                    <small>
+                      {actor} · {event.occurredAtUtc.toLocaleString('ru-RU')}
+                    </small>
+                  </span>
+                  <span aria-hidden="true" className={styles.chevron} data-expanded={isExpanded}>
+                    ⌄
+                  </span>
+                </button>
+                {isExpanded ? (
+                  <section aria-label="Подробности изменения" className={styles.details}>
+                    {changes.length ? (
+                      <dl className={styles.changes}>
+                        {changes.map((change) => (
+                          <div key={change.label}>
+                            <dt>{change.label}</dt>
+                            {change.oldValue !== undefined ? (
+                              <dd>
+                                <span>Было</span>
+                                {change.oldValue}
+                              </dd>
+                            ) : null}
+                            {change.newValue !== undefined ? (
+                              <dd>
+                                <span>Стало</span>
+                                {change.newValue}
+                              </dd>
+                            ) : null}
+                          </div>
+                        ))}
+                      </dl>
+                    ) : (
+                      <p className={styles.noChanges}>В этой записи нет отдельных полей.</p>
+                    )}
+                    <details className={styles.technical}>
+                      <summary>Технический ключ записи</summary>
+                      <pre>{formatEntityKey(event)}</pre>
+                    </details>
+                  </section>
+                ) : null}
               </li>
             );
           })}

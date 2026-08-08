@@ -7,6 +7,7 @@ export interface AuditLogEvent {
   actorUsername?: string;
   subjectType: string;
   operation: string;
+  entityKeyJson: string;
   oldValues: AuditValues;
   newValues: AuditValues;
 }

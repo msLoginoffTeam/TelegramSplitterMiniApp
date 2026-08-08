@@ -5,8 +5,68 @@ export interface AuditEventPresentation {
   details?: string;
 }
 
+export interface AuditFieldChange {
+  label: string;
+  oldValue?: string;
+  newValue?: string;
+}
+
+const fieldLabels: Record<string, string> = {
+  Title: 'Название',
+  TotalAmount: 'Общая сумма',
+  Amount: 'Сумма',
+  Members: 'Участники',
+  Permissions: 'Права',
+  Role: 'Роль',
+  TokenSuffix: 'Окончание ссылки',
+  ExpiresAtUtc: 'Действует до',
+  IsDraft: 'Черновик',
+  PayerName: 'Плательщик',
+  CreatedByUserName: 'Автор',
+  CreatedByName: 'Автор',
+  FromUserName: 'Отправитель',
+  ToUserName: 'Получатель',
+  OwnerName: 'Владелец',
+  UserName: 'Участник',
+  MemberUserName: 'Участник',
+  ExpenseId: 'ID траты',
+  GroupId: 'ID группы',
+};
+
+const idNamePairs: Record<string, string> = {
+  PayerId: 'PayerName',
+  CreatedByUserId: 'CreatedByUserName',
+  CreatedById: 'CreatedByName',
+  FromUserId: 'FromUserName',
+  ToUserId: 'ToUserName',
+  OwnerId: 'OwnerName',
+  UserId: 'UserName',
+  MemberUserId: 'MemberUserName',
+};
+
 export function formatAuditEvent(event: AuditLogEvent): AuditEventPresentation {
   return { title: getTitle(event), details: getDetails(event) };
+}
+
+export function getAuditFieldChanges(event: AuditLogEvent): AuditFieldChange[] {
+  const keys = new Set([...Object.keys(event.oldValues), ...Object.keys(event.newValues)]);
+
+  return [...keys]
+    .filter((key) => !isDuplicateIdentifier(key, event.oldValues, event.newValues))
+    .sort((first, second) => getFieldLabel(first).localeCompare(getFieldLabel(second), 'ru'))
+    .map((key) => ({
+      label: getFieldLabel(key),
+      oldValue: formatValue(event.oldValues[key], key),
+      newValue: formatValue(event.newValues[key], key),
+    }));
+}
+
+export function formatEntityKey(event: AuditLogEvent): string {
+  try {
+    return JSON.stringify(JSON.parse(event.entityKeyJson), null, 2);
+  } catch {
+    return event.entityKeyJson;
+  }
 }
 
 function getTitle(event: AuditLogEvent): string {
@@ -61,6 +121,37 @@ function getDetails(event: AuditLogEvent): string | undefined {
 
 function hasValue(values: AuditValues, key: string): boolean {
   return values[key] !== undefined && values[key] !== null;
+}
+
+function isDuplicateIdentifier(
+  key: string,
+  oldValues: AuditValues,
+  newValues: AuditValues,
+): boolean {
+  const nameKey = idNamePairs[key];
+  return Boolean(nameKey && (hasValue(oldValues, nameKey) || hasValue(newValues, nameKey)));
+}
+
+function getFieldLabel(key: string): string {
+  return fieldLabels[key] ?? key;
+}
+
+function formatValue(value: unknown, key: string): string | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return '—';
+  if (Array.isArray(value)) return value.map((item) => formatValue(item, key) ?? '—').join(', ');
+  if (typeof value === 'boolean') return value ? 'Да' : 'Нет';
+  if (typeof value === 'number') {
+    return key === 'Amount' || key === 'TotalAmount'
+      ? `${new Intl.NumberFormat('ru-RU').format(value)} ₽`
+      : String(value);
+  }
+  if (typeof value === 'string' && key.endsWith('AtUtc')) {
+    const date = new Date(value);
+    if (!Number.isNaN(date.getTime())) return date.toLocaleString('ru-RU');
+  }
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
 }
 
 function asText(value: unknown): string | undefined {

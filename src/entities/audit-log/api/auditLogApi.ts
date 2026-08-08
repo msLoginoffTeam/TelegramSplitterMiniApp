@@ -23,10 +23,17 @@ function toAuditLogEvent(response: {
   actorUsername?: string | null;
   subjectType?: string | null;
   operation?: string | null;
+  entityKeyJson?: string | null;
   oldValuesJson?: string | null;
   newValuesJson?: string | null;
 }): AuditLogEvent {
-  if (!response.id || !response.occurredAtUtc || !response.subjectType || !response.operation) {
+  if (
+    !response.id ||
+    !response.occurredAtUtc ||
+    !response.subjectType ||
+    !response.operation ||
+    !response.entityKeyJson
+  ) {
     throw new Error('Backend returned an incomplete audit event.');
   }
 
@@ -37,6 +44,7 @@ function toAuditLogEvent(response: {
     actorUsername: response.actorUsername ?? undefined,
     subjectType: response.subjectType,
     operation: response.operation,
+    entityKeyJson: response.entityKeyJson,
     oldValues: parseValues(response.oldValuesJson),
     newValues: parseValues(response.newValuesJson),
   };
