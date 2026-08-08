@@ -103,6 +103,7 @@ export function AuditLogPage() {
                         {changes.map((change) => (
                           <div key={change.label}>
                             <dt>{change.label}</dt>
+                            {change.value !== undefined ? <dd>{change.value}</dd> : null}
                             {change.oldValue !== undefined ? (
                               <dd>
                                 <span>Было</span>

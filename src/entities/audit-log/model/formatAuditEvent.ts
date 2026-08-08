@@ -7,6 +7,7 @@ export interface AuditEventPresentation {
 
 export interface AuditFieldChange {
   label: string;
+  value?: string;
   oldValue?: string;
   newValue?: string;
 }
@@ -29,6 +30,12 @@ const fieldLabels: Record<string, string> = {
   OwnerName: 'Владелец',
   UserName: 'Участник',
   MemberUserName: 'Участник',
+  Participant: 'Участник',
+  ExpenseTitle: 'Трата',
+  FromParticipant: 'Отправитель',
+  ToParticipant: 'Получатель',
+  Payer: 'Плательщик',
+  Author: 'Автор',
   ExpenseId: 'ID траты',
   GroupId: 'ID группы',
 };
@@ -40,9 +47,19 @@ const idNamePairs: Record<string, string> = {
   FromUserId: 'FromUserName',
   ToUserId: 'ToUserName',
   OwnerId: 'OwnerName',
-  UserId: 'UserName',
+  UserId: 'Participant',
   MemberUserId: 'MemberUserName',
+  ExpenseId: 'ExpenseTitle',
 };
+
+const contextFieldNames = new Set([
+  'Participant',
+  'ExpenseTitle',
+  'FromParticipant',
+  'ToParticipant',
+  'Payer',
+  'Author',
+]);
 
 export function formatAuditEvent(event: AuditLogEvent): AuditEventPresentation {
   return { title: getTitle(event), details: getDetails(event) };
@@ -54,11 +71,18 @@ export function getAuditFieldChanges(event: AuditLogEvent): AuditFieldChange[] {
   return [...keys]
     .filter((key) => !isDuplicateIdentifier(key, event.oldValues, event.newValues))
     .sort((first, second) => getFieldLabel(first).localeCompare(getFieldLabel(second), 'ru'))
-    .map((key) => ({
-      label: getFieldLabel(key),
-      oldValue: formatValue(event.oldValues[key], key),
-      newValue: formatValue(event.newValues[key], key),
-    }));
+    .map((key) =>
+      contextFieldNames.has(key)
+        ? {
+            label: getFieldLabel(key),
+            value: formatValue(event.newValues[key] ?? event.oldValues[key], key),
+          }
+        : {
+            label: getFieldLabel(key),
+            oldValue: formatValue(event.oldValues[key], key),
+            newValue: formatValue(event.newValues[key], key),
+          },
+    );
 }
 
 export function formatEntityKey(event: AuditLogEvent): string {
@@ -70,7 +94,11 @@ export function formatEntityKey(event: AuditLogEvent): string {
 }
 
 function getTitle(event: AuditLogEvent): string {
-  const title = asText(event.newValues.Title) ?? asText(event.oldValues.Title);
+  const title =
+    asText(event.newValues.Title) ??
+    asText(event.oldValues.Title) ??
+    asText(event.newValues.ExpenseTitle) ??
+    asText(event.oldValues.ExpenseTitle);
 
   switch (event.subjectType) {
     case 'Group':
@@ -86,17 +114,9 @@ function getTitle(event: AuditLogEvent): string {
         return title ? `Удалена трата «${title}»` : 'Удалена трата';
       return title ? `Изменена трата «${title}»` : 'Изменена трата';
     case 'ExpenseShare':
-      return event.operation === 'Deleted'
-        ? 'Удалена доля траты'
-        : event.operation === 'Added'
-          ? 'Добавлена доля траты'
-          : 'Изменено распределение траты';
+      return formatShareTitle(event);
     case 'Payment':
-      return event.operation === 'Deleted'
-        ? 'Удалён платёж'
-        : event.operation === 'Added'
-          ? 'Добавлен платёж'
-          : 'Изменён платёж';
+      return formatPaymentTitle(event);
     case 'GroupInvite':
       return 'Создана ссылка-приглашение';
     case 'GroupMemberPermissions':
@@ -119,6 +139,38 @@ function getDetails(event: AuditLogEvent): string | undefined {
   return role ? `Роль: ${role}` : undefined;
 }
 
+function formatShareTitle(event: AuditLogEvent): string {
+  const participant = asText(event.newValues.Participant) ?? asText(event.oldValues.Participant);
+  const expenseTitle = asText(event.newValues.ExpenseTitle) ?? asText(event.oldValues.ExpenseTitle);
+  const context = [participant, expenseTitle ? `в трате «${expenseTitle}»` : undefined]
+    .filter((value): value is string => Boolean(value))
+    .join(' ');
+  const action =
+    event.operation === 'Deleted'
+      ? 'Удалена доля'
+      : event.operation === 'Added'
+        ? 'Добавлена доля'
+        : 'Изменена доля';
+
+  return context ? `${action} ${context}` : `${action} траты`;
+}
+
+function formatPaymentTitle(event: AuditLogEvent): string {
+  const from = asText(event.newValues.FromParticipant) ?? asText(event.oldValues.FromParticipant);
+  const to = asText(event.newValues.ToParticipant) ?? asText(event.oldValues.ToParticipant);
+  const expenseTitle = asText(event.newValues.ExpenseTitle) ?? asText(event.oldValues.ExpenseTitle);
+  const action =
+    event.operation === 'Deleted'
+      ? 'Удалён платёж'
+      : event.operation === 'Added'
+        ? 'Добавлен платёж'
+        : 'Изменён платёж';
+  const route = from && to ? ` ${from} → ${to}` : '';
+  const expense = expenseTitle ? ` по трате «${expenseTitle}»` : '';
+
+  return `${action}${route}${expense}`;
+}
+
 function hasValue(values: AuditValues, key: string): boolean {
   return values[key] !== undefined && values[key] !== null;
 }
@@ -128,6 +180,21 @@ function isDuplicateIdentifier(
   oldValues: AuditValues,
   newValues: AuditValues,
 ): boolean {
+  if (
+    key === 'UserName' &&
+    (hasValue(oldValues, 'Participant') || hasValue(newValues, 'Participant'))
+  ) {
+    return true;
+  }
+
+  if (
+    (key === 'FromUserName' || key === 'ToUserName') &&
+    (hasValue(oldValues, key === 'FromUserName' ? 'FromParticipant' : 'ToParticipant') ||
+      hasValue(newValues, key === 'FromUserName' ? 'FromParticipant' : 'ToParticipant'))
+  ) {
+    return true;
+  }
+
   const nameKey = idNamePairs[key];
   return Boolean(nameKey && (hasValue(oldValues, nameKey) || hasValue(newValues, nameKey)));
 }
