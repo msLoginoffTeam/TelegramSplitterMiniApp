@@ -20,8 +20,10 @@ function getTitle(event: AuditLogEvent): string {
       if (hasValue(event.newValues, 'OwnerId')) return 'Передано владение группой';
       return 'Изменена группа';
     case 'Expense':
-      if (event.operation === 'Added') return title ? `Добавлена трата «${title}»` : 'Добавлена трата';
-      if (event.operation === 'Deleted') return title ? `Удалена трата «${title}»` : 'Удалена трата';
+      if (event.operation === 'Added')
+        return title ? `Добавлена трата «${title}»` : 'Добавлена трата';
+      if (event.operation === 'Deleted')
+        return title ? `Удалена трата «${title}»` : 'Удалена трата';
       return title ? `Изменена трата «${title}»` : 'Изменена трата';
     case 'ExpenseShare':
       return event.operation === 'Deleted'
