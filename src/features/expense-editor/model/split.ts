@@ -1,6 +1,7 @@
+import { calculateMoneyExpression } from '@/shared/lib/moneyExpression';
+
 export function toKopecks(value: string): number {
-  const parsed = Number(value.replace(',', '.'));
-  return Number.isFinite(parsed) && parsed >= 0 ? Math.round(parsed * 100) : 0;
+  return calculateMoneyExpression(value) ?? 0;
 }
 
 export function splitEvenly(

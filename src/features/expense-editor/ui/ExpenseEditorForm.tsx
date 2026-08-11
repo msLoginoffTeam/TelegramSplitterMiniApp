@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import type { ExpenseWriteInput } from '@/entities/expense';
 import type { GroupMember } from '@/entities/group';
+import { formatKopecksForInput } from '@/shared/lib/moneyExpression';
 import { formatRubles } from '@/shared/lib/money';
+import { AmountInput } from '@/shared/ui';
 import { splitEvenly, sumKopecks, toKopecks } from '@/features/expense-editor/model/split';
 import styles from '@/features/expense-editor/ui/ExpenseEditorForm.module.scss';
 
@@ -42,6 +44,14 @@ export function ExpenseEditorForm({
   const [allocations, setAllocations] = useState<Record<string, number>>(
     initialValues?.allocations ?? {},
   );
+  const [allocationInputs, setAllocationInputs] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      Object.entries(initialValues?.allocations ?? {}).map(([userId, amount]) => [
+        userId,
+        formatKopecksForInput(amount),
+      ]),
+    ),
+  );
   const [saveError, setSaveError] = useState<string>();
   const [isSaving, setIsSaving] = useState(false);
 
@@ -60,7 +70,30 @@ export function ExpenseEditorForm({
     !isSaving;
 
   const applyEvenSplit = () => {
-    setAllocations(splitEvenly(totalKopecks, participantIds, payerId));
+    const nextAllocations = splitEvenly(totalKopecks, participantIds, payerId);
+    setAllocations(nextAllocations);
+    setAllocationInputs(
+      Object.fromEntries(
+        Object.entries(nextAllocations).map(([userId, amount]) => [
+          userId,
+          formatKopecksForInput(amount),
+        ]),
+      ),
+    );
+  };
+
+  const applyRemainingToParticipant = (userId: string) => {
+    const nextAmount = (allocations[userId] ?? 0) + remainingKopecks;
+    setAllocations((current) => ({ ...current, [userId]: nextAmount }));
+    setAllocationInputs((current) => ({
+      ...current,
+      [userId]: formatKopecksForInput(nextAmount),
+    }));
+  };
+
+  const changeAllocation = (userId: string, value: string) => {
+    setAllocationInputs((current) => ({ ...current, [userId]: value }));
+    setAllocations((current) => ({ ...current, [userId]: toKopecks(value) }));
   };
 
   const toggleParticipant = (userId: string) => {
@@ -128,18 +161,10 @@ export function ExpenseEditorForm({
         />
       </label>
 
-      <label className={styles.field}>
+      <div className={styles.field}>
         <span>Сумма, ₽</span>
-        <input
-          inputMode="decimal"
-          min="0"
-          onChange={(event) => setTotalInput(event.target.value)}
-          placeholder="0"
-          step="0.01"
-          type="number"
-          value={totalInput}
-        />
-      </label>
+        <AmountInput onChange={setTotalInput} placeholder="0" value={totalInput} />
+      </div>
 
       <label className={styles.field}>
         <span>Заплатил</span>
@@ -169,6 +194,12 @@ export function ExpenseEditorForm({
             const isPayer = member.userId === payerId;
             const isSelected = participantIds.includes(member.userId);
             const allocation = allocations[member.userId] ?? 0;
+            const nextAllocation = allocation + remainingKopecks;
+            const canApplyRemaining = isPayer ? nextAllocation >= 0 : nextAllocation > 0;
+            const adjustmentLabel =
+              remainingKopecks > 0
+                ? `+ ${formatRubles(remainingKopecks / 100)}`
+                : `− ${formatRubles(Math.abs(remainingKopecks) / 100)}`;
 
             return (
               <div className={styles.participant} key={member.userId}>
@@ -186,22 +217,39 @@ export function ExpenseEditorForm({
                   {isPayer ? <small>плательщик</small> : null}
                 </label>
                 {isSelected ? (
-                  <label className={styles.allocation}>
-                    <input
-                      inputMode="decimal"
-                      min="0"
-                      onChange={(event) =>
-                        setAllocations((current) => ({
-                          ...current,
-                          [member.userId]: toKopecks(event.target.value),
-                        }))
-                      }
-                      step="0.01"
-                      type="number"
-                      value={allocation ? allocation / 100 : ''}
-                    />
-                    <span>₽</span>
-                  </label>
+                  <div className={styles.allocationStack}>
+                    <div className={styles.allocation}>
+                      <AmountInput
+                        ariaLabel={`Доля ${member.displayName}`}
+                        compact
+                        onChange={(value) => changeAllocation(member.userId, value)}
+                        value={
+                          allocationInputs[member.userId] ??
+                          (allocation ? String(allocation / 100) : '')
+                        }
+                      />
+                      <span>₽</span>
+                    </div>
+                    {remainingKopecks !== 0 && canApplyRemaining ? (
+                      <button
+                        aria-label={
+                          remainingKopecks > 0
+                            ? `Добавить весь нераспределённый остаток ${formatRubles(remainingKopecks / 100)}`
+                            : `Убрать лишнее ${formatRubles(Math.abs(remainingKopecks) / 100)}`
+                        }
+                        className={styles.applyRemaining}
+                        onClick={() => applyRemainingToParticipant(member.userId)}
+                        title={
+                          remainingKopecks > 0
+                            ? 'Добавить весь нераспределённый остаток'
+                            : 'Убрать лишнюю сумму из этой доли'
+                        }
+                        type="button"
+                      >
+                        {adjustmentLabel}
+                      </button>
+                    ) : null}
+                  </div>
                 ) : null}
               </div>
             );

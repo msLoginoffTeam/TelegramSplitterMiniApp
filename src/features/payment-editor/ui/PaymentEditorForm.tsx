@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { GroupMember } from '@/entities/group';
 import type { CreatePaymentInput } from '@/entities/payment';
+import { AmountInput } from '@/shared/ui';
 import { toKopecks } from '@/features/expense-editor/model/split';
 import styles from './PaymentEditorForm.module.scss';
 
@@ -166,18 +167,10 @@ export function PaymentEditorForm({
         </label>
       )}
 
-      <label className={styles.field}>
+      <div className={styles.field}>
         <span>Сумма, ₽</span>
-        <input
-          inputMode="decimal"
-          min="0"
-          onChange={(event) => setAmountInput(event.target.value)}
-          placeholder="0"
-          step="0.01"
-          type="number"
-          value={amountInput}
-        />
-      </label>
+        <AmountInput onChange={setAmountInput} placeholder="0" value={amountInput} />
+      </div>
 
       <label className={styles.field}>
         <span>

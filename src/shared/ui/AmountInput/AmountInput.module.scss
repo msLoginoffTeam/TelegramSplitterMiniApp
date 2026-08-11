@@ -1,0 +1,27 @@
+.root {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.result {
+  justify-self: end;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-accent);
+  font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.result:disabled {
+  color: var(--color-danger);
+}
+
+.compact {
+  gap: 0.25rem;
+}
+
+.compact .result {
+  font-size: 0.75rem;
+}

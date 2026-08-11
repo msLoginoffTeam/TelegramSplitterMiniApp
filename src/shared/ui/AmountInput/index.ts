@@ -1,2 +1,1 @@
-export { PageLayout } from './PageLayout';
 export { AmountInput } from './AmountInput';
