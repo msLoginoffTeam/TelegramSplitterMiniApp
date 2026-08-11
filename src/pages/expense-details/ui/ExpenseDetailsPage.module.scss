@@ -50,8 +50,9 @@
 
 .shareList li,
 .paymentList li {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   gap: var(--space-3);
   padding: var(--space-4);
 }
@@ -61,20 +62,38 @@
   border-top: 1px solid var(--color-border);
 }
 
-.shareList li > span {
+.shareMember,
+.shareSummary {
   display: grid;
   gap: 0.2rem;
   min-width: 0;
 }
 
+.shareMember {
+  overflow: hidden;
+}
+
+.shareMember small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .shareSummary {
   align-items: flex-end;
-  flex: 0 1 58%;
+  max-width: min(13rem, 52vw);
   text-align: right;
 }
 
-.shareList li > span:first-child {
-  overflow-wrap: anywhere;
+.shareActions {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: var(--space-2);
+}
+
+.shareActions > * {
+  width: 100%;
+  text-align: center;
 }
 
 .shareList small {
@@ -125,7 +144,9 @@
 }
 
 .paymentList li {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .paymentList li > span {

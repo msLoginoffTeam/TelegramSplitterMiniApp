@@ -167,7 +167,7 @@ export function ExpenseDetailsPage() {
 
             return (
               <li key={share.userId}>
-                <span>
+                <span className={styles.shareMember}>
                   <strong>{isPayer ? 'Плательщик' : share.displayName}</strong>
                   {share.username ? <small>@{share.username}</small> : null}
                 </span>
@@ -184,33 +184,37 @@ export function ExpenseDetailsPage() {
                   >
                     {settlementLabel}
                   </small>
-                  {canUpdateSettlement ? (
-                    <button
-                      className={styles.settlementAction}
-                      disabled={updateShareSettlement.isPending}
-                      onClick={() =>
-                        updateShareSettlement.mutate({
-                          userId: share.userId,
-                          isManuallySettled: !share.isManuallySettled,
-                        })
-                      }
-                      type="button"
-                    >
-                      {share.isManuallySettled ? 'Вернуть в долг' : 'Закрыть вручную'}
-                    </button>
-                  ) : null}
-                  {canCreateSharePayment ? (
-                    <Link
-                      className={styles.sharePaymentAction}
-                      to={routes.createExpensePayment(groupId, expenseId, {
-                        fromUserId: share.userId,
-                        amount: remainingAmount,
-                      })}
-                    >
-                      Погасить
-                    </Link>
-                  ) : null}
                 </span>
+                {canUpdateSettlement || canCreateSharePayment ? (
+                  <div className={styles.shareActions}>
+                    {canUpdateSettlement ? (
+                      <button
+                        className={styles.settlementAction}
+                        disabled={updateShareSettlement.isPending}
+                        onClick={() =>
+                          updateShareSettlement.mutate({
+                            userId: share.userId,
+                            isManuallySettled: !share.isManuallySettled,
+                          })
+                        }
+                        type="button"
+                      >
+                        {share.isManuallySettled ? 'Вернуть в долг' : 'Закрыть вручную'}
+                      </button>
+                    ) : null}
+                    {canCreateSharePayment ? (
+                      <Link
+                        className={styles.sharePaymentAction}
+                        to={routes.createExpensePayment(groupId, expenseId, {
+                          fromUserId: share.userId,
+                          amount: remainingAmount,
+                        })}
+                      >
+                        Погасить
+                      </Link>
+                    ) : null}
+                  </div>
+                ) : null}
               </li>
             );
           })}
