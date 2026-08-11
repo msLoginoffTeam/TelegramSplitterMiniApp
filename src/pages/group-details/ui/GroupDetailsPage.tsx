@@ -140,7 +140,14 @@ export function GroupDetailsPage() {
                     <div>
                       <strong className={styles.expenseTitle}>
                         {expense.title}
-                        {expense.isSettled ? (
+                        {expense.isDraft ? (
+                          <span
+                            className={styles.draftBadge}
+                            title="Черновик не учитывается в балансах и итоговых переводах."
+                          >
+                            Черновик
+                          </span>
+                        ) : expense.isSettled ? (
                           <span className={styles.settledBadge}>✓ Закрыта</span>
                         ) : null}
                       </strong>

@@ -13,6 +13,27 @@
   background: var(--color-surface);
 }
 
+.draftNotice {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.draftNotice summary {
+  color: var(--color-text);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.draftNotice p {
+  margin: 0;
+  line-height: 1.45;
+}
+
 .expenseSettlement strong {
   color: var(--color-danger);
 }

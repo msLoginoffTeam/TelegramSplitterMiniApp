@@ -109,7 +109,14 @@ export function ExpenseDetailsPage() {
     amounts.set(payment.fromUserId, (amounts.get(payment.fromUserId) ?? 0) + payment.amount);
     return amounts;
   }, new Map<string, number>());
-  const isSettled = expense.shares.every((share) => share.isPaid);
+  const unallocatedAmount = Math.max(
+    0,
+    Math.round(
+      (expense.totalAmount - expense.shares.reduce((total, share) => total + share.amount, 0)) *
+        100,
+    ) / 100,
+  );
+  const isSettled = !expense.isDraft && expense.shares.every((share) => share.isPaid);
 
   return (
     <PageLayout
@@ -118,12 +125,29 @@ export function ExpenseDetailsPage() {
       title={expense.title}
       description={`${formatRubles(expense.totalAmount)} · заплатил ${expense.payerName}`}
     >
+      {expense.isDraft ? (
+        <details className={styles.draftNotice}>
+          <summary>Черновик · не распределено {formatRubles(unallocatedAmount)}</summary>
+          <p>
+            Черновик не учитывается в балансах и итоговых переводах, пока вся сумма не распределена.
+            Платежи по нему учитываются как уже совершённые переводы.
+          </p>
+        </details>
+      ) : null}
       <section className={styles.expenseSettlement} data-settled={isSettled}>
-        <strong>{isSettled ? '✓ Трата закрыта' : 'Трата ещё не закрыта'}</strong>
+        <strong>
+          {expense.isDraft
+            ? 'Трата в черновиках'
+            : isSettled
+              ? '✓ Трата закрыта'
+              : 'Трата ещё не закрыта'}
+        </strong>
         <span>
-          {isSettled
-            ? 'Все доли оплачены платежами или закрыты вручную.'
-            : 'В распределении ниже видно, какие доли ещё нужно закрыть.'}
+          {expense.isDraft
+            ? 'Завершите распределение, чтобы трата начала участвовать в расчётах.'
+            : isSettled
+              ? 'Все доли оплачены платежами или закрыты вручную.'
+              : 'В распределении ниже видно, какие доли ещё нужно закрыть.'}
         </span>
       </section>
       {expense.description ? <p className={styles.description}>{expense.description}</p> : null}
@@ -151,16 +175,19 @@ export function ExpenseDetailsPage() {
         <ul className={styles.shareList}>
           {expense.shares.map((share) => {
             const isPayer = share.userId === expense.payerId;
+            const paidAmount = share.paidAmount || paidAmountByUserId.get(share.userId) || 0;
             const remainingAmount = Math.max(
               0,
-              Math.round((share.amount - (paidAmountByUserId.get(share.userId) ?? 0)) * 100) / 100,
+              Math.round((share.amount - paidAmount) * 100) / 100,
             );
             const canUpdateSettlement = canEdit && !isPayer && !share.isPaidByPayments;
             const canCreateSharePayment = canCreatePayment && !isPayer && remainingAmount > 0;
             const settlementLabel = isPayer
               ? 'Учтено как плательщик'
               : share.isPaidByPayments
-                ? 'Оплачено платежами'
+                ? share.overpaymentAmount > 0
+                  ? `Оплачено ${formatRubles(paidAmount)} · переплата ${formatRubles(share.overpaymentAmount)}`
+                  : 'Оплачено платежами'
                 : share.isManuallySettled
                   ? 'Закрыто вручную'
                   : `Осталось оплатить ${formatRubles(share.amount)}`;

@@ -36,6 +36,8 @@ function toExpense(response: ExpenseResponseDto): Expense {
       displayName: share.displayName ?? 'Участник',
       username: share.username ?? undefined,
       amount: share.amount ?? 0,
+      paidAmount: share.paidAmount ?? 0,
+      overpaymentAmount: share.overpaymentAmount ?? 0,
       isPaid: share.isPaid ?? false,
       isPaidByPayments: share.isPaidByPayments ?? false,
       isManuallySettled: share.isManuallySettled ?? false,
@@ -45,7 +47,7 @@ function toExpense(response: ExpenseResponseDto): Expense {
 
 function toShares(input: ExpenseWriteInput) {
   return input.shares
-    .filter((share) => share.userId !== input.payerId)
+    .filter((share) => share.amount > 0)
     .map((share) => new ExpenseShareCreateDto(share));
 }
 
@@ -58,7 +60,6 @@ export const expenseApi = {
         description: input.description,
         totalAmount: input.totalAmount,
         payerId: input.payerId,
-        isDraft: false,
         shares: toShares(input),
       }),
     );

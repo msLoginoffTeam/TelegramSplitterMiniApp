@@ -311,7 +311,6 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
     description?: string | null;
     totalAmount?: number;
     payerId?: string;
-    isDraft?: boolean;
     shares?: ExpenseShareCreateDto[] | null;
 
     constructor(data?: ICreateExpenseRequestDto) {
@@ -329,7 +328,6 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
             this.description = _data["description"];
             this.totalAmount = _data["totalAmount"];
             this.payerId = _data["payerId"];
-            this.isDraft = _data["isDraft"];
             if (Array.isArray(_data["shares"])) {
                 this.shares = [] as any;
                 for (let item of _data["shares"])
@@ -351,7 +349,6 @@ export class CreateExpenseRequestDto implements ICreateExpenseRequestDto {
         data["description"] = this.description;
         data["totalAmount"] = this.totalAmount;
         data["payerId"] = this.payerId;
-        data["isDraft"] = this.isDraft;
         if (Array.isArray(this.shares)) {
             data["shares"] = [];
             for (let item of this.shares)
@@ -366,7 +363,6 @@ export interface ICreateExpenseRequestDto {
     description?: string | null;
     totalAmount?: number;
     payerId?: string;
-    isDraft?: boolean;
     shares?: ExpenseShareCreateDto[] | null;
 }
 
@@ -587,6 +583,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
     displayName?: string | null;
     username?: string | null;
     amount?: number;
+    paidAmount?: number;
+    overpaymentAmount?: number;
     isPaid?: boolean;
     isPaidByPayments?: boolean;
     isManuallySettled?: boolean;
@@ -606,6 +604,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
             this.displayName = _data["displayName"];
             this.username = _data["username"];
             this.amount = _data["amount"];
+            this.paidAmount = _data["paidAmount"];
+            this.overpaymentAmount = _data["overpaymentAmount"];
             this.isPaid = _data["isPaid"];
             this.isPaidByPayments = _data["isPaidByPayments"];
             this.isManuallySettled = _data["isManuallySettled"];
@@ -625,6 +625,8 @@ export class ExpenseShareResponseDto implements IExpenseShareResponseDto {
         data["displayName"] = this.displayName;
         data["username"] = this.username;
         data["amount"] = this.amount;
+        data["paidAmount"] = this.paidAmount;
+        data["overpaymentAmount"] = this.overpaymentAmount;
         data["isPaid"] = this.isPaid;
         data["isPaidByPayments"] = this.isPaidByPayments;
         data["isManuallySettled"] = this.isManuallySettled;
@@ -637,6 +639,8 @@ export interface IExpenseShareResponseDto {
     displayName?: string | null;
     username?: string | null;
     amount?: number;
+    paidAmount?: number;
+    overpaymentAmount?: number;
     isPaid?: boolean;
     isPaidByPayments?: boolean;
     isManuallySettled?: boolean;

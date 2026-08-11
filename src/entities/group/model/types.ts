@@ -28,6 +28,7 @@ export type ExpenseSummary = {
   payerName: string;
   payerUsername?: string;
   createdAt: Date;
+  isDraft: boolean;
   isSettled: boolean;
 };
 

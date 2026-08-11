@@ -2413,9 +2413,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "isDraft": {
-            "type": "boolean"
-          },
           "shares": {
             "type": "array",
             "items": {
@@ -2545,6 +2542,14 @@
             "nullable": true
           },
           "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "overpaymentAmount": {
             "type": "number",
             "format": "double"
           },

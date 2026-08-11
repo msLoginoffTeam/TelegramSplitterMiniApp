@@ -58,16 +58,8 @@ export function ExpenseEditorForm({
   const totalKopecks = toKopecks(totalInput);
   const allocatedKopecks = sumKopecks(allocations, participantIds);
   const remainingKopecks = totalKopecks - allocatedKopecks;
-  const selectedMembers = members.filter((member) => participantIds.includes(member.userId));
-  const hasInvalidNonPayerShare = selectedMembers.some(
-    (member) => member.userId !== payerId && (allocations[member.userId] ?? 0) <= 0,
-  );
-  const canSave =
-    title.trim().length > 0 &&
-    totalKopecks > 0 &&
-    remainingKopecks === 0 &&
-    !hasInvalidNonPayerShare &&
-    !isSaving;
+  const isDraft = remainingKopecks > 0;
+  const canSave = title.trim().length > 0 && totalKopecks > 0 && remainingKopecks >= 0 && !isSaving;
 
   const applyEvenSplit = () => {
     const nextAllocations = splitEvenly(totalKopecks, participantIds, payerId);
@@ -115,6 +107,15 @@ export function ExpenseEditorForm({
     event.preventDefault();
     if (!canSave) return;
 
+    if (
+      isDraft &&
+      !window.confirm(
+        `Не распределено ${formatRubles(remainingKopecks / 100)}. Сохранить как черновик? Трата пока не будет учитываться в балансах и итоговых переводах.`,
+      )
+    ) {
+      return;
+    }
+
     setSaveError(undefined);
     setIsSaving(true);
     try {
@@ -123,10 +124,12 @@ export function ExpenseEditorForm({
         description: description.trim() || undefined,
         totalAmount: totalKopecks / 100,
         payerId,
-        shares: participantIds.map((userId) => ({
-          userId,
-          amount: (allocations[userId] ?? 0) / 100,
-        })),
+        shares: participantIds
+          .filter((userId) => (allocations[userId] ?? 0) > 0)
+          .map((userId) => ({
+            userId,
+            amount: (allocations[userId] ?? 0) / 100,
+          })),
       });
     } catch {
       setSaveError('Не удалось сохранить трату. Попробуйте ещё раз.');
@@ -257,14 +260,16 @@ export function ExpenseEditorForm({
         </div>
       </section>
 
-      <p className={styles.summary} data-invalid={remainingKopecks !== 0}>
+      <p className={styles.summary} data-draft={isDraft} data-invalid={remainingKopecks < 0}>
         {remainingKopecks === 0
           ? 'Сумма распределена.'
-          : `Осталось распределить: ${formatRubles(remainingKopecks / 100)}`}
+          : remainingKopecks > 0
+            ? `Не распределено: ${formatRubles(remainingKopecks / 100)}. Можно сохранить черновик.`
+            : `Распределено больше на ${formatRubles(Math.abs(remainingKopecks) / 100)}.`}
       </p>
       {saveError ? <p className={styles.error}>{saveError}</p> : null}
       <button className={styles.submit} disabled={!canSave} type="submit">
-        {isSaving ? 'Сохраняем…' : submitLabel}
+        {isSaving ? 'Сохраняем…' : isDraft ? 'Сохранить черновик' : submitLabel}
       </button>
     </form>
   );

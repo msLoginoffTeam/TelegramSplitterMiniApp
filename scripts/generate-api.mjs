@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
+import { chmod, mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 
@@ -31,6 +31,25 @@ const generator =
     ? fileURLToPath(new URL('../node_modules/.bin/react-query-swagger.cmd', import.meta.url))
     : fileURLToPath(new URL('../node_modules/.bin/react-query-swagger', import.meta.url));
 
+if (process.platform === 'darwin') {
+  // `nswag-portable@13.20.0-v.17`, used by react-query-swagger, is published
+  // without its declared macOS executable. Keep macOS generation reproducible
+  // through the versioned local .NET tool; Linux and Windows retain the package binary.
+  const restore = spawnSync('dotnet', ['tool', 'restore'], {
+    cwd: rootDirectory,
+    stdio: 'inherit',
+  });
+  if (restore.status !== 0) {
+    process.exit(restore.status ?? 1);
+  }
+
+  const macExecutable = fileURLToPath(
+    new URL('../node_modules/nswag-portable/bin/nswag-portable.mac', import.meta.url),
+  );
+  await writeFile(macExecutable, '#!/bin/sh\nexec dotnet tool run nswag "$@"\n');
+  await chmod(macExecutable, 0o755);
+}
+
 const result = spawnSync(
   generator,
   [
@@ -57,6 +76,16 @@ await Promise.all(
     .map(async (file) => {
       const filePath = join(generatedDirectory, file);
       const contents = await readFile(filePath, 'utf8');
-      await writeFile(filePath, contents.replace(/[ \t]+$/gm, ''));
+      await writeFile(
+        filePath,
+        contents
+          .replace(/[ \t]+$/gm, '')
+          // NSwag portable uses a different NJsonSchema patch version on macOS.
+          // Its generated TypeScript is identical here; keep the committed banner portable.
+          .replace(
+            /NJsonSchema v[\d.]+ \(Newtonsoft\.Json v/,
+            'NJsonSchema v11.0.0.0 (Newtonsoft.Json v',
+          ),
+      );
     }),
 );

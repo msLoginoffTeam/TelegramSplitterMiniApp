@@ -164,6 +164,9 @@
 .summary {
   color: var(--color-positive);
 }
+.summary[data-draft='true'] {
+  color: var(--color-hint);
+}
 .summary[data-invalid='true'],
 .error {
   color: var(--color-danger);

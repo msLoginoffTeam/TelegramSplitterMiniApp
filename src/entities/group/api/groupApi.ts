@@ -72,6 +72,7 @@ function toExpenseSummary(expense: {
   payerName?: string | null;
   payerUsername?: string | null;
   createdAt?: Date;
+  isDraft?: boolean;
   shares?: Array<{ isPaid?: boolean }> | null;
 }): ExpenseSummary {
   if (
@@ -93,7 +94,9 @@ function toExpenseSummary(expense: {
     payerName: expense.payerName ?? 'Участник',
     payerUsername: expense.payerUsername ?? undefined,
     createdAt: expense.createdAt,
-    isSettled: (expense.shares ?? []).every((share) => share.isPaid ?? false),
+    isDraft: expense.isDraft ?? false,
+    isSettled:
+      !(expense.isDraft ?? false) && (expense.shares ?? []).every((share) => share.isPaid ?? false),
   };
 }
 
