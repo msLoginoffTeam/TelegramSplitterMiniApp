@@ -64,11 +64,17 @@
 .shareList li > span {
   display: grid;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .shareSummary {
   align-items: flex-end;
+  flex: 0 1 58%;
   text-align: right;
+}
+
+.shareList li > span:first-child {
+  overflow-wrap: anywhere;
 }
 
 .shareList small {
@@ -101,6 +107,15 @@
   background: transparent;
   color: var(--color-accent);
   font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.sharePaymentAction {
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.6rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   font-size: var(--font-size-caption);
   font-weight: 700;
 }

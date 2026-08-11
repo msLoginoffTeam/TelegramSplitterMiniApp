@@ -98,7 +98,12 @@ export function PaymentCreatePage() {
         onSave={async (input) => {
           await createPayment.mutateAsync(input);
           platform.impact('light');
-          navigate(routes.payments(groupId), { replace: true });
+          navigate(
+            input.kind === 'expense'
+              ? routes.expense(groupId, input.expenseId)
+              : routes.payments(groupId),
+            { replace: true },
+          );
         }}
       />
     </PageLayout>

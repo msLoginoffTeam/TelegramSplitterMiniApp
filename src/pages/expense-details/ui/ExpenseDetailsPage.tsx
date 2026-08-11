@@ -105,6 +105,10 @@ export function ExpenseDetailsPage() {
   const payments = (paymentsQuery.data ?? [])
     .filter((payment) => payment.expenseId === expenseId)
     .sort((first, second) => second.timestamp.getTime() - first.timestamp.getTime());
+  const paidAmountByUserId = payments.reduce((amounts, payment) => {
+    amounts.set(payment.fromUserId, (amounts.get(payment.fromUserId) ?? 0) + payment.amount);
+    return amounts;
+  }, new Map<string, number>());
   const isSettled = expense.shares.every((share) => share.isPaid);
 
   return (
@@ -147,7 +151,12 @@ export function ExpenseDetailsPage() {
         <ul className={styles.shareList}>
           {expense.shares.map((share) => {
             const isPayer = share.userId === expense.payerId;
+            const remainingAmount = Math.max(
+              0,
+              Math.round((share.amount - (paidAmountByUserId.get(share.userId) ?? 0)) * 100) / 100,
+            );
             const canUpdateSettlement = canEdit && !isPayer && !share.isPaidByPayments;
+            const canCreateSharePayment = canCreatePayment && !isPayer && remainingAmount > 0;
             const settlementLabel = isPayer
               ? 'Учтено как плательщик'
               : share.isPaidByPayments
@@ -190,6 +199,17 @@ export function ExpenseDetailsPage() {
                       {share.isManuallySettled ? 'Вернуть в долг' : 'Закрыть вручную'}
                     </button>
                   ) : null}
+                  {canCreateSharePayment ? (
+                    <Link
+                      className={styles.sharePaymentAction}
+                      to={routes.createExpensePayment(groupId, expenseId, {
+                        fromUserId: share.userId,
+                        amount: remainingAmount,
+                      })}
+                    >
+                      Погасить
+                    </Link>
+                  ) : null}
                 </span>
               </li>
             );
@@ -223,12 +243,6 @@ export function ExpenseDetailsPage() {
           <p className={styles.muted}>Платежей по этой трате пока нет.</p>
         )}
       </section>
-
-      {canCreatePayment ? (
-        <Link className={styles.action} to={routes.createExpensePayment(groupId, expenseId)}>
-          Добавить платёж к трате
-        </Link>
-      ) : null}
 
       {canDelete ? (
         <button

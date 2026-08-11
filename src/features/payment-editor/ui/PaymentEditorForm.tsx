@@ -113,24 +113,18 @@ export function PaymentEditorForm({
 
   return (
     <form className={styles.form} onSubmit={submit}>
-      {!initialExpenseId ? (
-        <label className={styles.field}>
-          <span>Тип платежа</span>
-          <select onChange={(event) => changeKind(event.target.value as typeof kind)} value={kind}>
-            <option value="direct">Просто перевод</option>
-            <option value="expense">Погашение траты</option>
-          </select>
-        </label>
-      ) : null}
+      <label className={styles.field}>
+        <span>Тип платежа</span>
+        <select onChange={(event) => changeKind(event.target.value as typeof kind)} value={kind}>
+          <option value="direct">Просто перевод</option>
+          <option value="expense">Погашение траты</option>
+        </select>
+      </label>
 
       {isExpensePayment ? (
         <label className={styles.field}>
           <span>Трата</span>
-          <select
-            disabled={Boolean(initialExpenseId)}
-            onChange={(event) => selectExpense(event.target.value)}
-            value={expenseId}
-          >
+          <select onChange={(event) => selectExpense(event.target.value)} value={expenseId}>
             {expenses.map((expense) => (
               <option key={expense.id} value={expense.id}>
                 {expense.title} · заплатил {expense.payerName}
