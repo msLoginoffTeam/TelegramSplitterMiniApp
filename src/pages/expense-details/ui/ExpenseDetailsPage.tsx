@@ -55,7 +55,7 @@ export function ExpenseDetailsPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Трата"
-        description="Откройте приложение из Telegram или настройте local development ID."
+        description="Откройте приложение из Telegram или настройте local development ID"
       />
     );
   }
@@ -81,7 +81,7 @@ export function ExpenseDetailsPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Трата"
-        description="Не удалось загрузить трату."
+        description="Не удалось загрузить трату"
       >
         <button className={styles.action} onClick={() => expenseQuery.refetch()} type="button">
           Повторить
@@ -289,7 +289,7 @@ export function ExpenseDetailsPage() {
             ))}
           </ul>
         ) : (
-          <p className={styles.muted}>Платежей по этой трате пока нет.</p>
+          <p className={styles.muted}>Платежей по этой трате пока нет</p>
         )}
       </section>
 
@@ -317,7 +317,7 @@ export function ExpenseDetailsPage() {
                   </ul>
                 </>
               ) : (
-                <p>Связанных платежей нет.</p>
+                <p>Связанных платежей нет</p>
               )}
               <p className={styles.deleteHint}>
                 Трата и эти платежи перестанут участвовать в балансах и итоговых переводах.

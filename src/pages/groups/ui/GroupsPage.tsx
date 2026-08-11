@@ -16,7 +16,7 @@ export function GroupsPage() {
   return (
     <PageLayout
       title="Ваши группы"
-      description="Здесь появятся совместные поездки, квартиры и другие общие траты."
+      description="Здесь появятся совместные поездки, квартиры и другие общие траты"
     >
       {!canRequestGroups ? (
         <div className={styles.emptyState}>
@@ -27,7 +27,7 @@ export function GroupsPage() {
       {groupsQuery.isPending ? <p className={styles.status}>Загружаем группы…</p> : null}
       {groupsQuery.isError ? (
         <div className={styles.emptyState}>
-          <p>Не удалось загрузить группы.</p>
+          <p>Не удалось загрузить группы</p>
           <button onClick={() => groupsQuery.refetch()} type="button">
             Повторить
           </button>

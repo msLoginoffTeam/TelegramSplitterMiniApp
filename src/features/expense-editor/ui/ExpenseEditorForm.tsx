@@ -190,7 +190,7 @@ export function ExpenseEditorForm({
         <div className={styles.sectionHeading}>
           <div>
             <h2>Делят трату</h2>
-            <p>Плательщик всегда участвует.</p>
+            <p>Плательщик всегда участвует</p>
           </div>
           <button onClick={applyEvenSplit} type="button">
             Поровну

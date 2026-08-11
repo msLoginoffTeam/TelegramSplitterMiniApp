@@ -17,7 +17,7 @@ export function GroupCreatePage() {
       backTo={routes.groups}
       backLabel="К группам"
       title="Новая группа"
-      description="Вы автоматически станете владельцем и первым участником."
+      description="Вы автоматически станете владельцем и первым участником"
     >
       {canCreateGroup ? (
         <CreateGroupForm
@@ -27,7 +27,7 @@ export function GroupCreatePage() {
           }}
         />
       ) : (
-        <p>Создание доступно в Telegram или при настроенном локальном development ID.</p>
+        <p>Создание доступно в Telegram или при настроенном локальном development ID</p>
       )}
     </PageLayout>
   );

@@ -27,7 +27,7 @@ export function PaymentsPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Платежи"
-        description={canRequest ? 'Загружаем платежи…' : 'Откройте приложение из Telegram.'}
+        description={canRequest ? 'Загружаем платежи…' : 'Откройте приложение из Telegram'}
       />
     );
   }
@@ -42,7 +42,7 @@ export function PaymentsPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Платежи"
-        description="Не удалось загрузить платежи."
+        description="Не удалось загрузить платежи"
       >
         <button className={styles.retry} onClick={() => paymentsQuery.refetch()} type="button">
           Повторить
@@ -73,7 +73,7 @@ export function PaymentsPage() {
       backTo={routes.group(groupId)}
       backLabel="К группе"
       title="Платежи"
-      description="Переводы между участниками и погашения трат."
+      description="Переводы между участниками и погашения трат"
     >
       {canCreate ? (
         <Link className={styles.primaryAction} to={routes.createPayment(groupId)}>

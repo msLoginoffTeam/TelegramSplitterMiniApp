@@ -79,7 +79,7 @@ export const router = createBrowserRouter([
         element: (
           <GroupSectionPage
             title="Настройки группы"
-            description="Здесь будут редкие настройки группы."
+            description="Здесь будут редкие настройки группы"
           />
         ),
       },

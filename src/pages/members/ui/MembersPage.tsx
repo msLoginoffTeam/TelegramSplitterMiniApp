@@ -37,7 +37,7 @@ export function MembersPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Участники"
-        description="Откройте приложение из Telegram или настройте local development ID."
+        description="Откройте приложение из Telegram или настройте local development ID"
       />
     );
   }
@@ -57,7 +57,7 @@ export function MembersPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Участники"
-        description="Не удалось загрузить список участников."
+        description="Не удалось загрузить список участников"
       >
         <button className={styles.retry} onClick={() => dashboardQuery.refetch()} type="button">
           Повторить

@@ -30,7 +30,7 @@ export function GroupDetailsPage() {
         backTo={routes.groups}
         backLabel="К группам"
         title="Группа"
-        description="Откройте приложение из Telegram или настройте local development ID."
+        description="Откройте приложение из Telegram или настройте local development ID"
       />
     );
   }
@@ -52,7 +52,7 @@ export function GroupDetailsPage() {
         backTo={routes.groups}
         backLabel="К группам"
         title="Группа"
-        description="Не удалось загрузить данные группы."
+        description="Не удалось загрузить данные группы"
       >
         <button className={styles.retry} onClick={() => dashboardQuery.refetch()} type="button">
           Повторить
@@ -91,7 +91,7 @@ export function GroupDetailsPage() {
         <summary>
           <span>
             <strong>Баланс</strong>
-            <small>Общий итог расчётов по каждому участнику.</small>
+            <small>Общий итог расчётов по каждому участнику</small>
           </span>
           <span aria-hidden="true">⌄</span>
         </summary>
@@ -114,7 +114,7 @@ export function GroupDetailsPage() {
               ))}
             </ul>
           ) : (
-            <p className={styles.muted}>По группе пока нет взаиморасчётов.</p>
+            <p className={styles.muted}>По группе пока нет взаиморасчётов</p>
           )}
         </div>
       </details>
@@ -160,7 +160,7 @@ export function GroupDetailsPage() {
               ))}
             </ul>
           ) : (
-            <p className={styles.muted}>Трат пока нет.</p>
+            <p className={styles.muted}>Трат пока нет</p>
           )}
         </div>
       </details>
@@ -217,14 +217,14 @@ export function GroupDetailsPage() {
       <section aria-labelledby="actions-heading" className={styles.actions}>
         <div className={styles.actionsHeading}>
           <h2 id="actions-heading">Действия</h2>
-          <p>Добавляйте операции и управляйте группой.</p>
+          <p>Добавляйте операции и управляйте группой</p>
         </div>
         <nav aria-label="Действия с группой" className={styles.actionList}>
           {canCreateExpense ? (
             <Link className={styles.actionPrimary} to={routes.createExpense(groupId)}>
               <span>
                 <strong>Новая трата</strong>
-                <small>Кто заплатил и как разделить сумму.</small>
+                <small>Кто заплатил и как разделить сумму</small>
               </span>
               <span aria-hidden="true">→</span>
             </Link>
@@ -233,7 +233,7 @@ export function GroupDetailsPage() {
             <Link className={styles.actionItem} to={routes.createPayment(groupId)}>
               <span>
                 <strong>Новый платёж</strong>
-                <small>Обычный перевод или погашение траты.</small>
+                <small>Обычный перевод или погашение траты</small>
               </span>
               <span aria-hidden="true">→</span>
             </Link>
@@ -242,7 +242,7 @@ export function GroupDetailsPage() {
             <Link className={styles.actionItem} to={routes.invite(groupId)}>
               <span>
                 <strong>Пригласить участника</strong>
-                <small>Создать ссылку для вступления в группу.</small>
+                <small>Создать ссылку для вступления в группу</small>
               </span>
               <span aria-hidden="true">→</span>
             </Link>
@@ -253,34 +253,34 @@ export function GroupDetailsPage() {
       <section aria-labelledby="sections-heading" className={styles.sections}>
         <div className={styles.actionsHeading}>
           <h2 id="sections-heading">Разделы группы</h2>
-          <p>Сводные результаты и настройки.</p>
+          <p>Сводные результаты и настройки</p>
         </div>
         <nav aria-label="Разделы группы" className={styles.navigation}>
           <Link className={styles.navigationItem} to={routes.transfers(groupId)}>
             <span>
               <strong>Итоговые переводы</strong>
-              <small>Кто кому и сколько нужно перевести по итогам.</small>
+              <small>Кто кому и сколько нужно перевести по итогам</small>
             </span>
             <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.members(groupId)}>
             <span>
               <strong>Участники</strong>
-              <small>Состав группы и доступы.</small>
+              <small>Состав группы и доступы</small>
             </span>
             <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.auditLog(groupId)}>
             <span>
               <strong>История</strong>
-              <small>Все изменения трат, платежей и участников.</small>
+              <small>Все изменения трат, платежей и участников</small>
             </span>
             <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.settings(groupId)}>
             <span>
               <strong>Настройки</strong>
-              <small>Параметры текущей группы.</small>
+              <small>Параметры текущей группы</small>
             </span>
             <span aria-hidden="true">›</span>
           </Link>

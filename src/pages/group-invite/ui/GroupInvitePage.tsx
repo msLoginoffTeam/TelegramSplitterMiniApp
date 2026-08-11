@@ -21,7 +21,7 @@ export function GroupInvitePage() {
       backTo={routes.group(groupId)}
       backLabel="К группе"
       title="Пригласить участника"
-      description="Одна ссылка работает до истечения срока и подходит для нескольких участников."
+      description="Одна ссылка работает до истечения срока и подходит для нескольких участников"
     >
       <button
         className={styles.primaryAction}

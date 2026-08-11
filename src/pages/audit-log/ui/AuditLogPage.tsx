@@ -29,7 +29,7 @@ export function AuditLogPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="История"
-        description="Откройте приложение из Telegram или настройте local development ID."
+        description="Откройте приложение из Telegram или настройте local development ID"
       />
     );
   }
@@ -49,7 +49,7 @@ export function AuditLogPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="История"
-        description="Не удалось загрузить историю."
+        description="Не удалось загрузить историю"
       >
         <button className={styles.retry} onClick={() => auditLogQuery.refetch()} type="button">
           Повторить
@@ -65,7 +65,7 @@ export function AuditLogPage() {
       backTo={routes.group(groupId)}
       backLabel="К группе"
       title="История"
-      description="Изменения трат, платежей и участников."
+      description="Изменения трат, платежей и участников"
     >
       {events.length ? (
         <ul className={styles.list}>
@@ -120,7 +120,7 @@ export function AuditLogPage() {
                         ))}
                       </dl>
                     ) : (
-                      <p className={styles.noChanges}>В этой записи нет отдельных полей.</p>
+                      <p className={styles.noChanges}>В этой записи нет отдельных полей</p>
                     )}
                     <details className={styles.technical}>
                       <summary>Технический ключ записи</summary>
@@ -133,7 +133,7 @@ export function AuditLogPage() {
           })}
         </ul>
       ) : (
-        <p className={styles.empty}>Пока нет записанных изменений.</p>
+        <p className={styles.empty}>Пока нет записанных изменений</p>
       )}
 
       {auditLogQuery.hasNextPage ? (

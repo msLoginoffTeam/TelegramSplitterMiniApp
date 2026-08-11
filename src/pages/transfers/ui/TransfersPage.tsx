@@ -23,7 +23,7 @@ export function TransfersPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Итоговые переводы"
-        description={canRequest ? 'Считаем итоговые переводы…' : 'Откройте приложение из Telegram.'}
+        description={canRequest ? 'Считаем итоговые переводы…' : 'Откройте приложение из Telegram'}
       />
     );
   }
@@ -34,7 +34,7 @@ export function TransfersPage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Итоговые переводы"
-        description="Не удалось рассчитать переводы."
+        description="Не удалось рассчитать переводы"
       >
         <button className={styles.retry} onClick={() => transfersQuery.refetch()} type="button">
           Повторить
@@ -50,12 +50,12 @@ export function TransfersPage() {
       backTo={routes.group(groupId)}
       backLabel="К группе"
       title="Итоговые переводы"
-      description="Минимальный набор переводов, чтобы закрыть все долги."
+      description="Минимальный набор переводов, чтобы закрыть все долги"
     >
       {transfers.length ? (
         <>
           <p className={styles.hint}>
-            После реального перевода отметьте его здесь — баланс группы обновится.
+            После реального перевода отметьте его здесь — баланс группы обновится
           </p>
           <ul className={styles.list}>
             {transfers.map((transfer) => (
@@ -87,7 +87,7 @@ export function TransfersPage() {
       ) : (
         <section className={styles.settled}>
           <h2>Все рассчитались</h2>
-          <p>Сейчас в группе нет долгов и дополнительных переводов не нужно.</p>
+          <p>Сейчас в группе нет долгов и дополнительных переводов не нужно</p>
           <Link className={styles.action} to={routes.createPayment(groupId)}>
             Добавить платёж
           </Link>

@@ -33,7 +33,7 @@ export function ExpenseCreatePage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Новая трата"
-        description="Не удалось загрузить участников группы."
+        description="Не удалось загрузить участников группы"
       />
     );
 
@@ -43,7 +43,7 @@ export function ExpenseCreatePage() {
       backTo={routes.group(groupId)}
       backLabel="К группе"
       title="Новая трата"
-      description="Заполните сумму и распределите её между участниками."
+      description="Заполните сумму и распределите её между участниками"
     >
       <ExpenseEditorForm
         currentUserId={dashboard.currentUserId}

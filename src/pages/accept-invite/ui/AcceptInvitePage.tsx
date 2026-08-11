@@ -23,7 +23,7 @@ export function AcceptInvitePage() {
   return (
     <PageLayout
       title="Приглашение в группу"
-      description={isError ? 'Ссылка недействительна или уже истекла.' : 'Добавляем вас в группу…'}
+      description={isError ? 'Ссылка недействительна или уже истекла' : 'Добавляем вас в группу…'}
     />
   );
 }

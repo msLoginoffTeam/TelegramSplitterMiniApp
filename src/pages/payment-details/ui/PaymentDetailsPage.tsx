@@ -25,7 +25,7 @@ export function PaymentDetailsPage() {
         backTo={routes.payments(groupId)}
         backLabel="К платежам"
         title="Платёж"
-        description={canRequest ? 'Загружаем платёж…' : 'Откройте приложение из Telegram.'}
+        description={canRequest ? 'Загружаем платёж…' : 'Откройте приложение из Telegram'}
       />
     );
   }
@@ -38,7 +38,7 @@ export function PaymentDetailsPage() {
         backTo={routes.payments(groupId)}
         backLabel="К платежам"
         title="Платёж"
-        description="Платёж не найден или больше недоступен."
+        description="Платёж не найден или больше недоступен"
       />
     );
   }
@@ -83,7 +83,7 @@ function PaymentDetailsContent({
       <section className={styles.details}>
         <p>{expenseTitle ? `Погашение: ${expenseTitle}` : 'Просто перевод'}</p>
         {payment.description ? <p className={styles.description}>{payment.description}</p> : null}
-        <small>Платёж создан {payment.timestamp.toLocaleString('ru-RU')}.</small>
+        <small>Платёж создан {payment.timestamp.toLocaleString('ru-RU')}</small>
       </section>
 
       {canDelete ? (

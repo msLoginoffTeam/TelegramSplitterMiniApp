@@ -29,7 +29,7 @@ export function PaymentCreatePage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Новый платёж"
-        description="Откройте приложение из Telegram или настройте local development ID."
+        description="Откройте приложение из Telegram или настройте local development ID"
       />
     );
   }
@@ -49,7 +49,7 @@ export function PaymentCreatePage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Новый платёж"
-        description="Не удалось загрузить данные группы."
+        description="Не удалось загрузить данные группы"
       />
     );
   }
@@ -64,7 +64,7 @@ export function PaymentCreatePage() {
         backTo={routes.group(groupId)}
         backLabel="К группе"
         title="Платёж к трате"
-        description="Трата не найдена или больше недоступна."
+        description="Трата не найдена или больше недоступна"
       />
     );
   }

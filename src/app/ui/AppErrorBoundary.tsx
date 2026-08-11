@@ -20,7 +20,7 @@ export class AppErrorBoundary extends Component<PropsWithChildren, AppErrorBound
       return (
         <main>
           <h1>Не удалось открыть приложение</h1>
-          <p>Попробуйте открыть его ещё раз.</p>
+          <p>Попробуйте открыть его ещё раз</p>
         </main>
       );
     }
