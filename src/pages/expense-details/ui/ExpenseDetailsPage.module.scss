@@ -226,6 +226,56 @@
   color: var(--color-danger);
 }
 
+.deleteSection {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.deleteConfirmation {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-danger);
+  border-radius: 1rem;
+  background: var(--color-surface);
+}
+
+.deleteConfirmation > p,
+.deleteConfirmation > ul {
+  margin: 0;
+}
+
+.deleteConfirmation > ul {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: 1.15rem;
+  color: var(--color-hint);
+}
+
+.deleteHint {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.deleteActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.deleteActions > button:not(.dangerAction) {
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 700;
+}
+
+.deleteActions .dangerAction {
+  width: 100%;
+}
+
 .backLink {
   color: var(--color-accent);
 }

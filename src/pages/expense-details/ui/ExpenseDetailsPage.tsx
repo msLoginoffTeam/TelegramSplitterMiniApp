@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { useExpenseQuery } from '@/entities/expense';
@@ -35,6 +36,8 @@ export function ExpenseDetailsPage() {
   const updateExpense = useUpdateExpense(groupId ?? '', expenseId ?? '');
   const updateShareSettlement = useUpdateExpenseShareSettlement(groupId ?? '', expenseId ?? '');
   const deleteExpense = useDeleteExpense(groupId ?? '', expenseId ?? '');
+  const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState<string>();
 
   if (!groupId || !expenseId) return null;
   if (!canRequest) {
@@ -276,18 +279,71 @@ export function ExpenseDetailsPage() {
       </section>
 
       {canDelete ? (
-        <button
-          className={styles.dangerAction}
-          disabled={deleteExpense.isPending}
-          onClick={async () => {
-            if (!window.confirm('Удалить эту трату?')) return;
-            await deleteExpense.mutateAsync();
-            navigate(routes.group(groupId), { replace: true });
-          }}
-          type="button"
-        >
-          {deleteExpense.isPending ? 'Удаляем…' : 'Удалить трату'}
-        </button>
+        <section className={styles.deleteSection}>
+          {isDeleteConfirmationOpen ? (
+            <div className={styles.deleteConfirmation}>
+              <strong>Удалить трату?</strong>
+              {payments.length ? (
+                <>
+                  <p>Также будут скрыты связанные платежи:</p>
+                  <ul>
+                    {payments.map((payment) => (
+                      <li key={payment.id}>
+                        {payment.fromUserId === dashboard.currentUserId
+                          ? 'Вы'
+                          : payment.fromDisplayName}{' '}
+                        →{' '}
+                        {payment.toUserId === dashboard.currentUserId
+                          ? 'вы'
+                          : payment.toDisplayName}{' '}
+                        · {formatRubles(payment.amount)}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p>Связанных платежей нет.</p>
+              )}
+              <p className={styles.deleteHint}>
+                Трата и эти платежи перестанут участвовать в балансах и итоговых переводах.
+              </p>
+              {deleteError ? <p className={styles.error}>{deleteError}</p> : null}
+              <div className={styles.deleteActions}>
+                <button
+                  disabled={deleteExpense.isPending}
+                  onClick={() => setDeleteConfirmationOpen(false)}
+                  type="button"
+                >
+                  Отмена
+                </button>
+                <button
+                  className={styles.dangerAction}
+                  disabled={deleteExpense.isPending}
+                  onClick={async () => {
+                    setDeleteError(undefined);
+                    try {
+                      await deleteExpense.mutateAsync();
+                      navigate(routes.group(groupId), { replace: true });
+                    } catch {
+                      setDeleteError('Не удалось удалить трату. Попробуйте ещё раз.');
+                    }
+                  }}
+                  type="button"
+                >
+                  {deleteExpense.isPending ? 'Удаляем…' : 'Подтвердить удаление'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              className={styles.dangerAction}
+              onClick={() => setDeleteConfirmationOpen(true)}
+              type="button"
+            >
+              Удалить трату
+            </button>
+          )}
+        </section>
       ) : null}
       <Link className={styles.backLink} to={routes.group(groupId)}>
         Вернуться к группе

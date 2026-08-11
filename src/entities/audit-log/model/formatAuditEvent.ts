@@ -16,6 +16,8 @@ const fieldLabels: Record<string, string> = {
   Title: 'Название',
   TotalAmount: 'Общая сумма',
   Amount: 'Сумма',
+  Description: 'Комментарий',
+  Timestamp: 'Время платежа',
   Members: 'Участники',
   Permissions: 'Права',
   Role: 'Роль',
@@ -32,6 +34,8 @@ const fieldLabels: Record<string, string> = {
   MemberUserName: 'Участник',
   Participant: 'Участник',
   IsManuallySettled: 'Ручное закрытие',
+  IsDeleted: 'Статус',
+  DeletedAtUtc: 'Дата удаления',
   ExpenseTitle: 'Трата',
   FromParticipant: 'Отправитель',
   ToParticipant: 'Получатель',
@@ -62,6 +66,8 @@ const contextFieldNames = new Set([
   'Author',
 ]);
 
+const technicalFieldNames = new Set(['DeletedWithExpenseId']);
+
 export function formatAuditEvent(event: AuditLogEvent): AuditEventPresentation {
   return { title: getTitle(event), details: getDetails(event) };
 }
@@ -70,7 +76,11 @@ export function getAuditFieldChanges(event: AuditLogEvent): AuditFieldChange[] {
   const keys = new Set([...Object.keys(event.oldValues), ...Object.keys(event.newValues)]);
 
   return [...keys]
-    .filter((key) => !isDuplicateIdentifier(key, event.oldValues, event.newValues))
+    .filter(
+      (key) =>
+        !technicalFieldNames.has(key) &&
+        !isDuplicateIdentifier(key, event.oldValues, event.newValues),
+    )
     .sort((first, second) => getFieldLabel(first).localeCompare(getFieldLabel(second), 'ru'))
     .map((key) =>
       contextFieldNames.has(key)
@@ -111,7 +121,7 @@ function getTitle(event: AuditLogEvent): string {
     case 'Expense':
       if (event.operation === 'Added')
         return title ? `Добавлена трата «${title}»` : 'Добавлена трата';
-      if (event.operation === 'Deleted')
+      if (event.operation === 'Deleted' || wasSoftDeleted(event))
         return title ? `Удалена трата «${title}»` : 'Удалена трата';
       return title ? `Изменена трата «${title}»` : 'Изменена трата';
     case 'ExpenseShare':
@@ -168,7 +178,7 @@ function formatPaymentTitle(event: AuditLogEvent): string {
   const to = asText(event.newValues.ToParticipant) ?? asText(event.oldValues.ToParticipant);
   const expenseTitle = asText(event.newValues.ExpenseTitle) ?? asText(event.oldValues.ExpenseTitle);
   const action =
-    event.operation === 'Deleted'
+    event.operation === 'Deleted' || wasSoftDeleted(event)
       ? 'Удалён платёж'
       : event.operation === 'Added'
         ? 'Добавлен платёж'
@@ -215,13 +225,16 @@ function formatValue(value: unknown, key: string): string | undefined {
   if (value === undefined) return undefined;
   if (value === null) return '—';
   if (Array.isArray(value)) return value.map((item) => formatValue(item, key) ?? '—').join(', ');
-  if (typeof value === 'boolean') return value ? 'Да' : 'Нет';
+  if (typeof value === 'boolean') {
+    if (key === 'IsDeleted') return value ? 'Удалено' : 'Активно';
+    return value ? 'Да' : 'Нет';
+  }
   if (typeof value === 'number') {
     return key === 'Amount' || key === 'TotalAmount'
       ? `${new Intl.NumberFormat('ru-RU').format(value)} ₽`
       : String(value);
   }
-  if (typeof value === 'string' && key.endsWith('AtUtc')) {
+  if (typeof value === 'string' && (key.endsWith('AtUtc') || key === 'Timestamp')) {
     const date = new Date(value);
     if (!Number.isNaN(date.getTime())) return date.toLocaleString('ru-RU');
   }
@@ -239,4 +252,8 @@ function getTextList(value: unknown): string[] | undefined {
     (item): item is string => typeof item === 'string' && Boolean(item.trim()),
   );
   return values.length ? values : undefined;
+}
+
+function wasSoftDeleted(event: AuditLogEvent): boolean {
+  return event.newValues.IsDeleted === true && event.oldValues.IsDeleted !== true;
 }
