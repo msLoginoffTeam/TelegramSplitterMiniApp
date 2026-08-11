@@ -1,0 +1,64 @@
+.page {
+  display: grid;
+  min-height: var(--app-viewport-height, 100dvh);
+  place-items: center;
+  padding: calc(var(--safe-area-top) + var(--space-5)) var(--space-5)
+    calc(var(--safe-area-bottom) + var(--space-5));
+}
+
+.card {
+  display: grid;
+  width: min(100%, 28rem);
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background: var(--color-surface);
+}
+
+.brand {
+  color: var(--color-accent);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.card h1,
+.card p {
+  margin: 0;
+}
+
+.card h1 {
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  letter-spacing: -0.04em;
+}
+
+.card p {
+  color: var(--color-hint);
+  line-height: 1.5;
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.actions button,
+.actions a {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.actions button {
+  border: 0;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.actions a {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}

@@ -26,9 +26,10 @@ export function useGroupOverviewState(groupId: string) {
   }, [state, storageKey]);
 
   const onToggle = (section: OverviewSection) => (event: SyntheticEvent<HTMLDetailsElement>) => {
+    const isOpen = event.currentTarget.open;
     setState((current) => ({
       ...current,
-      [section]: event.currentTarget.open,
+      [section]: isOpen,
     }));
   };
 

@@ -17,6 +17,7 @@ import { PaymentDetailsPage } from '@/pages/payment-details';
 import { PaymentsPage } from '@/pages/payments';
 import { AuditLogPage } from '@/pages/audit-log';
 import { TransfersPage } from '@/pages/transfers';
+import { AppErrorPage } from '@/pages/app-error';
 
 function IndexRedirect() {
   const platform = usePlatform();
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <AppShell />,
+    errorElement: <AppErrorPage />,
     children: [
       { index: true, element: <IndexRedirect /> },
       { path: 'groups', element: <GroupsPage /> },
