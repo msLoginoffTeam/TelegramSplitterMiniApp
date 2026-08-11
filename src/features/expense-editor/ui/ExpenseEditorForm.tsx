@@ -32,8 +32,13 @@ export function ExpenseEditorForm({
   onSave,
 }: ExpenseEditorFormProps) {
   const initialPayerId = initialValues?.payerId ?? currentUserId ?? members[0]?.userId ?? '';
-  const initialParticipantIds =
-    initialValues?.participantIds ?? members.map((member) => member.userId);
+  const initialParticipantIds = Array.from(
+    new Set(
+      initialValues?.participantIds
+        ? [...initialValues.participantIds, initialPayerId]
+        : members.map((member) => member.userId),
+    ),
+  );
   const [title, setTitle] = useState(initialValues?.title ?? '');
   const [description, setDescription] = useState(initialValues?.description ?? '');
   const [totalInput, setTotalInput] = useState(
