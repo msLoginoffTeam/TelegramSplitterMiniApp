@@ -91,7 +91,7 @@ export function GroupDetailsPage() {
         <summary>
           <span>
             <strong>Баланс</strong>
-            <small>Кто кому должен сейчас</small>
+            <small>Общий итог расчётов по каждому участнику.</small>
           </span>
           <span aria-hidden="true">⌄</span>
         </summary>
@@ -114,7 +114,7 @@ export function GroupDetailsPage() {
               ))}
             </ul>
           ) : (
-            <p className={styles.muted}>Пока никто никому не должен.</p>
+            <p className={styles.muted}>По группе пока нет взаиморасчётов.</p>
           )}
         </div>
       </details>
@@ -222,20 +222,29 @@ export function GroupDetailsPage() {
         <nav aria-label="Действия с группой" className={styles.actionList}>
           {canCreateExpense ? (
             <Link className={styles.actionPrimary} to={routes.createExpense(groupId)}>
-              <strong>Новая трата</strong>
-              <small>Кто заплатил и как разделить сумму.</small>
+              <span>
+                <strong>Новая трата</strong>
+                <small>Кто заплатил и как разделить сумму.</small>
+              </span>
+              <span aria-hidden="true">→</span>
             </Link>
           ) : null}
           {canCreatePayment ? (
             <Link className={styles.actionItem} to={routes.createPayment(groupId)}>
-              <strong>Новый платёж</strong>
-              <small>Обычный перевод или погашение траты.</small>
+              <span>
+                <strong>Новый платёж</strong>
+                <small>Обычный перевод или погашение траты.</small>
+              </span>
+              <span aria-hidden="true">→</span>
             </Link>
           ) : null}
           {canManageMembers ? (
             <Link className={styles.actionItem} to={routes.invite(groupId)}>
-              <strong>Пригласить участника</strong>
-              <small>Создать ссылку для вступления в группу.</small>
+              <span>
+                <strong>Пригласить участника</strong>
+                <small>Создать ссылку для вступления в группу.</small>
+              </span>
+              <span aria-hidden="true">→</span>
             </Link>
           ) : null}
         </nav>
@@ -248,20 +257,32 @@ export function GroupDetailsPage() {
         </div>
         <nav aria-label="Разделы группы" className={styles.navigation}>
           <Link className={styles.navigationItem} to={routes.transfers(groupId)}>
-            <strong>Итоговые переводы</strong>
-            <small>Кто кому должен перевести по итогам.</small>
+            <span>
+              <strong>Итоговые переводы</strong>
+              <small>Кто кому и сколько нужно перевести по итогам.</small>
+            </span>
+            <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.members(groupId)}>
-            <strong>Участники</strong>
-            <small>Состав группы и доступы.</small>
+            <span>
+              <strong>Участники</strong>
+              <small>Состав группы и доступы.</small>
+            </span>
+            <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.auditLog(groupId)}>
-            <strong>История</strong>
-            <small>Все изменения трат, платежей и участников.</small>
+            <span>
+              <strong>История</strong>
+              <small>Все изменения трат, платежей и участников.</small>
+            </span>
+            <span aria-hidden="true">›</span>
           </Link>
           <Link className={styles.navigationItem} to={routes.settings(groupId)}>
-            <strong>Настройки</strong>
-            <small>Параметры текущей группы.</small>
+            <span>
+              <strong>Настройки</strong>
+              <small>Параметры текущей группы.</small>
+            </span>
+            <span aria-hidden="true">›</span>
           </Link>
         </nav>
       </section>

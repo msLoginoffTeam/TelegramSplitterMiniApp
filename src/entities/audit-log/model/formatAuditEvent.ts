@@ -33,7 +33,7 @@ const fieldLabels: Record<string, string> = {
   UserName: 'Участник',
   MemberUserName: 'Участник',
   Participant: 'Участник',
-  IsManuallySettled: 'Ручное закрытие',
+  IsManuallySettled: 'Отметка об оплате',
   IsDeleted: 'Статус',
   DeletedAtUtc: 'Дата удаления',
   ExpenseTitle: 'Трата',
@@ -159,7 +159,9 @@ function formatShareTitle(event: AuditLogEvent): string {
   const manualSettlement = event.newValues.IsManuallySettled;
 
   if (typeof manualSettlement === 'boolean') {
-    const action = manualSettlement ? 'Вручную закрыта доля' : 'Доля снова считается долгом';
+    const action = manualSettlement
+      ? 'Доля отмечена как оплаченная'
+      : 'Доля снова считается неоплаченной';
     return context ? `${action} ${context}` : action;
   }
 

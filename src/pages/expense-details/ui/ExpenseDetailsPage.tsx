@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { useExpenseQuery } from '@/entities/expense';
@@ -38,6 +38,15 @@ export function ExpenseDetailsPage() {
   const deleteExpense = useDeleteExpense(groupId ?? '', expenseId ?? '');
   const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string>();
+  const [isEditorOpen, setEditorOpen] = useState(false);
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState<string>();
+
+  useEffect(() => {
+    if (!saveSuccessMessage) return;
+
+    const timeoutId = window.setTimeout(() => setSaveSuccessMessage(undefined), 3_000);
+    return () => window.clearTimeout(timeoutId);
+  }, [saveSuccessMessage]);
 
   if (!groupId || !expenseId) return null;
   if (!canRequest) {
@@ -155,7 +164,11 @@ export function ExpenseDetailsPage() {
       </section>
       {expense.description ? <p className={styles.description}>{expense.description}</p> : null}
       {canEdit ? (
-        <details className={styles.editor}>
+        <details
+          className={styles.editor}
+          onToggle={(event) => setEditorOpen(event.currentTarget.open)}
+          open={isEditorOpen}
+        >
           <summary>Редактировать трату</summary>
           <ExpenseEditorForm
             currentUserId={dashboard.currentUserId}
@@ -164,6 +177,8 @@ export function ExpenseDetailsPage() {
             onSave={async (input) => {
               await updateExpense.mutateAsync(input);
               platform.impact('light');
+              setEditorOpen(false);
+              setSaveSuccessMessage('Изменения сохранены');
             }}
             submitLabel="Сохранить изменения"
           />
@@ -173,7 +188,7 @@ export function ExpenseDetailsPage() {
       <section className={styles.section}>
         <h2>Распределение</h2>
         <p className={styles.settlementHint}>
-          Ручное закрытие меняет только статус этой траты, а не общий баланс группы.
+          Отметка об оплате меняет только статус этой траты, а не общий баланс группы.
         </p>
         <ul className={styles.shareList}>
           {expense.shares.map((share) => {
@@ -192,7 +207,7 @@ export function ExpenseDetailsPage() {
                   ? `Оплачено ${formatRubles(paidAmount)} · переплата ${formatRubles(share.overpaymentAmount)}`
                   : 'Оплачено платежами'
                 : share.isManuallySettled
-                  ? 'Закрыто вручную'
+                  ? 'Отмечено оплаченным'
                   : `Осталось оплатить ${formatRubles(share.amount)}`;
 
             return (
@@ -229,7 +244,7 @@ export function ExpenseDetailsPage() {
                         }
                         type="button"
                       >
-                        {share.isManuallySettled ? 'Вернуть в долг' : 'Закрыть вручную'}
+                        {share.isManuallySettled ? 'Считать неоплаченной' : 'Пометить оплаченным'}
                       </button>
                     ) : null}
                     {canCreateSharePayment ? (
@@ -240,7 +255,7 @@ export function ExpenseDetailsPage() {
                           amount: remainingAmount,
                         })}
                       >
-                        Погасить
+                        Создать платёж →
                       </Link>
                     ) : null}
                   </div>
@@ -345,9 +360,11 @@ export function ExpenseDetailsPage() {
           )}
         </section>
       ) : null}
-      <Link className={styles.backLink} to={routes.group(groupId)}>
-        Вернуться к группе
-      </Link>
+      {saveSuccessMessage ? (
+        <p aria-live="polite" className={styles.successToast} role="status">
+          {saveSuccessMessage}
+        </p>
+      ) : null}
     </PageLayout>
   );
 }

@@ -52,6 +52,14 @@ export function AppShell() {
     };
   }, [location.hash, location.pathname, location.search, navigate, platform]);
 
+  useEffect(() => {
+    if (location.pathname === routes.groups) {
+      return;
+    }
+
+    return platform.bindBackButton(() => navigate(-1));
+  }, [location.pathname, navigate, platform]);
+
   return (
     <main className={styles.shell}>
       <header className={styles.header}>

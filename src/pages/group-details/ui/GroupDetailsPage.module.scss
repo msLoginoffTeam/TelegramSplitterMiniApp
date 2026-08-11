@@ -197,12 +197,27 @@
 }
 
 .actionPrimary,
-.actionItem,
-.navigationItem {
-  display: grid;
-  gap: 0.25rem;
+.actionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   padding: var(--space-4);
   border-radius: 1rem;
+}
+
+.actionPrimary > span:first-child,
+.actionItem > span:first-child,
+.navigationItem > span:first-child {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.actionPrimary > span:last-child,
+.actionItem > span:last-child {
+  flex: none;
+  font-size: 1.35rem;
 }
 
 .actionPrimary {
@@ -215,12 +230,37 @@
 }
 
 .actionItem,
-.navigationItem {
+.navigation {
   border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  overflow: hidden;
   background: var(--color-surface);
+}
+
+.actionItem {
+  background: var(--color-surface-raised);
   color: var(--color-text);
 }
 
-.navigationItem strong {
-  color: var(--color-accent);
+.navigation {
+  gap: 0;
+}
+
+.navigationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  color: var(--color-text);
+}
+
+.navigationItem + .navigationItem {
+  border-top: 1px solid var(--color-border);
+}
+
+.navigationItem > span:last-child {
+  flex: none;
+  color: var(--color-hint);
+  font-size: 1.45rem;
 }

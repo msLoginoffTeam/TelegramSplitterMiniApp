@@ -142,10 +142,10 @@
 
 .settlementAction {
   padding: 0.45rem 0.6rem;
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--color-border);
   border-radius: 0.6rem;
-  background: transparent;
-  color: var(--color-accent);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
   font: inherit;
   font-size: var(--font-size-caption);
   font-weight: 700;
@@ -153,9 +153,10 @@
 
 .sharePaymentAction {
   padding: 0.45rem 0.6rem;
+  border: 1px solid var(--color-border);
   border-radius: 0.6rem;
-  background: var(--color-accent);
-  color: var(--color-on-accent);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
   font-size: var(--font-size-caption);
   font-weight: 700;
 }
@@ -205,8 +206,7 @@
 }
 
 .action,
-.dangerAction,
-.backLink {
+.dangerAction {
   width: fit-content;
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
@@ -276,6 +276,22 @@
   width: 100%;
 }
 
-.backLink {
-  color: var(--color-accent);
+.successToast {
+  position: fixed;
+  z-index: 10;
+  right: var(--space-4);
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  left: var(--space-4);
+  width: fit-content;
+  max-width: min(30rem, calc(100vw - var(--space-8)));
+  margin: 0 auto;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 28%);
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+  text-align: center;
 }
