@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { groupPermissions, useGroupDashboardQuery } from '@/entities/group';
 import { useGroupPaymentsQuery } from '@/entities/payment';
+import { useGroupOverviewState } from '../model/useGroupOverviewState';
 import { routes } from '@/shared/config/routes';
 import { getRuntimeConfig } from '@/shared/config/runtimeConfig';
 import { formatRubles } from '@/shared/lib/money';
@@ -21,6 +22,7 @@ export function GroupDetailsPage() {
     platform.kind === 'telegram' ? Boolean(platform.getInitData()) : hasDevelopmentIdentity;
   const dashboardQuery = useGroupDashboardQuery(groupId, canRequestGroup);
   const paymentsQuery = useGroupPaymentsQuery(groupId, canRequestGroup);
+  const overview = useGroupOverviewState(groupId);
 
   if (!canRequestGroup) {
     return (
@@ -81,7 +83,11 @@ export function GroupDetailsPage() {
       title={dashboard.title}
       description={`${dashboard.members.length} ${dashboard.members.length === 1 ? 'участник' : 'участника'}`}
     >
-      <details className={styles.overview} open>
+      <details
+        className={styles.overview}
+        onToggle={overview.onToggle('balance')}
+        open={overview.state.balance}
+      >
         <summary>
           <span>
             <strong>Баланс</strong>
@@ -113,7 +119,11 @@ export function GroupDetailsPage() {
         </div>
       </details>
 
-      <details className={styles.overview}>
+      <details
+        className={styles.overview}
+        onToggle={overview.onToggle('expenses')}
+        open={overview.state.expenses}
+      >
         <summary>
           <span>
             <strong>Траты</strong>
@@ -148,7 +158,11 @@ export function GroupDetailsPage() {
         </div>
       </details>
 
-      <details className={styles.overview}>
+      <details
+        className={styles.overview}
+        onToggle={overview.onToggle('payments')}
+        open={overview.state.payments}
+      >
         <summary>
           <span>
             <strong>Платежи</strong>

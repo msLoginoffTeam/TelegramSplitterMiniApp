@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { routes } from '@/shared/config/routes';
@@ -63,6 +63,9 @@ export function AppShell() {
         </span>
       </header>
       <Outlet />
+      <ScrollRestoration
+        getKey={(scrollLocation) => `${scrollLocation.pathname}${scrollLocation.search}`}
+      />
     </main>
   );
 }
