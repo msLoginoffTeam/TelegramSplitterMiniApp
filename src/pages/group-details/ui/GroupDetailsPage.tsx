@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { groupPermissions, useGroupDashboardQuery } from '@/entities/group';
@@ -9,8 +10,26 @@ import { formatRubles } from '@/shared/lib/money';
 import { PageLayout } from '@/shared/ui';
 import styles from '@/pages/group-details/ui/GroupDetailsPage.module.scss';
 
+type ExpenseSort =
+  | 'created-desc'
+  | 'created-asc'
+  | 'title-asc'
+  | 'title-desc'
+  | 'amount-desc'
+  | 'amount-asc';
+
+const expenseSortOptions: ReadonlyArray<{ value: ExpenseSort; label: string }> = [
+  { value: 'created-desc', label: 'По дате: сначала новые' },
+  { value: 'created-asc', label: 'По дате: сначала старые' },
+  { value: 'title-asc', label: 'По названию: А → Я' },
+  { value: 'title-desc', label: 'По названию: Я → А' },
+  { value: 'amount-desc', label: 'По сумме: сначала больше' },
+  { value: 'amount-asc', label: 'По сумме: сначала меньше' },
+];
+
 export function GroupDetailsPage() {
   const { groupId } = useParams();
+  const [expenseSort, setExpenseSort] = useState<ExpenseSort>('created-desc');
 
   if (!groupId) {
     return null;
@@ -75,6 +94,22 @@ export function GroupDetailsPage() {
   const recentPayments = [...(paymentsQuery.data ?? [])]
     .sort((first, second) => second.timestamp.getTime() - first.timestamp.getTime())
     .slice(0, 3);
+  const sortedExpenses = [...dashboard.expenses].sort((first, second) => {
+    switch (expenseSort) {
+      case 'created-asc':
+        return first.createdAt.getTime() - second.createdAt.getTime();
+      case 'title-asc':
+        return first.title.localeCompare(second.title, 'ru');
+      case 'title-desc':
+        return second.title.localeCompare(first.title, 'ru');
+      case 'amount-desc':
+        return second.totalAmount - first.totalAmount;
+      case 'amount-asc':
+        return first.totalAmount - second.totalAmount;
+      case 'created-desc':
+        return second.createdAt.getTime() - first.createdAt.getTime();
+    }
+  });
 
   return (
     <PageLayout
@@ -133,32 +168,47 @@ export function GroupDetailsPage() {
         </summary>
         <div className={styles.overviewBody}>
           {dashboard.expenses.length ? (
-            <ul className={styles.expenseList}>
-              {dashboard.expenses.map((expense) => (
-                <li key={expense.id}>
-                  <Link className={styles.expenseLink} to={routes.expense(groupId, expense.id)}>
-                    <div>
-                      <strong className={styles.expenseTitle}>
-                        {expense.title}
-                        {expense.isDraft ? (
-                          <span
-                            className={styles.draftBadge}
-                            title="Черновик не учитывается в балансах и итоговых переводах."
-                          >
-                            Черновик
-                          </span>
-                        ) : expense.isSettled ? (
-                          <span className={styles.settledBadge}>✓ Закрыта</span>
-                        ) : null}
-                      </strong>
-                      {expense.description ? <span>{expense.description}</span> : null}
-                      <span>Заплатил {expense.payerName}</span>
-                    </div>
-                    <b>{formatRubles(expense.totalAmount)}</b>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <>
+              <label className={styles.expenseSort}>
+                <span>Сортировка</span>
+                <select
+                  onChange={(event) => setExpenseSort(event.target.value as ExpenseSort)}
+                  value={expenseSort}
+                >
+                  {expenseSortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <ul className={styles.expenseList}>
+                {sortedExpenses.map((expense) => (
+                  <li key={expense.id}>
+                    <Link className={styles.expenseLink} to={routes.expense(groupId, expense.id)}>
+                      <div>
+                        <strong className={styles.expenseTitle}>
+                          {expense.title}
+                          {expense.isDraft ? (
+                            <span
+                              className={styles.draftBadge}
+                              title="Черновик не учитывается в балансах и итоговых переводах"
+                            >
+                              Черновик
+                            </span>
+                          ) : expense.isSettled ? (
+                            <span className={styles.settledBadge}>✓ Закрыта</span>
+                          ) : null}
+                        </strong>
+                        {expense.description ? <span>{expense.description}</span> : null}
+                        <span>Заплатил {expense.payerName}</span>
+                      </div>
+                      <b>{formatRubles(expense.totalAmount)}</b>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
           ) : (
             <p className={styles.muted}>Трат пока нет</p>
           )}
