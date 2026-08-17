@@ -167,6 +167,9 @@ export function GroupDetailsPage() {
           <span aria-hidden="true">⌄</span>
         </summary>
         <div className={styles.overviewBody}>
+          <Link className={styles.memberExpensesLink} to={routes.memberExpenses(groupId)}>
+            Траты по участнику <span aria-hidden="true">→</span>
+          </Link>
           {dashboard.expenses.length ? (
             <>
               <label className={styles.expenseSort}>

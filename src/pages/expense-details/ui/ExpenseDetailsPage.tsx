@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { useExpenseQuery } from '@/entities/expense';
 import { groupPermissions, useGroupDashboardQuery } from '@/entities/group';
@@ -17,6 +17,7 @@ import styles from './ExpenseDetailsPage.module.scss';
 export function ExpenseDetailsPage() {
   const { groupId, expenseId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const platform = usePlatform();
   const canRequest =
     platform.kind === 'telegram'
@@ -49,10 +50,15 @@ export function ExpenseDetailsPage() {
   }, [saveSuccessMessage]);
 
   if (!groupId || !expenseId) return null;
+  const returnTo = (location.state as { returnTo?: unknown } | null)?.returnTo;
+  const backTo =
+    typeof returnTo === 'string' && returnTo.startsWith(`${routes.memberExpenses(groupId)}?`)
+      ? returnTo
+      : routes.group(groupId);
   if (!canRequest) {
     return (
       <PageLayout
-        backTo={routes.group(groupId)}
+        backTo={backTo}
         backLabel="К группе"
         title="Трата"
         description="Откройте приложение из Telegram или настройте local development ID"
@@ -62,7 +68,7 @@ export function ExpenseDetailsPage() {
   if (expenseQuery.isPending || dashboardQuery.isPending || paymentsQuery.isPending) {
     return (
       <PageLayout
-        backTo={routes.group(groupId)}
+        backTo={backTo}
         backLabel="К группе"
         title="Трата"
         description="Загружаем данные…"
@@ -78,7 +84,7 @@ export function ExpenseDetailsPage() {
   ) {
     return (
       <PageLayout
-        backTo={routes.group(groupId)}
+        backTo={backTo}
         backLabel="К группе"
         title="Трата"
         description="Не удалось загрузить трату"
@@ -132,7 +138,7 @@ export function ExpenseDetailsPage() {
 
   return (
     <PageLayout
-      backTo={routes.group(groupId)}
+      backTo={backTo}
       backLabel="К группе"
       title={expense.title}
       description={`${formatRubles(expense.totalAmount)} · заплатил ${expense.payerName}`}
@@ -338,7 +344,7 @@ export function ExpenseDetailsPage() {
                     setDeleteError(undefined);
                     try {
                       await deleteExpense.mutateAsync();
-                      navigate(routes.group(groupId), { replace: true });
+                      navigate(backTo, { replace: true });
                     } catch {
                       setDeleteError('Не удалось удалить трату. Попробуйте ещё раз.');
                     }

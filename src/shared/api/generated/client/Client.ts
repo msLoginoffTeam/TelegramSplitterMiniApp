@@ -342,7 +342,7 @@ function processHealth(response: AxiosResponse): Promise<void> {
 }
 
 /**
- * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
+ * Retrieves all expenses in the group, including unfinished drafts.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
@@ -863,7 +863,7 @@ function processParticipantsAll(response: AxiosResponse): Promise<Types.ExpenseS
 }
 
 /**
- * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * Adds an explicit participant share to the expense.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param body (optional) Share details of the new participant.
@@ -991,7 +991,7 @@ function processParticipantsPUT(response: AxiosResponse): Promise<void> {
 }
 
 /**
- * Removes a participant from an expense and reallocates their share to the payer.
+ * Removes a participant share from an expense. The expense may become a draft.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
@@ -1548,6 +1548,79 @@ function processGroupsDELETE(response: AxiosResponse): Promise<void> {
         return throwException("Error", status, _responseText, _headers, resultdefault);
 
     }
+}
+
+/**
+ * Retrieves expenses where a selected group member paid or has a share.
+ * @param involvement (optional)
+ * @return OK
+ */
+export function expensesAll2(groupId: string, userId: string, involvement?: Types.MemberExpenseInvolvement | undefined, config?: AxiosRequestConfig | undefined): Promise<Types.MemberExpenseResponseDto[]> {
+    let url_ = getBaseUrl() + "/api/groups/{groupId}/users/{userId}/expenses?";
+    if (groupId === undefined || groupId === null)
+      throw new Error("The parameter 'groupId' must be defined.");
+    url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+    if (userId === undefined || userId === null)
+      throw new Error("The parameter 'userId' must be defined.");
+    url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+    if (involvement === null)
+        throw new Error("The parameter 'involvement' cannot be null.");
+    else if (involvement !== undefined)
+        url_ += "involvement=" + encodeURIComponent("" + involvement) + "&";
+      url_ = url_.replace(/[?&]$/, "");
+
+    let options_: AxiosRequestConfig = {
+        ..._requestConfigExpensesAll2,
+        ...config,
+        method: "GET",
+        url: url_,
+        headers: {
+            ..._requestConfigExpensesAll2?.headers,
+            "Accept": "text/plain",
+            ...config?.headers,
+        }
+    };
+
+    return getAxios().request(options_).catch((_error: any) => {
+        if (isAxiosError(_error) && _error.response) {
+            return _error.response;
+        } else {
+            throw _error;
+        }
+    }).then((_response: AxiosResponse) => {
+        return processExpensesAll2(_response);
+    });
+}
+
+function processExpensesAll2(response: AxiosResponse): Promise<Types.MemberExpenseResponseDto[]> {
+    const status = response.status;
+    let _headers: any = {};
+    if (response.headers && typeof response.headers === "object") {
+        for (let k in response.headers) {
+            if (response.headers.hasOwnProperty(k)) {
+                _headers[k] = response.headers[k];
+            }
+        }
+    }
+    if (status === 200) {
+        const _responseText = response.data;
+        let result200: any = null;
+        let resultData200  = _responseText;
+        if (Array.isArray(resultData200)) {
+            result200 = [] as any;
+            for (let item of resultData200)
+                result200!.push(Types.MemberExpenseResponseDto.fromJS(item));
+        }
+        else {
+            result200 = <any>null;
+        }
+        return Promise.resolve<Types.MemberExpenseResponseDto[]>(result200);
+
+    } else if (status !== 200 && status !== 204) {
+        const _responseText = response.data;
+        return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    }
+    return Promise.resolve<Types.MemberExpenseResponseDto[]>(null as any);
 }
 
 /**
@@ -2546,6 +2619,17 @@ export function setGroupsDELETERequestConfig(value: Partial<AxiosRequestConfig>)
 }
 export function patchGroupsDELETERequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
   _requestConfigGroupsDELETE = patch(_requestConfigGroupsDELETE ?? {});
+}
+
+let _requestConfigExpensesAll2: Partial<AxiosRequestConfig> | null;
+export function getExpensesAll2RequestConfig() {
+  return _requestConfigExpensesAll2;
+}
+export function setExpensesAll2RequestConfig(value: Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesAll2 = value;
+}
+export function patchExpensesAll2RequestConfig(patch: (value: Partial<AxiosRequestConfig>) => Partial<AxiosRequestConfig>) {
+  _requestConfigExpensesAll2 = patch(_requestConfigExpensesAll2 ?? {});
 }
 
 let _requestConfigUsersPOST: Partial<AxiosRequestConfig> | null;

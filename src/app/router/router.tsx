@@ -18,6 +18,7 @@ import { PaymentsPage } from '@/pages/payments';
 import { AuditLogPage } from '@/pages/audit-log';
 import { TransfersPage } from '@/pages/transfers';
 import { AppErrorPage } from '@/pages/app-error';
+import { MemberExpensesPage } from '@/pages/member-expenses';
 
 function IndexRedirect() {
   const platform = usePlatform();
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       { path: 'groups', element: <GroupsPage /> },
       { path: 'groups/new', element: <GroupCreatePage /> },
       { path: 'groups/:groupId', element: <GroupDetailsPage /> },
+      {
+        path: 'groups/:groupId/member-expenses',
+        element: <MemberExpensesPage />,
+      },
       {
         path: 'groups/:groupId/expenses/new',
         element: <ExpenseCreatePage />,

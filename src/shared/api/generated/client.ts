@@ -877,6 +877,108 @@ export enum GroupRole {
     _4 = 4,
 }
 
+export enum MemberExpenseInvolvement {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export class MemberExpenseResponseDto implements IMemberExpenseResponseDto {
+    id?: string;
+    title?: string | null;
+    description?: string | null;
+    totalAmount?: number;
+    payerId?: string;
+    payerName?: string | null;
+    payerUsername?: string | null;
+    createdAt?: Date;
+    isDraft?: boolean;
+    isPayer?: boolean;
+    shareAmount?: number | null;
+    paidAmount?: number | null;
+    overpaymentAmount?: number | null;
+    isPaid?: boolean | null;
+    isPaidByPayments?: boolean | null;
+    isManuallySettled?: boolean | null;
+
+    constructor(data?: IMemberExpenseResponseDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.totalAmount = _data["totalAmount"];
+            this.payerId = _data["payerId"];
+            this.payerName = _data["payerName"];
+            this.payerUsername = _data["payerUsername"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>null;
+            this.isDraft = _data["isDraft"];
+            this.isPayer = _data["isPayer"];
+            this.shareAmount = _data["shareAmount"];
+            this.paidAmount = _data["paidAmount"];
+            this.overpaymentAmount = _data["overpaymentAmount"];
+            this.isPaid = _data["isPaid"];
+            this.isPaidByPayments = _data["isPaidByPayments"];
+            this.isManuallySettled = _data["isManuallySettled"];
+        }
+    }
+
+    static fromJS(data: any): MemberExpenseResponseDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MemberExpenseResponseDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["totalAmount"] = this.totalAmount;
+        data["payerId"] = this.payerId;
+        data["payerName"] = this.payerName;
+        data["payerUsername"] = this.payerUsername;
+        data["createdAt"] = this.createdAt && this.createdAt.toISOString();
+        data["isDraft"] = this.isDraft;
+        data["isPayer"] = this.isPayer;
+        data["shareAmount"] = this.shareAmount;
+        data["paidAmount"] = this.paidAmount;
+        data["overpaymentAmount"] = this.overpaymentAmount;
+        data["isPaid"] = this.isPaid;
+        data["isPaidByPayments"] = this.isPaidByPayments;
+        data["isManuallySettled"] = this.isManuallySettled;
+        return data;
+    }
+}
+
+export interface IMemberExpenseResponseDto {
+    id?: string;
+    title?: string | null;
+    description?: string | null;
+    totalAmount?: number;
+    payerId?: string;
+    payerName?: string | null;
+    payerUsername?: string | null;
+    createdAt?: Date;
+    isDraft?: boolean;
+    isPayer?: boolean;
+    shareAmount?: number | null;
+    paidAmount?: number | null;
+    overpaymentAmount?: number | null;
+    isPaid?: boolean | null;
+    isPaidByPayments?: boolean | null;
+    isManuallySettled?: boolean | null;
+}
+
 export class OperationHistoryResponseDto implements IOperationHistoryResponseDto {
     id?: string;
     type?: string | null;
@@ -1666,6 +1768,7 @@ export function initPersister() {
   addResultTypeFactory('Client___my', (data: any) => { const result = new GroupOverviewResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___groupsAll', (data: any) => { const result = new GroupOverviewResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___groupsGET', (data: any) => { const result = new GroupResponseDto(); result.init(data); return result; });
+  addResultTypeFactory('Client___expensesAll2', (data: any) => { const result = new MemberExpenseResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___paymentsAll', (data: any) => { const result = new PaymentResponseDto(); result.init(data); return result; });
   addResultTypeFactory('Client___me', (data: any) => { const result = new UserResponseDto(); result.init(data); return result; });
 

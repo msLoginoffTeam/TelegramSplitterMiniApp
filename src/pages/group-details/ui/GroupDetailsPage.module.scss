@@ -80,6 +80,21 @@
   font-size: var(--font-size-caption);
 }
 
+.memberExpensesLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.memberExpensesLink span {
+  flex: none;
+  font-size: 1.1rem;
+}
+
 .expenseSort select {
   width: 100%;
   min-width: 0;

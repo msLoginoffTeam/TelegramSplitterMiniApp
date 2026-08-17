@@ -114,6 +114,12 @@ export type GroupsDELETEQueryParameters = {
   groupId: string ;
 }
 
+export type ExpensesAll2QueryParameters = {
+  groupId: string ;
+  userId: string ;
+  involvement?: Types.MemberExpenseInvolvement | undefined ;
+}
+
 export type UsersPOSTQueryParameters = {
   groupId: string ;
 }
@@ -673,7 +679,7 @@ export function __expensesAll(context: QueryFunctionContext, axiosConfig?: Axios
 
 export function useExpensesAllQuery<TSelectData = Types.ExpenseResponseDto[], TError = unknown>(dto: ExpensesAllQueryParameters, options?: Omit<UseQueryOptions<Types.ExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
 /**
- * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
+ * Retrieves all expenses in the group, including unfinished drafts.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
@@ -706,7 +712,7 @@ export function useExpensesAllQuery<TSelectData = Types.ExpenseResponseDto[], TE
   });
 }
 /**
- * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
+ * Retrieves all expenses in the group, including unfinished drafts.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
@@ -718,7 +724,7 @@ export function setExpensesAllData(queryClient: QueryClient, updater: (data: Typ
 }
 
 /**
- * Retrieves all confirmed expenses in the group, optionally filtered by a specific user.
+ * Retrieves all expenses in the group, including unfinished drafts.
  * @param groupId ID of the group.
  * @param userId (optional) Optional user ID to filter expenses by payer.
  * @return OK
@@ -1264,7 +1270,7 @@ export function participantsPOSTMutationKey(groupId: string, expenseId: string):
 }
 
 /**
- * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * Adds an explicit participant share to the expense.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param body (optional) Share details of the new participant.
@@ -1288,7 +1294,7 @@ type ParticipantsPOST__MutationParameters = ParticipantsPOSTQueryParameters & {
 }
 
 /**
- * Adds a participant share to the expense and adjusts the payer’s share accordingly.
+ * Adds an explicit participant share to the expense.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param body (optional) Share details of the new participant.
@@ -1398,7 +1404,7 @@ export function participantsDELETEMutationKey(groupId: string, expenseId: string
 }
 
 /**
- * Removes a participant from an expense and reallocates their share to the payer.
+ * Removes a participant share from an expense. The expense may become a draft.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
@@ -1420,7 +1426,7 @@ export function useParticipantsDELETEMutation<TContext>(groupId: string, expense
 type ParticipantsDELETE__MutationParameters = ParticipantsDELETEQueryParameters
 
 /**
- * Removes a participant from an expense and reallocates their share to the payer.
+ * Removes a participant share from an expense. The expense may become a draft.
  * @param groupId ID of the group.
  * @param expenseId ID of the expense.
  * @param userId ID of the participant to remove.
@@ -1904,6 +1910,111 @@ return useMutation({
   mutationFn: (data: GroupsDELETE__MutationParameters) => Client.groupsDELETE(data.groupId ?? options?.parameters?.groupId!),
   mutationKey: key,
 });
+}
+
+export function expensesAll2Url(groupId: string, userId: string, involvement?: Types.MemberExpenseInvolvement | undefined): string {
+  let url_ = getBaseUrl() + "/api/groups/{groupId}/users/{userId}/expenses?";
+if (groupId === undefined || groupId === null)
+  throw new Error("The parameter 'groupId' must be defined.");
+url_ = url_.replace("{groupId}", encodeURIComponent("" + groupId));
+if (userId === undefined || userId === null)
+  throw new Error("The parameter 'userId' must be defined.");
+url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+if (involvement === null)
+    throw new Error("The parameter 'involvement' cannot be null.");
+else if (involvement !== undefined)
+    url_ += "involvement=" + encodeURIComponent("" + involvement) + "&";
+  url_ = url_.replace(/[?&]$/, "");
+  return url_;
+}
+
+let expensesAll2DefaultOptions: Omit<UseQueryOptions<Types.MemberExpenseResponseDto[], unknown, Types.MemberExpenseResponseDto[]>, 'queryKey' | 'queryFn'> & Partial<Pick<UseQueryOptions<Types.MemberExpenseResponseDto[], unknown, Types.MemberExpenseResponseDto[]>, 'queryFn'>> = {
+};
+export function getExpensesAll2DefaultOptions() {
+  return expensesAll2DefaultOptions;
+};
+export function setExpensesAll2DefaultOptions(options: typeof expensesAll2DefaultOptions) {
+  expensesAll2DefaultOptions = options;
+}
+
+export function expensesAll2QueryKey(dto: ExpensesAll2QueryParameters): QueryKey;
+export function expensesAll2QueryKey(groupId: string, userId: string, involvement?: Types.MemberExpenseInvolvement | undefined): QueryKey;
+export function expensesAll2QueryKey(...params: any[]): QueryKey {
+  if (params.length === 1 && isParameterObject(params[0])) {
+    const { groupId, userId, involvement,  } = params[0] as ExpensesAll2QueryParameters;
+
+    return trimArrayEnd([
+        'Client',
+        'expensesAll2',
+        groupId as any,
+        userId as any,
+        involvement as any,
+      ]);
+  } else {
+    return trimArrayEnd([
+        'Client',
+        'expensesAll2',
+        ...params
+      ]);
+  }
+}
+export function __expensesAll2(context: QueryFunctionContext, axiosConfig?: AxiosRequestConfig | undefined) {
+  return Client.expensesAll2(
+      context.queryKey[2] as string,       context.queryKey[3] as string,       context.queryKey[4] as Types.MemberExpenseInvolvement | undefined,axiosConfig    );
+}
+
+export function useExpensesAll2Query<TSelectData = Types.MemberExpenseResponseDto[], TError = unknown>(dto: ExpensesAll2QueryParameters, options?: Omit<UseQueryOptions<Types.MemberExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+/**
+ * Retrieves expenses where a selected group member paid or has a share.
+ * @param involvement (optional)
+ * @return OK
+ */
+export function useExpensesAll2Query<TSelectData = Types.MemberExpenseResponseDto[], TError = unknown>(groupId: string, userId: string, involvement?: Types.MemberExpenseInvolvement | undefined, options?: Omit<UseQueryOptions<Types.MemberExpenseResponseDto[], TError, TSelectData>, 'queryKey'>, axiosConfig?: Partial<AxiosRequestConfig>): UseQueryResult<TSelectData, TError>;
+export function useExpensesAll2Query<TSelectData = Types.MemberExpenseResponseDto[], TError = unknown>(...params: any []): UseQueryResult<TSelectData, TError> {
+  let options: UseQueryOptions<Types.MemberExpenseResponseDto[], TError, TSelectData> | undefined = undefined;
+  let axiosConfig: AxiosRequestConfig |undefined = undefined;
+  let groupId: any = undefined;
+  let userId: any = undefined;
+  let involvement: any = undefined;
+
+  if (params.length > 0) {
+    if (isParameterObject(params[0])) {
+      ({ groupId, userId, involvement,  } = params[0] as ExpensesAll2QueryParameters);
+      options = params[1];
+      axiosConfig = params[2];
+    } else {
+      [groupId, userId, involvement, options, axiosConfig] = params;
+    }
+  }
+
+  const metaContext = useContext(QueryMetaContext);
+  options = addMetaToOptions(options, metaContext);
+
+  return useQuery<Types.MemberExpenseResponseDto[], TError, TSelectData>({
+    queryFn: axiosConfig ? (context) => __expensesAll2(context, axiosConfig) : __expensesAll2,
+    queryKey: expensesAll2QueryKey(groupId, userId, involvement),
+    ...expensesAll2DefaultOptions as unknown as Omit<UseQueryOptions<Types.MemberExpenseResponseDto[], TError, TSelectData>, 'queryKey'>,
+    ...options,
+  });
+}
+/**
+ * Retrieves expenses where a selected group member paid or has a share.
+ * @param involvement (optional)
+ * @return OK
+ */
+export function setExpensesAll2Data(queryClient: QueryClient, updater: (data: Types.MemberExpenseResponseDto[] | undefined) => Types.MemberExpenseResponseDto[], groupId: string, userId: string, involvement?: Types.MemberExpenseInvolvement | undefined) {
+  queryClient.setQueryData(expensesAll2QueryKey(groupId, userId, involvement),
+    updater
+  );
+}
+
+/**
+ * Retrieves expenses where a selected group member paid or has a share.
+ * @param involvement (optional)
+ * @return OK
+ */
+export function setExpensesAll2DataByQueryId(queryClient: QueryClient, queryKey: QueryKey, updater: (data: Types.MemberExpenseResponseDto[] | undefined) => Types.MemberExpenseResponseDto[]) {
+  queryClient.setQueryData(queryKey, updater);
 }
 
 export function usersPOSTUrl(groupId: string): string {

@@ -330,7 +330,7 @@
         "tags": [
           "Expenses"
         ],
-        "summary": "Retrieves all confirmed expenses in the group, optionally filtered by a specific user.",
+        "summary": "Retrieves all expenses in the group, including unfinished drafts.",
         "parameters": [
           {
             "name": "groupId",
@@ -814,7 +814,7 @@
         "tags": [
           "Expenses"
         ],
-        "summary": "Adds a participant share to the expense and adjusts the payer’s share accordingly.",
+        "summary": "Adds an explicit participant share to the expense.",
         "parameters": [
           {
             "name": "groupId",
@@ -932,7 +932,7 @@
         "tags": [
           "Expenses"
         ],
-        "summary": "Removes a participant from an expense and reallocates their share to the payer.",
+        "summary": "Removes a participant share from an expense. The expense may become a draft.",
         "parameters": [
           {
             "name": "groupId",
@@ -1562,6 +1562,77 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "TelegramInitData": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{groupId}/users/{userId}/expenses": {
+      "get": {
+        "tags": [
+          "Groups"
+        ],
+        "summary": "Retrieves expenses where a selected group member paid or has a share.",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "involvement",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/MemberExpenseInvolvement"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberExpenseResponseDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberExpenseResponseDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberExpenseResponseDto"
+                  }
                 }
               }
             }
@@ -2686,6 +2757,86 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "MemberExpenseInvolvement": {
+        "enum": [
+          0,
+          1,
+          2
+        ],
+        "type": "integer",
+        "format": "int32"
+      },
+      "MemberExpenseResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "payerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "payerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "payerUsername": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isDraft": {
+            "type": "boolean"
+          },
+          "isPayer": {
+            "type": "boolean"
+          },
+          "shareAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "paidAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "overpaymentAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isPaid": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isPaidByPayments": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "isManuallySettled": {
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "OperationHistoryResponseDto": {
         "type": "object",

@@ -1,0 +1,162 @@
+.retry {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font: inherit;
+  font-weight: 700;
+}
+
+.memberSelect {
+  display: grid;
+  gap: var(--space-2);
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.memberSelect select {
+  width: 100%;
+  min-width: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.85rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.filters {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+}
+
+.filter {
+  flex: none;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-hint);
+  font: inherit;
+  font-size: var(--font-size-caption);
+  font-weight: 700;
+}
+
+.filter[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
+}
+
+.summary span {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.summary small,
+.summary p,
+.expenseMain small,
+.amounts small,
+.empty {
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+}
+
+.summary p {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background: var(--color-surface);
+}
+
+.list li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.expenseLink {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  color: inherit;
+}
+
+.expenseMain,
+.amounts {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.expenseMain {
+  flex: 1;
+}
+
+.expenseMain strong {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.expenseMain small,
+.amounts small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amounts {
+  flex: none;
+  max-width: 48%;
+  text-align: right;
+}
+
+.amounts > strong {
+  white-space: nowrap;
+}
+
+.amounts small[data-settlement^='Осталось'] {
+  color: var(--color-danger);
+}
+
+.amounts small[data-settlement^='Оплачено'],
+.amounts small[data-settlement^='Помечено'] {
+  color: var(--color-positive);
+}
+
+.draftBadge {
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-hint);
+  font-size: var(--font-size-caption);
+  font-style: normal;
+}
+
+.empty {
+  margin: 0;
+}
