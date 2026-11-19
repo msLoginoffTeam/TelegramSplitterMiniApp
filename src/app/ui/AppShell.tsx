@@ -137,11 +137,11 @@ export function AppShell() {
         <Outlet />
       </div>
       <footer className={styles.footer}>
-        <span>Сделано </span>
+        <span>Designed by </span>
         <a href="https://t.me/msloginoff" rel="noreferrer" target="_blank">
           @msloginoff
         </a>
-        <span> · поддержка и благодарности</span>
+        <span> · Support &amp; feedback</span>
       </footer>
       <ScrollRestoration
         getKey={(scrollLocation) => `${scrollLocation.pathname}${scrollLocation.search}`}
