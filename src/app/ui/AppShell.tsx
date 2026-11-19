@@ -133,7 +133,16 @@ export function AppShell() {
           {platform.kind === 'telegram' ? 'Telegram' : 'Браузер'}
         </span>
       </header>
-      <Outlet />
+      <div className={styles.content}>
+        <Outlet />
+      </div>
+      <footer className={styles.footer}>
+        <span>Сделано </span>
+        <a href="https://t.me/msloginoff" rel="noreferrer" target="_blank">
+          @msloginoff
+        </a>
+        <span> · поддержка и благодарности</span>
+      </footer>
       <ScrollRestoration
         getKey={(scrollLocation) => `${scrollLocation.pathname}${scrollLocation.search}`}
       />
