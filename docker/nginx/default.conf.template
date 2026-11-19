@@ -31,6 +31,13 @@ server {
     try_files $uri =404;
   }
 
+  # The Mini App starts at the root path. Without an exact location nginx finds
+  # the root directory first and bypasses the index.html cache policy above.
+  location = / {
+    add_header Cache-Control "no-cache, max-age=0, must-revalidate" always;
+    try_files /index.html =404;
+  }
+
   location / {
     try_files $uri $uri/ /index.html;
   }
