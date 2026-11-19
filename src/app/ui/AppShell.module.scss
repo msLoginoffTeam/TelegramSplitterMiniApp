@@ -1,15 +1,7 @@
 .shell {
-  display: flex;
-  flex-direction: column;
-  min-height: var(--app-viewport-height, 100dvh);
   min-width: 0;
   padding-top: var(--safe-area-top);
   padding-bottom: var(--safe-area-bottom);
-}
-
-.content {
-  flex: 1;
-  min-width: 0;
 }
 
 .header {
@@ -32,19 +24,4 @@
 .mode {
   color: var(--color-hint);
   font-size: var(--font-size-caption);
-}
-
-.footer {
-  max-width: 44rem;
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--space-4) var(--space-5) calc(var(--space-4) + var(--safe-area-bottom));
-  color: var(--color-hint);
-  font-size: var(--font-size-caption);
-  text-align: center;
-}
-
-.footer a {
-  color: var(--color-accent);
-  font-weight: 600;
 }

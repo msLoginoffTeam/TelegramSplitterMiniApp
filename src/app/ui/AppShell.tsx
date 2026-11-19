@@ -1,5 +1,5 @@
 import { Link, Outlet, ScrollRestoration, useLocation, useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { usePlatform } from '@/app/providers/PlatformProvider';
 import { routes } from '@/shared/config/routes';
 import styles from '@/app/ui/AppShell.module.scss';
@@ -10,24 +10,6 @@ export function AppShell() {
   const location = useLocation();
   const handledInviteToken = useRef<string | undefined>(undefined);
   const swipeStart = useRef<{ x: number; y: number; startedAt: number } | undefined>(undefined);
-
-  useLayoutEffect(() => {
-    const browserViewport = window.visualViewport;
-    const updateViewportHeight = () => {
-      const height = Math.round(browserViewport?.height ?? window.innerHeight);
-      document.documentElement.style.setProperty('--app-viewport-height', `${height}px`);
-    };
-
-    updateViewportHeight();
-    browserViewport?.addEventListener('resize', updateViewportHeight);
-    window.addEventListener('resize', updateViewportHeight);
-
-    return () => {
-      browserViewport?.removeEventListener('resize', updateViewportHeight);
-      window.removeEventListener('resize', updateViewportHeight);
-      document.documentElement.style.removeProperty('--app-viewport-height');
-    };
-  }, []);
 
   const navigateBack = useCallback(() => {
     const historyIndex = (window.history.state as { idx?: unknown } | null)?.idx;
@@ -151,16 +133,7 @@ export function AppShell() {
           {platform.kind === 'telegram' ? 'Telegram' : 'Браузер'}
         </span>
       </header>
-      <div className={styles.content}>
-        <Outlet />
-      </div>
-      <footer className={styles.footer}>
-        <span>Designed by </span>
-        <a href="https://t.me/msloginoff" rel="noreferrer" target="_blank">
-          @msloginoff
-        </a>
-        <span> · Support &amp; feedback</span>
-      </footer>
+      <Outlet />
       <ScrollRestoration
         getKey={(scrollLocation) => `${scrollLocation.pathname}${scrollLocation.search}`}
       />

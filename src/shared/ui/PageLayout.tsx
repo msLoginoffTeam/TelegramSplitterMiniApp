@@ -28,6 +28,13 @@ export function PageLayout({
         <p>{description}</p>
       </header>
       {children}
+      <footer className={styles.attribution}>
+        <span>Designed by </span>
+        <a href="https://t.me/msloginoff" rel="noreferrer" target="_blank">
+          @msloginoff
+        </a>
+        <span> · Support &amp; feedback</span>
+      </footer>
     </section>
   );
 }
